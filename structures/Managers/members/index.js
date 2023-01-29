@@ -1,0 +1,101 @@
+const { EagleDatabaseSqlite } = require('../../DataBase')
+/**
+ * 
+ * @param {EagleDatabaseSqlite} database 
+ * @param {*} modelName 
+ * @returns 
+ */
+module.exports = function (database, modelName) {
+    return new Promise((resolve, reject) => {
+        const DataTypes = database.DataTypes;
+        const data = [
+            {
+                name: "id",
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true,
+            },
+            {
+                name: "guildId",
+                type: DataTypes.TEXT,
+                allowNull: false,
+                isWhere: true,
+            },
+            {
+                name: "memberId",
+                type: DataTypes.TEXT,
+                allowNull: false,
+                isWhere: true,
+            },
+            {
+                name: "antiraidLimits",
+                type: DataTypes.JSON,
+                allowNull: false,
+                isValue: true,
+                default: {
+                    antiLink: {count: 0},
+                    mentions: {count: 0},
+                    ban: {count: 0, banned: []},
+                    kick: {count: 0}
+                }
+            },
+            {
+                name: 'invites',
+                type: DataTypes.JSON,
+                allowNull: true,
+                isValue: true,
+                default: {
+                    join: 0, leave: 0, fake: 0, bonus: 0
+                }
+            },
+            {
+                name: 'xp',
+                type: DataTypes.JSON,
+                allowNull: true,
+                isValue: true,
+                default: {xp: 0, level: 0, lastUpdated: new Date()}
+            },
+            {
+                name: 'moderation',
+                type: DataTypes.JSON,
+                allowNull: true,
+                isValue: true,
+                default: {
+                    kick: 0,
+                    ban: 0,
+                    removedMessage: 0,
+                    warn: 0,
+                    mute: 0
+                }
+            },
+            {
+                name: 'warn',
+                type: DataTypes.JSON,
+                isValue: true,
+                default: {
+                    nombre: 0,
+                    raison: [],
+                }
+            }
+        ];
+
+        const t = {};
+        data.forEach(y => {
+            t[y.name] = y;
+        });
+
+        try {
+            database.define(modelName, t, {
+                timestamps: false,
+                tableName: modelName,
+                charset: "utf8mb4",
+                collate: "utf8mb4_unicode_ci",
+            })
+            .sync({alter: true}).then(() => {
+                resolve(data);
+            }).catch(reject);
+        } catch (err) {
+            reject(err);
+        }
+    })
+}

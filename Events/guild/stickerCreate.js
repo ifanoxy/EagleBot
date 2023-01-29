@@ -1,0 +1,39 @@
+const { AuditLogEvent, EmbedBuilder, GuildEmoji, Sticker } = require("discord.js")
+const path = require("path");
+const { EagleClient } = require("../../structures/Client");
+
+module.exports = {
+    name: "stickerCreate",
+    /**
+     * 
+     * @param {EagleClient} client 
+     * @param {Sticker} Parametre 
+     */
+    async execute(client, Parametre) {
+        if (!Parametre.guild) return;
+        const guildData = client.managers.guildsManager.getIfExist(Parametre.guild.id);
+        if (!guildData) return;
+        if (!guildData.logs.enable.StickerCreate) return;
+        const channel = guildData.logs.channel.StickerCreate;
+        if (channel == null || channel == undefined) return;
+
+        const audit = await Parametre.guild.fetchAuditLogs({
+            limit: 1,
+            type: AuditLogEvent.StickerCreate,
+        })
+
+        client.channels.cache.get(channel).send({
+            embeds: [
+                new EmbedBuilder().setColor("#2f3136").setTimestamp()
+                .setTitle(`Logs | ${path.basename(__filename).replace(".js", "")}`)
+                .setDescription(
+                    `**Nom:** ${Parametre.name}\n\n`+
+                    `**ID:** ${Parametre.id}\n\n`+
+                    `**Description:** ${Parametre.description || 'aucune'}\n\n`+
+                    `**Créé par:** <@${audit.entries.first().executor.id}>`
+                )
+                .setImage(Parametre.url)
+            ],
+        });
+    }
+}

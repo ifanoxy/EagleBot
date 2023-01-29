@@ -1,0 +1,171 @@
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require("discord.js");
+const { EagleClient } = require('../../structures/Client')
+
+module.exports = {
+    data: new SlashCommandBuilder()
+    .setName("owner-list")
+    .setDescription("Permet de voir la liste des owners"),
+    /**
+     * 
+     * @param {} interaction 
+     * @param {EagleClient} client 
+     */
+    execute(interaction, client) {
+        if (!client.moderation.checkOwner(interaction.member.id)) return interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                .setColor('Red')
+                .setDescription("Vous devez être owner pour utiliser cette commande !")
+            ],
+            ephemeral: true
+        });
+        
+        const ownerData = client.managers.ownerManager
+    
+        let data = []
+
+        data.push(
+            {
+                size: 0,
+                userId: client.config.ownerId
+            }
+        )
+
+        for (const ownered of ownerData) {
+            data.push(
+                {
+                    size: data.length,
+                    userId: ownered[1].values.userId,
+                }
+            )
+        }
+
+        if(!data.length)return interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                .setColor("DarkRed")
+                .setDescription("Il n'y a personne de owner")
+            ],
+        });
+        let Embed = new EmbedBuilder().setColor("Gold").setTitle(`Liste des ${data.length} owners`)
+        let Row = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+            .setCustomId("[no-check]Previous")
+            .setDisabled(true)
+            .setEmoji("◀️")
+            .setStyle(1),
+            new ButtonBuilder()
+            .setCustomId("[no-check]")
+            .setDisabled(true)
+            .setLabel(`1/${Math.ceil(data.length/25)}`)
+            .setStyle(1),
+            new ButtonBuilder()
+            .setCustomId("[no-check]Next")
+            .setDisabled(false)
+            .setEmoji("▶️")
+            .setStyle(1),
+        )
+        
+        for (const owner of data) {
+            if (owner.size > 24)break;
+            Embed.addFields(
+                {name: `‎`, value: `${owner.size+1}. <@${owner.userId}>`, inline: true}
+            )
+        }
+
+        if (data.length <= 24) {
+            interaction.reply({
+                embeds: [
+                    Embed
+                ]
+            })
+        } else {
+            interaction.reply({
+                embeds: [
+                    Embed
+                ],
+                components: [
+                    Row
+                ]
+            }).then(msg => {
+                messageEdit(msg, interaction)
+            })
+
+            function messageEdit(msg, interaction) {
+                const collector = msg.createMessageComponentCollector({
+                    time: 15*1000,
+                    componentType: ComponentType.Button,
+                    max: 1
+                })
+                collector.on('collect', inter => { 
+                    const reponse = inter.customId.replace("[no-check]","")
+                    const position = inter.message.components[0].components[1].label.split("/")
+                    Embed.setFields()
+                    switch (reponse) {
+                        case "Previous" : {
+                            let i = (Number(position[0])-1)*25-1
+                            let j = (Number(position[0])-1)*25-25
+                            while (j <= i && j < data.length) {
+                                Embed.addFields(
+                                    {name: `‎`, value: `${data[j].size+1}. <@${data[j].userId}>`, inline: true}
+                                )
+                                j++;
+                            }
+                            if (Number(position[0])-1 == 1) {
+                                Row.components[0].setDisabled(true)
+                            }
+                            Row.components[2].setDisabled(false)
+                            Row.components[1].setLabel(`${Number(position[0])-1}/${position[1]}`)
+                            inter.update({
+                                embeds: [
+                                    Embed
+                                ],
+                                components: [
+                                    Row
+                                ]
+                            }).then(msg => {
+                                messageEdit(msg, interaction)
+                            })
+                        }break;
+                        case "Next" : {
+                            let i = Number(position[0])*25+24
+                            let j = Number(position[0])*25
+                            while (j <= i && j < data.length) {
+                                Embed.addFields(
+                                    {name: `‎`, value: `${data[j].size+1}. <@${data[j].userId}>`, inline: true}
+                                )
+                                j++;
+                            }
+                            if (Number(position[0])+1 == position[1]) {
+                                Row.components[2].setDisabled(true)
+                            }
+                            Row.components[0].setDisabled(false)
+                            Row.components[1].setLabel(`${Number(position[0])+1}/${position[1]}`)
+                            inter.update({
+                                embeds: [
+                                    Embed
+                                ],
+                                components: [
+                                    Row
+                                ]
+                            }).then(msg => {
+                                messageEdit(msg, interaction)
+                            })
+                        }break;
+                    }
+                });
+                collector.on("end", (coll,reason) => {
+                    if (reason != "time")return
+                    Row.components[0].setDisabled(true)
+                    Row.components[2].setDisabled(true)
+                    interaction.editReply({
+                        components: [
+                            Row
+                        ]
+                    })
+                })
+            }
+        }
+    }
+}
