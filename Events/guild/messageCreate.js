@@ -15,5 +15,9 @@ module.exports = {
         const guildData = client.managers.guildsManager.getIfExist(Parametre.guild.id);
         if (!guildData) return;
         if (!guildData.anti.link.active)return;
+        if (Parametre.member.roles.hoist.rawPosition >= Parametre.guild.roles.cache.get(guildData.anti.link.roleMini).rawPosition)return;
+        if (!Parametre.content.includes("https://") || !Parametre.content.includes("http://"))return;
+        Parametre.delete().catch(() => {});
+        Parametre.author.send("Votre message a été supprimé, vous ne pouvez pas envoyez des liens dans ce serveurs").catch(() => {});
     }
 }

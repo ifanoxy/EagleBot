@@ -48,6 +48,7 @@ module.exports = {
         client.guilds.cache.map(guild => {
             if (guild.members.cache.has(id)) {
                 guild.members.cache.get(id).ban({reason: "Blacklist"}).catch(() => {
+                    client.error(err)
                     interaction.channel.send({
                         embeds: [
                             new EmbedBuilder()

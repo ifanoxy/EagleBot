@@ -39,7 +39,7 @@ module.exports = {
                     ]
                 });
             }catch{
-                
+                client.error(err)
             }
         })
         .catch((err) => {
@@ -53,7 +53,7 @@ module.exports = {
                             .setDescription("Vous venez de quitter le serveur avec succès !")
                         ]
                     });
-                }).catch(err => console.log(err))
+                }).catch(err => client.error(err))
             }
         })
     }

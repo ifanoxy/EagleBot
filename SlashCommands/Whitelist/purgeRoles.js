@@ -3,11 +3,11 @@ const { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ActionRowBuilder,
 
 module.exports = {
     data: new SlashCommandBuilder()
-    .setName("purge-channels")
-    .setDescription("Permet de supprimer tout les channels d'un serveur discord")
+    .setName("purge-roles")
+    .setDescription("Permet de supprimer tout les roles d'un serveur discord")
     .setDMPermission(false)
-    .addChannelOption(
-        opt => opt.setName("ignore").setDescription("Permet d'ignorer une catégorie").addChannelTypes(ChannelType.GuildCategory)
+    .addRoleOption(
+        opt => opt.setName("ignore").setDescription("Permet d'ignorer un role")
     ),
     /**
      * 
@@ -29,7 +29,7 @@ module.exports = {
             embeds: [
                 new EmbedBuilder()
                 .setTitle("Confirmation")
-                .setDescription("Vous êtes sur de vouloir supprimer **l'entièreté** des channels de ce serveur ?")
+                .setDescription("Vous êtes sur de vouloir supprimer **l'entièreté** des roles de ce serveur ?")
                 .setFooter({text: "Vous avez 30s pour répondre"})
                 .setColor("Red")
             ],
@@ -57,14 +57,14 @@ module.exports = {
                 inter.update({
                     embeds: [
                         new EmbedBuilder()
-                        .setTitle("Suppression de tout les channels")
+                        .setTitle("Suppression de tout les roles")
                         .setColor("Green")
                         .setDescription('Cette opération peut prendre un certain temps.')
                     ]
                 }).then(() => {
-                    const ignoreChannel = interaction.options.getChannel("ignore")
-                    interaction.guild.channels.cache.filter(chn => chn?.parentId != ignoreChannel.id | chn.id != ignoreChannel.id).map(channel => {
-                        channel.delete("Purge channel command | demandé par :" + interaction.user.tag).catch(() => {client.error(err)})
+                    const ignoreRole = interaction.options.getRole("ignore")
+                    interaction.guild.roles.cache.filter(role => role.id != ignoreRole.id).map(role => {
+                        role.delete("Purge role command | demandé par :" + interaction.user.tag).catch(() => {client.error(err)})
                     })
                 })
             })
@@ -73,7 +73,7 @@ module.exports = {
                     embeds: [
                         new EmbedBuilder()
                         .setTitle("Confirmation")
-                        .setDescription("Vous êtes sur de vouloir supprimer **l'entièreté** des channels de ce serveur ?")
+                        .setDescription("Vous êtes sur de vouloir supprimer **l'entièreté** des roles de ce serveur ?")
                         .setFooter({text: "Vous avez 30s pour répondre"})
                         .setColor("Red")
                     ],

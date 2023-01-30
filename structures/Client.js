@@ -100,7 +100,7 @@ class EagleClient extends Client {
     }
 
     error(err) {
-        console.log(chalk.bold.greenBright("[Eagle BOT]") + chalk.red.bold(" an error has occurred :\n" + err))
+        console.log(chalk.bold.greenBright("[Eagle BOT]") + chalk.red.bold(" an error has occurred :\n" + err.stack))
     }
 }
 
