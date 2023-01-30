@@ -12,7 +12,7 @@ module.exports = {
      * @returns 
      */
     execute(interaction, client) {
-        if (!client.moderation.checkOwner(interaction.member.id)) return interaction.reply({
+        if (!client.moderation.checkOwner(interaction.user.id)) return interaction.reply({
             embeds: [
                 new EmbedBuilder()
                 .setColor('Red')

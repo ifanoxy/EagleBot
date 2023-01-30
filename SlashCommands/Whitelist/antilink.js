@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName("anti-link")
     .setDescription("Permet de bloquer tout les liens")
+    .setDMPermission(false)
     .addBooleanOption(
         option => option.setName("activé").setDescription("Permet d'actif ou non l'anti link").setRequired(true)
     )

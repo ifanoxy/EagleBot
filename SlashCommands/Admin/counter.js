@@ -4,7 +4,8 @@ const { EagleClient } = require("../../structures/Client");
 module.exports = {
     data: new SlashCommandBuilder()
     .setName("counter")
-    .setDescription("permet de créer des compteurs sur votre serveur"),
+    .setDescription("permet de créer des compteurs sur votre serveur")
+    .setDMPermission(false),
     /**
      * 
      * @param {CommandInteraction} interaction 

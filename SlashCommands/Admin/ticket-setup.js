@@ -215,41 +215,113 @@ module.exports = {
                                     })
                                     .catch(err => client.error(err))
                                 } else {
-                                    ask(
-                                        [
+                                    await interactionNow.update({
+                                        embeds: [
                                             new EmbedBuilder()
                                             .setColor("Blue")
                                             .setTitle(`Définission des options ${i}/${inter3.values[0]}`)
                                             .setFooter({text: "Vous avez 1m30 pour répondres"})
                                             .setDescription("Définissez l'options avec le nom, une description, la couleur du bouton, l'émoji.")
                                         ],
-                                        [
+                                        components: [
                                             new ActionRowBuilder().addComponents(
                                                 new ButtonBuilder()
                                                 .setStyle(ButtonStyle.Success)
                                                 .setLabel(`Cliquez pour définir l'option N°${i}`)
                                                 .setCustomId("[no-check]")
                                             )
-                                        ],
-                                        interactionNow,
-                                        ComponentType.Button,
-                                        90
-                                    )
-                                    .then(interTemp => {
-                                        interTemp.showModal(
-                                            new ModalBuilder().addComponents(
-                                                new ActionRowBuilder().addComponents(
-
-                                                ),
-                                                new ActionRowBuilder().addComponents(
-
-                                                ),
-                                                new ActionRowBuilder().addComponents(
-
-                                                ),
-                                            )
-                                        );
-                                    });
+                                        ]
+                                    })
+                                    .then(msg => {
+                                        return msg.awaitMessageComponent({
+                                            componentType: ComponentType.Button,
+                                            time: 30 * 1000,
+                                            filter: i => i.customId.startsWith("[no-check]")
+                                        })
+                                        .then(interTemp => {
+                                            const ModalOption = new ModalBuilder()
+                                                .setCustomId("[no-check]ticket_define_choice")
+                                                .setTitle(`Définission des options ${i}/${inter3.values[0]}`)
+                                                .addComponents(
+                                                    new ActionRowBuilder().addComponents(
+                                                        new TextInputBuilder()
+                                                        .setCustomId("name")
+                                                        .setLabel("Quel est le nom de cette option ?")
+                                                        .setStyle(TextInputStyle.Short)
+                                                        .setMaxLength(90)
+                                                        .setRequired(true)
+                                                    ),
+                                                    new ActionRowBuilder().addComponents(
+                                                        new TextInputBuilder()
+                                                        .setCustomId("description")
+                                                        .setLabel("Définissez une petite description")
+                                                        .setStyle(TextInputStyle.Short)
+                                                        .setMaxLength(90)
+                                                        .setRequired(true)
+                                                    ),
+                                                    new ActionRowBuilder().addComponents(
+                                                        new TextInputBuilder()
+                                                        .setCustomId("emoji")
+                                                        .setLabel("Définissez un émoji (Optionnel)")
+                                                        .setStyle(TextInputStyle.Short)
+                                                        .setMaxLength(90)
+                                                        .setRequired(false)
+                                                    ),
+                                                    new ActionRowBuilder().addComponents(
+                                                        new TextInputBuilder()
+                                                        .setCustomId("color")
+                                                        .setLabel("Définissez la couleur du bouton")
+                                                        .setPlaceholder("rouge | bleu | vert | gris")
+                                                        .setStyle(TextInputStyle.Short)
+                                                        .setMaxLength(90)
+                                                        .setRequired(false)
+                                                    )
+                                                )
+                                            
+                                            interTemp.showModal(ModalOption)
+    
+                                            return interTemp.awaitModalSubmit({
+                                                filter: i => i.customId == "[no-check]ticket_define_choice",
+                                                time: 2 * 60 * 1000,
+                                            })
+                                            .then(interTemp2 => {
+                                                interactionNow = interTemp2
+                                                const name = interTemp2.fields.getTextInputValue("name")
+                                                const description = interTemp2.fields.getTextInputValue("description")
+                                                const emoji = interTemp2.fields.getTextInputValue("emoji")
+                                                let color = interTemp2.fields.getTextInputValue("color")
+                                                switch (color.toLocaleUpperCase()) {
+                                                    case "ROUGE" : {
+                                                        color = ButtonStyle.Danger
+                                                    }break
+                                                    case "BLEU" : {
+                                                        color = ButtonStyle.Primary
+                                                    }break
+                                                    case "VERT" : {
+                                                        color = ButtonStyle.Success
+                                                    }break
+                                                    case "GRIS" : {
+                                                        color = ButtonStyle.Secondary
+                                                    }break
+                                                    default: color = ButtonStyle.Primary
+                                                }
+                                                options.push({
+                                                    name: name,
+                                                    description: description,
+                                                    emoji: emoji || null,
+                                                    color: color
+                                                });
+                                                return 1
+                                            });
+                                        })
+                                        .catch(reason => {components.map(row => row.components.map(component => component.setDisabled(true)))
+                                            interaction.editReply({
+                                                components: components
+                                            });
+                                            return 0
+                                        })
+                                    })
+                                    .catch(err => client.error(err))
                                 };
                             };
                             interactionNow.update({
@@ -258,7 +330,8 @@ module.exports = {
                                     .setTitle("Vous avez terminé la création de votre Ticket")
                                     .setDescription("Vous pouvez Utiliser ce 'template' en cliquant sur le bouton ci-dessous ou bien avec la commande /ticket-utiliser")
                                     .setColor("Green")
-                                ]
+                                ],
+                                components: []
                             })
 
                             let database = client.managers.ticketsManager.getAndCreateIfNotExists(interaction.user.id, {
@@ -271,7 +344,7 @@ module.exports = {
                         //#endregion
                     })
                 } else {
-
+                    interaction.deleteReply()
                 }
             }).catch(reason => {
                 interaction.editReply({
@@ -301,7 +374,8 @@ module.exports = {
                 .then(inter => {
                     return inter
                 }
-                ).catch(reason => {components.map(row => row.components.map(component => component.setDisabled(true)))
+                ).catch(reason => {
+                    components.map(row => row.components.map(component => component.setDisabled(true)))
                     interaction.editReply({
                         components: components
                     });

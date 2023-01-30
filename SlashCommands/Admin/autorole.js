@@ -3,6 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
     .setName("auto-role")
+    .setDMPermission(false)
     .setDescription("Permet de définir quel rôle sera ajouté automatiquement")
     .addRoleOption(
         opt => opt.setName("role").setDescription("Choisissez le rôle qui sera ajouté automatiquement").setRequired(true)

@@ -3,7 +3,8 @@ const { SlashCommandBuilder, CommandInteraction, EmbedBuilder } = require("disco
 module.exports = {
     data: new SlashCommandBuilder()
     .setName("getcouronne")
-    .setDescription("permet de récuperer la couronne si le bot l'a"),
+    .setDescription("permet de récuperer la couronne si le bot l'a")
+    .setDMPermission(false),
     /**
      * 
      * @param {CommandInteraction} interaction 

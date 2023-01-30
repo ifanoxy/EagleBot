@@ -4,7 +4,8 @@ const { EagleClient } = require('../../structures/Client')
 module.exports = {
     data: new SlashCommandBuilder()
     .setName("owner-list")
-    .setDescription("Permet de voir la liste des owners"),
+    .setDescription("Permet de voir la liste des owners")
+    .setDMPermission(false),
     /**
      * 
      * @param {} interaction 

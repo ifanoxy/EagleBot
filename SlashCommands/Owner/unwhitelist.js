@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName("unwl")
     .setDescription("Permet de retirer un identifiant de la whitelist")
+    .setDMPermission(false)
     .addStringOption(
         option => option.setName("id").setDescription("entrez l'identifiant de la personne que vous shouaitez unwhiteliste").setRequired(true)
     ),

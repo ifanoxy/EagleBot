@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName("unowner")
     .setDescription("Permet d'enlever l'owner d'un indentifiant")
+    .setDMPermission(false)
     .addStringOption(
         option => option.setName("id").setDescription("entrez l'identifiant de la personne que vous shouaitez unowner").setRequired(true)
     ),

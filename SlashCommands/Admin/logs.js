@@ -4,7 +4,8 @@ const { EagleClient } = require("../../structures/Client");
 module.exports = {
     data: new SlashCommandBuilder()
     .setName('logs')
-    .setDescription("Permet d'activer ou de désactiver les logs pour votre serveur"),
+    .setDescription("Permet d'activer ou de désactiver les logs pour votre serveur")
+    .setDMPermission(false),
     /**
      * 
      * @param {CommandInteraction} interaction 

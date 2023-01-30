@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName("role-everyone")
     .setDescription("Permet d'ajouter un rôle à tout les membres")
+    .setDMPermission(false)
     .addRoleOption(
         option => option.setName("role").setDescription('définissez le rôle qui sera attribué à tout le monde').setRequired(true)
     ),

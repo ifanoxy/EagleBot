@@ -4,7 +4,8 @@ const { EagleClient } = require('../../structures/Client')
 module.exports = {
     data: new SlashCommandBuilder()
     .setName("owner")
-    .setDescription("Permet d'ajouter une personne owner duy bot")
+    .setDescription("Permet d'ajouter une personne owner du bot")
+    .setDMPermission(false)
     .addUserOption(
         option => option.setName("user").setDescription("entrez la personne que vous shouaitez whitelist").setRequired(true)
     ),

@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName("backup")
     .setDescription("permet de faire une backup de votre serveur discord")
+    .setDMPermission(false)
     .addSubcommand(sub =>
         sub.setName('créer').setDescription("permet de créer une backup")
         .addStringOption(option =>

@@ -52,7 +52,7 @@ class EagleClient extends Client {
                  .~YBBBBBBBBBBBBBBBBBBGGP5YJJ??????JJY5PGGBBBBBBBBBBBBBBBBBBBGJ^                    
                    .~YGBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBP?:                      
                       :75GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBPJ~.                        ` + chalk.red("Version { Pre-Alpha }") +`
-                        .^7YPBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBG5?~.                           ` + chalk.green("Last update: 25/01/2023") + `
+                        .^7YPBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBG5?~.                           ` + chalk.green("Last update: 31/01/2023") + `
                             :^7J5GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBGPY?~:.                              
                                 .:^!7JY5PGGBBBBBBBBBBBGGGP5Y?7~:.                                   ` + chalk.bold.yellow("full developed by Ifanoxy#7183") + `
                                        ..::^^^~~~~~~^^^::..                                                                                            

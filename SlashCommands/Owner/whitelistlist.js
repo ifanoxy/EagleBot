@@ -4,7 +4,8 @@ const { EagleClient } = require('../../structures/Client')
 module.exports = {
     data: new SlashCommandBuilder()
     .setName("wl-list")
-    .setDescription("Permet de voir la liste des identifiants whitelist"),
+    .setDescription("Permet de voir la liste des identifiants whitelist")
+    .setDMPermission(false),
     /**
      * 
      * @param {} interaction 

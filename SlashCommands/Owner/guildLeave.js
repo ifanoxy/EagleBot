@@ -4,6 +4,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName("guild-leave")
     .setDescription("permet de faire quitter le bot d'un serveur.")
+    .setDMPermission(false)
     .addStringOption(
         opt => opt.setName("guild-id").setDescription("Veuillez insérer l'indenfiant du serveur").setRequired(true)
     ),

@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName("unbl")
     .setDescription("Permet de retirer une personne à la blacklist")
+    .setDMPermission(false)
     .addStringOption(
         option => option.setName("id").setDescription("entrez l'identifiant de la personne que vous shouaitez unblacklist").setRequired(true)
     ),

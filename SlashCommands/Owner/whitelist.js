@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName("wl")
     .setDescription("Permet d'ajouter une personne à la whitelist")
+    .setDMPermission(false)
     .addUserOption(
         option => option.setName("user").setDescription("entrez  la personne que vous shouaitez whitelist").setRequired(true)
     ).addStringOption(
