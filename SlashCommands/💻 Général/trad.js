@@ -20,7 +20,7 @@ module.exports = {
                 new EmbedBuilder()
                 .setColor("Gold")
                 .setDescription(`**Traduction de ${interaction.options.getString('langue-entree') || "fr"} à ${interaction.options.getString('langue-sortie')}**\n\n**Phrase entrée :**\n> ${interaction.options.getString('texte')}\n\n**Phrase sortie:**\n> ${await translate(interaction.options.getString('texte'), {from: interaction.options.getString('langue-entree') || "fr", to: interaction.options.getString('langue-sortie')})}`)
-                .setFooter({text: "traduit par google traduction"})
+                .setFooter({text: "traduit par Deepl"})
             ]
         })
     }
