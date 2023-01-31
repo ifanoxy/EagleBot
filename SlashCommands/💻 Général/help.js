@@ -19,7 +19,7 @@ module.exports = {
         .setMaxValues(1)
         .addOptions(
             {
-                label: "Accueil",
+                label: "🏠 Accueil",
                 value: "Accueil"
             }
         )

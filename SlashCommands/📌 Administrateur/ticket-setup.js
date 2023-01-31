@@ -328,7 +328,7 @@ module.exports = {
                                 embeds: [
                                     new EmbedBuilder()
                                     .setTitle("Vous avez terminé la création de votre Ticket")
-                                    .setDescription("Vous pouvez Utiliser ce 'template' en cliquant sur le bouton ci-dessous ou bien avec la commande /ticket-utiliser")
+                                    .setDescription("Vous pouvez Utiliser ce 'template' en utilisant la commande /ticket-use")
                                     .setColor("Green")
                                 ],
                                 components: []

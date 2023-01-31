@@ -60,11 +60,12 @@ module.exports = {
                         .setTitle("Suppression de tout les roles")
                         .setColor("Green")
                         .setDescription('Cette opération peut prendre un certain temps.')
-                    ]
+                    ],
+                    components: []
                 }).then(() => {
                     const ignoreRole = interaction.options.getRole("ignore")
                     interaction.guild.roles.cache.filter(role => role.id != ignoreRole.id).map(role => {
-                        role.delete("Purge role command | demandé par :" + interaction.user.tag).catch(() => {client.error(err)})
+                        role.delete("Purge role command | demandé par :" + interaction.user.tag).catch(() => {})
                     })
                 })
             })

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, CommandInteraction, PermissionsBitField, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, CommandInteraction, PermissionsBitField, EmbedBuilder, Collection } = require("discord.js");
 const { EagleClient } = require("../../structures/Client");
 const ms = require("ms");
 
@@ -58,6 +58,8 @@ module.exports = {
                         .setTimestamp()
                     ]
                 });
+                client.handlers.fonctionHandler.startFonction([client.handlers.fonctionHandler.FonctionsList.get("checkmute")], client)
+                
             })
         })
 

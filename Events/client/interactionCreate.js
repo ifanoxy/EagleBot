@@ -1,39 +1,86 @@
-const { CommandInteraction, EmbedBuilder } = require('discord.js');
+const { BaseInteraction, EmbedBuilder } = require('discord.js');
 const { EagleClient } = require('../../structures/Client');
 module.exports = {
     name: "interactionCreate",
     /**
      * 
-     * @param {CommandInteraction} interaction 
+     * @param {BaseInteraction} interaction 
      * @param {EagleClient} client 
      */
     async execute(client, interaction) {
-        if (!interaction.isChatInputCommand() && !interaction.isAutocomplete())return;
-        if (interaction.isChatInputCommand()) {
-            const command = client.handlers.slashCommandsHandler.SlashCommandsList.get(interaction.commandName);
+        switch(true) {
+            case interaction.isAnySelectMenu() : {
+                if (interaction.customId.startsWith("[no-check]")) return;
 
-            if (!command) return interaction.reply({
-                embeds: [
-                    new EmbedBuilder()
-                    .setColor('Red')
-                    .setDescription("Cette commande n'existe pas !")
-                ],
-                ephemeral: true
-            });
+                const file = client._fs.readFile(`./interaction/selectmenu/${interaction.customId.split("#")[0]}`);
+                if (!file) return interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                        .setColor('Red')
+                        .setDescription("Ce selectMenu est introuvable !")
+                    ],
+                    ephemeral: true
+                });
+
+                file.execute(interaction, client);
+            }break;
+            case interaction.isAutocomplete() : {
+                const command = client.handlers.slashCommandsHandler.SlashCommandsList.get(interaction.commandName);
+
+                if (!command) {
+                    console.error(`No command matching ${interaction.commandName} was found.`);
+                    return;
+                }
     
-            command.execute(interaction, client)
-        }else if (interaction.isAutocomplete()) {
-            const command = client.handlers.slashCommandsHandler.SlashCommandsList.get(interaction.commandName);
+                try {
+                    await command.autocomplete(interaction, client);
+                } catch (error) {
+                    console.error(error);
+                }
+            }break;
+            case interaction.isButton() : {
+                if (interaction.customId.startsWith("[no-check]")) return;
 
-            if (!command) {
-                console.error(`No command matching ${interaction.commandName} was found.`);
-                return;
-            }
+                const file = client._fs.readFile(`./interaction/button/${interaction.customId.split("#")[0]}`);
+                if (!file) return interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                        .setColor('Red')
+                        .setDescription("Ce bouton est introuvable !")
+                    ],
+                    ephemeral: true
+                });
 
-            try {
-                await command.autocomplete(interaction, client);
-            } catch (error) {
-                console.error(error);
+                file.execute(interaction, client);
+            }break;
+            case interaction.isChatInputCommand() : {
+                const command = client.handlers.slashCommandsHandler.SlashCommandsList.get(interaction.commandName);
+
+                if (!command) return interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                        .setColor('Red')
+                        .setDescription("Cette commande n'existe pas !")
+                    ],
+                    ephemeral: true
+                });
+        
+                command.execute(interaction, client)
+            }break;
+            case interaction.isModalSubmit() : {
+                if (interaction.customId.startsWith("[no-check]")) return;
+
+                const file = client._fs.readFile(`./interaction/modal/${interaction.customId.split("#")[0]}`);
+                if (!file) return interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                        .setColor('Red')
+                        .setDescription("Ce modal est introuvable !")
+                    ],
+                    ephemeral: true
+                });
+
+                file.execute(interaction, client);
             }
         }
     }

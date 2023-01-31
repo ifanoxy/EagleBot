@@ -24,7 +24,12 @@ module.exports = {
                             ]
                         })
                     }).catch(() => {})
-                    client.managers.mutesManager.getIfExist(`${mute.guildId}-${mute.memberId}`).delete();
+                    let database = client.managers.mutesManager.getIfExist(`${mute.guildId}-${mute.memberId}`);
+                    try {
+                        database.delete()
+                    } catch (err) {
+                        client.err(err)
+                    }
                 }, TimeRemaining * 1000)
             }
         }
