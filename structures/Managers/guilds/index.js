@@ -24,6 +24,13 @@ module.exports = function (database, modelName, config) {
                 default: []
             },
             {
+                name: 'autoreply',
+                type: DataTypes.JSON,
+                allowNull: true,
+                isValue: true,
+                default: []
+            },
+            {
                 name: 'anti',
                 type: DataTypes.JSON,
                 allowNull: true,
