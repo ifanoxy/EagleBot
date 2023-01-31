@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder } = require("discord.js");
+const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, CommandInteraction, PermissionsBitField, PermissionOverwrites, ChannelFlagsBitField } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,7 +27,13 @@ module.exports = {
 			filtered.map(choice => ({ name: choice, value: choice })),
 		); 
     },
-    execute(interaction, client) {
+    /**
+     * 
+     * @param {CommandInteraction} interaction 
+     * @param {*} client 
+     * @returns 
+     */
+    async execute(interaction, client) {
         if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) return interaction.reply({
             embeds: [
                 new EmbedBuilder()
@@ -52,21 +58,34 @@ module.exports = {
         const ticketsData = userData.data[interaction.options.getString("template")];
 
         let categorie = interaction.options.getChannel("catégorie")
+        if (!categorie) {
+            await interaction.guild.channels.create({
+                type: ChannelType.GuildCategory,
+                name: "Ticket",
+                topic: "Catégorie créer automatiquement pour les tickets",
+                permissionOverwrites: [
+                    {
+                        id: interaction.guild.roles.everyone.id,
+                        deny: "ViewChannel"
+                    }
+                ]
+            }).then(cate => {
+                categorie = cate
+            })
+        }
 
         let rowTicket = new ActionRowBuilder()
-        if(ticketsData[0].placeholder) {
-            var selectMenuTicket = new StringSelectMenuBuilder()
-            .setCustomId(`Ticket#${categorie.id}`)
+        let selectMenuTicket = new StringSelectMenuBuilder()
+            .setCustomId(`ticketCreate#${categorie.id}`)
             .setMaxValues(1)
-            .setPlaceholder(ticketsData[0].placeholder)
-        }
+            .setPlaceholder(ticketsData[0].placeHolder || "aucun")
 
         let i = 0;
         for (let ticket of ticketsData) {
             if (ticket.color) {
                 rowTicket.addComponents(
                     new ButtonBuilder()
-                    .setCustomId(`Ticket#${categorie.id}_${i}`)
+                    .setCustomId(`ticketCreate#${categorie.id}#${i}`)
                     .setStyle(ticket.color)
                     .setLabel(ticket.name)
                 )
@@ -80,10 +99,14 @@ module.exports = {
             i++;
         }
 
+        if (ticketsData[0].placeHolder) {
+            rowTicket.addComponents(selectMenuTicket)
+        }
+
         interaction.channel.send({
             embeds: [
                 new EmbedBuilder()
-                .setTitle("Ouvrez votre ticket !")
+                .setAuthor({name: "Ouvrez votre ticket !", iconURL: interaction.client.user.avatarURL()})
                 .setDescription("Afin de créer un ticket, vous devez cliquer sur un des boutons/menu sélectif.\n\nLes différentes options possibles sont :")
                 .addFields(
                     ticketsData.map(data => {return{
@@ -97,6 +120,15 @@ module.exports = {
             components: [
                 rowTicket
             ]
+        });
+
+        interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                .setTitle("Le message de ticket à été envoyé avec succès !")
+                .setColor("Blurple")
+            ],
+            ephemeral: true
         })
     }
 }

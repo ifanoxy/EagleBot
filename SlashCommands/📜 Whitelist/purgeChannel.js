@@ -5,10 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName("purge-channels")
     .setDescription("Permet de supprimer tout les channels d'un serveur discord")
-    .setDMPermission(false)
-    .addChannelOption(
-        opt => opt.setName("ignore").setDescription("Permet d'ignorer une catégorie").addChannelTypes(ChannelType.GuildCategory)
-    ),
+    .setDMPermission(false),
     /**
      * 
      * @param {CommandInteraction} interaction 
@@ -62,8 +59,7 @@ module.exports = {
                         .setDescription('Cette opération peut prendre un certain temps.')
                     ]
                 }).then(() => {
-                    const ignoreChannel = interaction.options.getChannel("ignore")
-                    interaction.guild.channels.cache.filter(chn => chn?.parentId != ignoreChannel.id | chn.id != ignoreChannel.id).map(channel => {
+                    interaction.guild.channels.cache.map(channel => {
                         channel.delete("Purge channel command | demandé par :" + interaction.user.tag).catch(() => {client.error(err)})
                     })
                 })

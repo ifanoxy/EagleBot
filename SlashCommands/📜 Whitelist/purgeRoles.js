@@ -8,7 +8,7 @@ module.exports = {
     .setDMPermission(false)
     .addRoleOption(
         opt => opt.setName("ignore").setDescription("Permet d'ignorer un role")
-    ),
+    ),  
     /**
      * 
      * @param {CommandInteraction} interaction 

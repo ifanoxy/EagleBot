@@ -156,14 +156,6 @@ module.exports = {
                                                         .setMaxLength(90)
                                                         .setRequired(true)
                                                     ),
-                                                    new ActionRowBuilder().addComponents(
-                                                        new TextInputBuilder()
-                                                        .setCustomId("emoji")
-                                                        .setLabel("Définissez un émoji (Optionnel)")
-                                                        .setStyle(TextInputStyle.Short)
-                                                        .setMaxLength(90)
-                                                        .setRequired(false)
-                                                    )
                                                 )
                                             if (i == 1 ) {
                                                 ModalOption.addComponents(
@@ -187,20 +179,17 @@ module.exports = {
                                                 interactionNow = interTemp2
                                                 const name = interTemp2.fields.getTextInputValue("name")
                                                 const description = interTemp2.fields.getTextInputValue("description")
-                                                const emoji = interTemp2.fields.getTextInputValue("emoji")
                                                 if (i == 1 ) {
                                                     const placeHolder = interTemp2.fields.getTextInputValue("placeholder")
                                                     options.push({
                                                         name: name,
                                                         description: description,
-                                                        emoji: emoji || null,
                                                         placeHolder: placeHolder || null
                                                     });
                                                 } else {
                                                     options.push({
                                                         name: name,
                                                         description: description,
-                                                        emoji: emoji || null
                                                     });
                                                 };
                                                 return 1
@@ -261,14 +250,6 @@ module.exports = {
                                                     ),
                                                     new ActionRowBuilder().addComponents(
                                                         new TextInputBuilder()
-                                                        .setCustomId("emoji")
-                                                        .setLabel("Définissez un émoji (Optionnel)")
-                                                        .setStyle(TextInputStyle.Short)
-                                                        .setMaxLength(90)
-                                                        .setRequired(false)
-                                                    ),
-                                                    new ActionRowBuilder().addComponents(
-                                                        new TextInputBuilder()
                                                         .setCustomId("color")
                                                         .setLabel("Définissez la couleur du bouton")
                                                         .setPlaceholder("rouge | bleu | vert | gris")
@@ -288,7 +269,6 @@ module.exports = {
                                                 interactionNow = interTemp2
                                                 const name = interTemp2.fields.getTextInputValue("name")
                                                 const description = interTemp2.fields.getTextInputValue("description")
-                                                const emoji = interTemp2.fields.getTextInputValue("emoji")
                                                 let color = interTemp2.fields.getTextInputValue("color")
                                                 switch (color.toLocaleUpperCase()) {
                                                     case "ROUGE" : {
@@ -308,7 +288,6 @@ module.exports = {
                                                 options.push({
                                                     name: name,
                                                     description: description,
-                                                    emoji: emoji || null,
                                                     color: color
                                                 });
                                                 return 1
@@ -328,7 +307,7 @@ module.exports = {
                                 embeds: [
                                     new EmbedBuilder()
                                     .setTitle("Vous avez terminé la création de votre Ticket")
-                                    .setDescription("Vous pouvez Utiliser ce 'template' en utilisant la commande /ticket-use")
+                                    .setDescription(`Vous pouvez Utiliser ce 'template' en utilisant la commande ${client.application.commands.cache.filter(i => i.name == "ticket-use").map(a => `</${a.name}:${a.id}>`)}`)
                                     .setColor("Green")
                                 ],
                                 components: []

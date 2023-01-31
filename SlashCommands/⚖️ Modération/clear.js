@@ -27,11 +27,13 @@ module.exports = {
             interaction.reply({
                 embeds: [
                     new EmbedBuilder()
-                    .setColor("Purple")
+                    .setColor("Greyple")
                     .setDescription(`Vous venez de supprimer **${interaction.options.getInteger("nombre-messages")}** messages`)
                     .setTimestamp()
+                    .setFooter({text: "Auto-suppression dans 5s"})
                 ]
             })
+            .then(msg => setTimeout(() => msg.delete(), 5*100))
         })
         .catch(() => {
             interaction.reply({

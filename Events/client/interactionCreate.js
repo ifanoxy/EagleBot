@@ -12,7 +12,7 @@ module.exports = {
             case interaction.isAnySelectMenu() : {
                 if (interaction.customId.startsWith("[no-check]")) return;
 
-                const file = client._fs.readFile(`./interaction/selectmenu/${interaction.customId.split("#")[0]}`);
+                const file = require(`../../interaction/selectmenu/${interaction.customId.split("#")[0]}.js`);
                 if (!file) return interaction.reply({
                     embeds: [
                         new EmbedBuilder()
@@ -41,7 +41,7 @@ module.exports = {
             case interaction.isButton() : {
                 if (interaction.customId.startsWith("[no-check]")) return;
 
-                const file = client._fs.readFile(`./interaction/button/${interaction.customId.split("#")[0]}`);
+                const file = require(`../../interaction/button/${interaction.customId.split("#")[0]}.js`);
                 if (!file) return interaction.reply({
                     embeds: [
                         new EmbedBuilder()
@@ -70,7 +70,7 @@ module.exports = {
             case interaction.isModalSubmit() : {
                 if (interaction.customId.startsWith("[no-check]")) return;
 
-                const file = client._fs.readFile(`./interaction/modal/${interaction.customId.split("#")[0]}`);
+                const file = require(`../../interaction/modal/${interaction.customId.split("#")[0]}.js`);
                 if (!file) return interaction.reply({
                     embeds: [
                         new EmbedBuilder()

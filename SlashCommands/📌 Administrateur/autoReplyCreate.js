@@ -1,14 +1,14 @@
 const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder }= require('discord.js')
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName("auto-reply-create")
+        .setName("autoreply-create")
         .setDescription("Vous permet de créer une préponse automatique à un message")
-        .setDMPermissions(false)
+        .setDMPermission(false)
         .addStringOption(
-            option => option.setName("question").setDescription("Quelle est la question que vous souhaitez répondre").setRequire(true)
+            option => option.setName("question").setDescription("Quelle est la question que vous souhaitez répondre").setRequired(true)
         )
         .addStringOption(
-            option => option.setName("réponse").setDescription("Définissez la réponse à la question").setRequire(true)
+            option => option.setName("réponse").setDescription("Définissez la réponse à la question").setRequired(true)
         ),
     execute(interaction, client) {
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply({
@@ -20,8 +20,8 @@ module.exports = {
             ephemeral: true
         });
 
-        const question = interaction.options.get("question");
-        const reponse = interaction.options.get("réponse");
+        const question = interaction.options.getString("question");
+        const reponse = interaction.options.getString("réponse");
 
         var guildData = client.managers.guildsManager.getAndCreateIfNotExists(interaction.guildId, {
             guildId: interaction.guildId,
@@ -32,6 +32,8 @@ module.exports = {
             reponse: reponse,
         });
 
+        guildData.save()
+
         interaction.reply({
             embeds: [
                 new EmbedBuilder()
@@ -40,11 +42,11 @@ module.exports = {
                     .addFields(
                         {
                             name: "Question",
-                            value: question
+                            value: `${question}`
                         },
                         {
                             name: "Réponse",
-                            value: reponse,
+                            value: `${reponse}`,
                         }
                     )
             ]
