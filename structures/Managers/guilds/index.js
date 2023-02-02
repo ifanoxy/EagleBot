@@ -77,6 +77,7 @@ module.exports = function (database, modelName, config) {
                         ThreadDelete: false,
                         WebhookCreate: false,
                         WebhookDelete: false,
+                        warn: false,
                     },
                     channel: {
                         ApplicationCommandPermissionUpdate: null,
@@ -106,6 +107,7 @@ module.exports = function (database, modelName, config) {
                         ThreadDelete: null,
                         WebhookCreate: null,
                         WebhookDelete: null,
+                        warn: null,
                     }
                 }
             },

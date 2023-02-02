@@ -34,7 +34,7 @@ module.exports = {
      * @returns 
      */
     async execute(interaction, client) {
-        if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) return interaction.reply({
+        if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) return interaction.reply({
             embeds: [
                 new EmbedBuilder()
                 .setColor('Red')
@@ -42,6 +42,7 @@ module.exports = {
             ],
             ephemeral: true
         });
+        
         const userData = client.managers.ticketsManager.getIfExist(interaction.user.id, {
             userId: interaction.user.id,
         });

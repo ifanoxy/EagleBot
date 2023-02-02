@@ -105,6 +105,21 @@ module.exports = {
             guildId: interaction.guildId,
             memberId: executor.id,
         })
+        if (guildData.logs.enable.warn) {
+            const channel = guildData.logs.channel.warn;
+            if (channel != null && channel != undefined) {
+                client.channels.cache.get(channel).send({
+                    embeds: [
+                        new EmbedBuilder().setColor("#2f3136").setTimestamp()
+                        .setTitle(`Logs | Warn`)
+                        .setDescription(
+                            `**Warn donné à :** <@${cible.id}> (${cible.id})\n\n`+
+                            `**Warn par:** <@${executor.id}>`
+                        )
+                    ]
+                });
+            }
+        }
         memberData.moderation.warn++;
         memberData.save();
         cibledata.save();

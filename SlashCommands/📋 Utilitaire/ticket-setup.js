@@ -10,7 +10,7 @@ module.exports = {
      * @param {*} client 
      */
     execute(interaction, client) {
-        if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply({
+        if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) return interaction.reply({
             embeds: [
                 new EmbedBuilder()
                 .setColor('Red')

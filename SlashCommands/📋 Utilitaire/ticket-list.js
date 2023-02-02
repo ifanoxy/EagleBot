@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require("discord.js");
+const { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, PermissionsBitField } = require("discord.js");
 const { EagleClient } = require("../../structures/Client");
 
 module.exports = {
@@ -12,6 +12,15 @@ module.exports = {
      * @param {EagleClient} client 
      */
     execute(interaction, client) {
+        if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) return interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                .setColor('Red')
+                .setDescription("Vous n'avez pas la permission d'utiliser cette commande !")
+            ],
+            ephemeral: true
+        });
+
         const userData = client.managers.ticketsManager.getIfExist(interaction.user.id, {
             userId: interaction.user.id,
         });

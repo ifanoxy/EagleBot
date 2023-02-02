@@ -19,7 +19,7 @@ module.exports = {
         let Name = [];
         let value = [];
         let channel = [];
-        for (let i = 0; i < 27; i++) {
+        for (let i = 0; i < 28; i++) {
             Name.push(`${Name.length+1}. ${Object.entries(guildData.logs.enable)[i][0]}`);
             value.push(`${Object.entries(guildData.logs.enable)[i][1] ? "Actif" : "Inactif"}`)
             channel.push(`${Object.entries(guildData.logs.enable)[i][1] == true ? `<#${Object.entries(guildData.logs.channel)[i][1]}>` : "*Aucun channel*"}`)
@@ -65,7 +65,7 @@ module.exports = {
                             .setCustomId("1")
                             .setLabel("Quelle options voulez-vous modifier")
                             .setRequired(true)
-                            .setPlaceholder("Nombre entre 1 et 27. ex : 1 6 7 8 10 25 ou all")
+                            .setPlaceholder("Nombre entre 1 et 28. ex : 1 6 7 8 10 25 ou all")
                             .setStyle(TextInputStyle.Short)
                         ),
                         new ActionRowBuilder().addComponents(
@@ -95,7 +95,7 @@ module.exports = {
                     const status = mod.fields.getTextInputValue("2").toLowerCase();
                     const channelId = mod.fields.getTextInputValue("3");
 
-                    if (positions[0] == "all") positions = [...Array(27).keys()].map(x => ++x)
+                    if (positions[0] == "all") positions = [...Array(28).keys()].map(x => ++x)
 
                     if (status != "actif" && status != "inactif")return mod.reply({
                         embeds: [
@@ -117,12 +117,12 @@ module.exports = {
                         });
                     }
                     for (let position of positions) {
-                        if (position <= 0 || position > 27 ) {
+                        if (position <= 0 || position > 28 ) {
                             return mod.reply({
                                 embeds: [
                                     new EmbedBuilder()
                                     .setColor('Red')
-                                    .setDescription("**Vous devez rentrer un nombre en 1 et 27 !**")
+                                    .setDescription("**Vous devez rentrer un nombre en 1 et 28 !**")
                                 ],
                                 ephemeral: true
                             });
