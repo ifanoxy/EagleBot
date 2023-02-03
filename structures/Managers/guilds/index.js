@@ -193,11 +193,11 @@ module.exports = function (database, modelName, config) {
 
             },
             {
-                name: 'invites',
+                name: 'form',
                 type: DataTypes.JSON,
                 allowNull: true,
                 isValue: true,
-                default: {channel: null, message: null, enable: false}
+                default: {},
             },
             {
                 name: 'member',
@@ -225,60 +225,12 @@ module.exports = function (database, modelName, config) {
                 default: []
             },
             {
-                name: 'guildOwners',
-                isValue: true,
-                type: DataTypes.JSON,
-                default: []
-            },
-            {
-                name: 'counters',
-                isValue: true,
-                type: DataTypes.JSON,
-                allowNull: true,
-                default: {member:{channel: undefined, name: undefined}, voice:{channel: undefined, name: undefined}, online:{channel: undefined, name: undefined}, offline:{channel: undefined, name: undefined}, boostCount:{channel: undefined, name: undefined}, boosterCount:{channel: undefined, name: undefined}}
-            },
-            {
-                name: 'tempvoc',
-                isValue: true,
-                type: DataTypes.JSON,
-                allowNull: true,
-                default: {category: undefined, channel: undefined, enable: false, name: '{member} - ✨'}
-            },
-            {
-                name: 'piconly',
-                isValue: true,
-                type: DataTypes.JSON,
-                allowNull: true,
-                default: []
-            },
-            {
-                name: 'polls',
-                isValue: true,
-                type: DataTypes.JSON,
-                allowNull: true,
-                default: []
-            },
-            {
-                name: 'warn',
-                isValue: true,
-                type: DataTypes.JSON,
-                allowNull: true,
-                default: []
-            },
-            {
               name: 'embedColor',
               isValue: true,
               type: DataTypes.JSON,
               allowNull: true,
               default: "#36393E"
             },
-            {
-                name: 'blacklistRoles',
-                isValue: true,
-                type: DataTypes.JSON,
-                allowNull: true,
-                default: [],
-            }
 
         ]
         const t = {};
