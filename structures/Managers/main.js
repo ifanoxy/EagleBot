@@ -23,7 +23,7 @@ class Manager extends Collection {
     }
 
     init() {
-        require(`./${this.modelName}`)(this.EagleManager.EagleClient.database, this.modelName, this.EagleManager.EagleClient.config).then(data => {
+        require(`./${this.modelName}`)(this.EagleManager.EagleClient?.database || this.EagleManager.database, this.modelName, this.EagleManager.EagleClient?.config || this.EagleManager.config).then(data => {
             this.model = data;
             this.loadTable();
         });
@@ -41,13 +41,18 @@ class Manager extends Collection {
     }
 
     async loadTables(data = {}) {
-        for await (const element of (await this.EagleManager.EagleClient.database.models[data.model].findAll()))
+        for await (const element of (await this.EagleManager.EagleClient?.database.models[data.model].findAll() || await this.EagleManager.database.models[data.model].findAll()))
             this[data.add](data.key.map(k => k.startsWith("{") && k.endsWith("}") ? element[k.slice(1, -1)] : k).join(''), element.get());
         console.log(chalk.bold.greenBright("[Eagle BOT]") + chalk.redBright(`Database - Successfully loaded ${this.size} ${data.model.charAt(0).toUpperCase()}${data.model.slice(1)}`))
         this.EagleManager.actualModelLoad++;
-        if (this.EagleManager.actualModelLoad >= this.EagleManager.EagleClient.database.modelManager.models.length) {
+        if (this.EagleManager.actualModelLoad >= (this.EagleManager.EagleClient?.database.modelManager.models.length || 1)) {
             this.EagleManager.actualModelLoad = 0
-            this.EagleManager.EagleClient.startHandler();
+            if (this.EagleManager.EagleClient){
+                this.EagleManager.EagleClient.startHandler();
+            }
+            else {
+                this.EagleManager.startHandler();
+            }
         }
     }
 }

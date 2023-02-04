@@ -5,6 +5,8 @@ const { EagleManagers } = require("./Manager");
 const { Moderation } = require("./Moderation");
 const { EagleMusic } = require("./Distube");
 const chalk = require("chalk");
+const { AntiRaidClient } = require("./AntiRaidClient");
+const { EagleFonctions } = require("./Fonctions");
 
 class EagleClient extends Client {
     constructor() {
@@ -73,11 +75,12 @@ class EagleClient extends Client {
             console.log(chalk.bold.greenBright("[Eagle BOT]") + chalk.blueBright("Database connection..."))
             this.managers = new EagleManagers(this);
         });
+        this.fonctions = new EagleFonctions(this);
         this.moderation = new Moderation(this);
         this.music = new EagleMusic(this);
         setTimeout(() => {
-            console.log(chalk.bold.greenBright("\n[Eagle BOT]") + chalk.blueBright(`Bot is ready ! Connected on ${this.user.tag}\n`))
-        }, 3000)
+            console.log(chalk.bold.greenBright("\n[Eagle BOT]") + chalk.blueBright(`Bot is ready ! Connected on ${this.user.tag}\n`));
+        }, 3500)
     }
 
     startHandler() {
@@ -86,6 +89,8 @@ class EagleClient extends Client {
         .then(() => {
             console.log(chalk.bold.greenBright("[Eagle BOT]") + chalk.yellow(`Adding ${this.handlers.slashCommandsHandler.SlashCommandsList.size} slash commands`))
             this.application.commands.set(this.handlers.slashCommandsHandler.SlashCommandsList.map(s => s.data.toJSON()))
+            
+            this.antiraidClient = new AntiRaidClient();
         })
     }
 

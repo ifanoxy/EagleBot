@@ -9,6 +9,18 @@ module.exports = {
     .addBooleanOption(
         option => option.setName("activé").setDescription("Permet d'actif ou non l'anti link").setRequired(true)
     )
+    .addStringOption(
+        option => option.setName("type").setDescription("le type de lien non autorisé").setRequired(true).setChoices(
+            {
+                name: "discord",
+                value: "discord",
+            },
+            {
+                name: "all",
+                value: "all",
+            }
+        )
+    )
     .addRoleOption(
         option => option.setName("role-minimum").setDescription("Role minimum nécessaire pour envoyé des liens")
     ),
@@ -33,7 +45,8 @@ module.exports = {
         });
         guildData.anti.link = {
             roleMini: interaction.options.getRole('role-minimum').id || interaction.guild.roles.everyone,
-            active: interaction.options.getBoolean('activé')
+            active: interaction.options.getBoolean('activé'),
+            type: interaction.options.getString('type')
         };
         guildData.save()
         interaction.reply({

@@ -26,7 +26,6 @@ module.exports = {
         });
         let listeUnban = []
         interaction.guild.bans.cache.map(ban => {
-            console.log(ban)
             interaction.guild.bans.remove(ban.user.id).catch(()=>{})
             listeUnban.push(ban.user.username)
         })

@@ -3,9 +3,12 @@
     "@discordjs/opus": "^0.8.0",
     "@discordjs/voice": "^0.14.0",
     "better-sqlite3": "^8.0.1",
+    "bufferutil": "^4.0.7",
     "chalk": "^4.1.2",
     "discord.js": "^14.7.1",
     "distube": "^4.0.4",
+    "eris": "^0.17.1",
+    "erlpack": "github:discord/erlpack",
     "ffmpeg-static": "^4.4.1",
     "fs": "^0.0.1-security",
     "libsodium-wrappers": "^0.7.10",
@@ -14,7 +17,9 @@
     "sequelize": "^6.28.0",
     "sqlite3": "^5.1.4",
     "translate": "^1.4.1",
-    "wikipedia": "^2.0.0"
+    "utf-8-validate": "^5.0.10",
+    "wikipedia": "^2.0.0",
+    "zlib-sync": "^0.1.8"
   },
   "type": "commonjs",
   "name": "eaglebot",

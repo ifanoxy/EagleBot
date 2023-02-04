@@ -15,10 +15,19 @@ module.exports = {
         const guildData = client.managers.guildsManager.getIfExist(Parametre.guild.id);
         if (!guildData) return;
         if (guildData.anti.link.active) {
-            if (Parametre.member.roles.hoist.rawPosition >= Parametre.guild.roles.cache.get(guildData.anti.link.roleMini).rawPosition)return;
-            if (!Parametre.content.includes("https://") || !Parametre.content.includes("http://"))return;
-            Parametre.delete().catch(() => {});
-            Parametre.author.send("Votre message a été supprimé, vous ne pouvez pas envoyez des liens dans ce serveurs").catch(() => {});
+            if (Parametre.member.roles.hoist.rawPosition < Parametre.guild.roles.cache.get(guildData.anti.link.roleMini).rawPosition){
+            if (guildData.anti.link.type == "discord") {
+                if (Parametre.content.includes("discord.gg/") || Parametre.content.includes(".gg/")) {
+                    Parametre.delete().catch(() => {});
+                    Parametre.author.send("Votre message a été supprimé, vous ne pouvez pas envoyez des liens d'invitation").catch(() => {});
+                }
+            } else {
+                if (Parametre.content.includes("discord.gg/") || Parametre.content.includes(".gg/") || Parametre.content.includes("https://") || Parametre.content.includes("http://") || Parametre.content.includes(".com/") || Parametre.content.includes(".fr/")) {
+                    Parametre.delete().catch(() => {});
+                    Parametre.author.send("Votre message a été supprimé, vous ne pouvez pas envoyez des liens dans ce serveurs").catch(() => {});
+                }
+            }
+            };
         };
         if (guildData.autoreply.length > 0) {
             for (let autoreply of guildData.autoreply) {
