@@ -15,14 +15,14 @@ class EagleFonctions {
      * @param {String | undefined} subGroup
      * @returns void
      */
-    async desactivateAntiRaid(AntiRaidType, interaction, value, subGroup) {
+    desactivateAntiRaid(AntiRaidType, interaction, value, subGroup) {
         if (!interaction)
         throw new Error("Vous devez définir l'interaction");
 
         let database = this.#client.managers.antiraidManager.getIfExist(interaction.guildId);
         if (database) {
             database.status[AntiRaidType] = value;
-            await database.save();
+            database.save();
             if (database.log) {
                 const channel = interaction.guild.channels.cache.get(database.log);
                 if (!channel) return database.log = null;
@@ -48,7 +48,7 @@ class EagleFonctions {
      * @param {String | undefined} subGroup
      * @returns void
      */
-    async activateAntiRaid(AntiRaidType, interaction, value, subGroup) {
+    activateAntiRaid(AntiRaidType, interaction, value, subGroup) {
         if (!interaction)
         throw new Error("Vous devez définir l'interaction");
 
@@ -59,7 +59,7 @@ class EagleFonctions {
         else 
         database.status[AntiRaidType] = value;
 
-        await database.save();
+        database.save();
         if (database.log) {
             const channel = interaction.guild.channels.cache.get(database.log);
             if (!channel) return database.log = null;
@@ -91,7 +91,6 @@ class EagleFonctions {
         
         return true;
     };
-
 }
 
 module.exports = { EagleFonctions }

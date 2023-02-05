@@ -3,7 +3,6 @@ const { EagleHandler } = require("./Handler/EagleHandler");
 const { EagleDatabaseSqlite } = require("./DataBase");
 const { EagleManagers } = require("./Manager");
 const { Moderation } = require("./Moderation");
-const { EagleMusic } = require("./Distube");
 const chalk = require("chalk");
 const { AntiRaidClient } = require("./AntiRaidClient");
 const { EagleFonctions } = require("./Fonctions");
@@ -77,7 +76,6 @@ class EagleClient extends Client {
         });
         this.fonctions = new EagleFonctions(this);
         this.moderation = new Moderation(this);
-        this.music = new EagleMusic(this);
         setTimeout(() => {
             console.log(chalk.bold.greenBright("\n[Eagle BOT]") + chalk.blueBright(`Bot is ready ! Connected on ${this.user.tag}\n`));
         }, 3500)
