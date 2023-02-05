@@ -3,17 +3,17 @@ const { EagleClient } = require("../../structures/Client");
 
 module.exports = {
     data: new SlashCommandBuilder()
-    .setName('anti-masschannel')
-    .setDescription("Vous permet de limiter la gestion des channels")
+    .setName('anti-massrole')
+    .setDescription("Vous permet de limiter la gestion des roles")
     .addSubcommandGroup(
-        subGroup => subGroup.setName("create").setDescription("Limiter la création de channel")
+        subGroup => subGroup.setName("create").setDescription("Limiter la création de role")
         .addSubcommand(
-            sub => sub.setName("off").setDescription("Permet de désactiver l'anti mass Channel")
+            sub => sub.setName("off").setDescription("Permet de désactiver l'anti mass role")
         )
         .addSubcommand(
-            sub => sub.setName("on").setDescription("Permet d'activer l'anti mass Channel")
+            sub => sub.setName("on").setDescription("Permet d'activer l'anti mass role")
             .addStringOption(
-                opt => opt.setName('sanction').setDescription("La sanction que prendra le membre qui créer trop de channel").setRequired(true).addChoices(
+                opt => opt.setName('sanction').setDescription("La sanction que prendra le membre qui créer trop de role").setRequired(true).addChoices(
                     {name: "Derank", value: "derank"},
                     {name: "kick", value: "kick"},
                     {name: "ban", value: "ban"}
@@ -23,19 +23,19 @@ module.exports = {
                 opt => opt.setName("ignore-whitelist").setDescription("True: les whitelists ne seront pas sanctionnés").setRequired(true)
             )
             .addStringOption(
-                opt => opt.setName("frequence").setDescription("l'intervale de temps entre les créations de channel. ex: '5/15s' ").setRequired(true)
+                opt => opt.setName("frequence").setDescription("l'intervale de temps entre les créations de role. ex: '5/15s' ").setRequired(true)
             )
         )
     )
     .addSubcommandGroup(
-        subGroup => subGroup.setName("update").setDescription("Limiter la modification de channel")
+        subGroup => subGroup.setName("update").setDescription("Limiter la modification de role")
         .addSubcommand(
-            sub => sub.setName("off").setDescription("Permet de désactiver l'anti mass Channel")
+            sub => sub.setName("off").setDescription("Permet de désactiver l'anti mass role")
         )
         .addSubcommand(
-            sub => sub.setName("on").setDescription("Permet d'activer l'anti mass Channel")
+            sub => sub.setName("on").setDescription("Permet d'activer l'anti mass role")
             .addStringOption(
-                opt => opt.setName('sanction').setDescription("La sanction que prendra le membre qui modifie trop de channel").setRequired(true).addChoices(
+                opt => opt.setName('sanction').setDescription("La sanction que prendra le membre qui modifie trop de role").setRequired(true).addChoices(
                     {name: "Derank", value: "derank"},
                     {name: "kick", value: "kick"},
                     {name: "ban", value: "ban"}
@@ -45,19 +45,19 @@ module.exports = {
                 opt => opt.setName("ignore-whitelist").setDescription("True: les whitelists ne seront pas sanctionnés").setRequired(true)
             )
             .addStringOption(
-                opt => opt.setName("frequence").setDescription("l'intervale de temps entre les modifications de channel. ex: '5/15s' ").setRequired(true)
+                opt => opt.setName("frequence").setDescription("l'intervale de temps entre les modifications de role. ex: '5/15s' ").setRequired(true)
             )
         )
     )
     .addSubcommandGroup(
-        subGroup => subGroup.setName("delete").setDescription("Limiter la suppression de channel")
+        subGroup => subGroup.setName("delete").setDescription("Limiter la suppression de role")
         .addSubcommand(
-            sub => sub.setName("off").setDescription("Permet de désactiver l'anti mass Channel")
+            sub => sub.setName("off").setDescription("Permet de désactiver l'anti mass role")
         )
         .addSubcommand(
-            sub => sub.setName("on").setDescription("Permet d'activer l'anti mass Channel")
+            sub => sub.setName("on").setDescription("Permet d'activer l'anti mass role")
             .addStringOption(
-                opt => opt.setName('sanction').setDescription("La sanction que prendra le membre qui supprime trop de channel").setRequired(true).addChoices(
+                opt => opt.setName('sanction').setDescription("La sanction que prendra le membre qui supprime trop de role").setRequired(true).addChoices(
                     {name: "Derank", value: "derank"},
                     {name: "kick", value: "kick"},
                     {name: "ban", value: "ban"}
@@ -67,19 +67,19 @@ module.exports = {
                 opt => opt.setName("ignore-whitelist").setDescription("True: les whitelists ne seront pas sanctionnés").setRequired(true)
             )
             .addStringOption(
-                opt => opt.setName("frequence").setDescription("l'intervale de temps entre les suppressions de channel. ex: '5/15s' ").setRequired(true)
+                opt => opt.setName("frequence").setDescription("l'intervale de temps entre les suppressions de role. ex: '5/15s' ").setRequired(true)
             )
         )
     )
     .addSubcommandGroup(
-        subGroup => subGroup.setName("all").setDescription("Limiter la création/modification/suppression de channel")
+        subGroup => subGroup.setName("all").setDescription("Limiter la création/modification/suppression de role")
         .addSubcommand(
-            sub => sub.setName("off").setDescription("Permet de désactiver l'anti mass Channel")
+            sub => sub.setName("off").setDescription("Permet de désactiver l'anti mass role")
         )
         .addSubcommand(
-            sub => sub.setName("on").setDescription("Permet d'activer l'anti mass Channel")
+            sub => sub.setName("on").setDescription("Permet d'activer l'anti mass role")
             .addStringOption(
-                opt => opt.setName('sanction').setDescription("La sanction que prendra le membre qui modifie trop les channels").setRequired(true).addChoices(
+                opt => opt.setName('sanction').setDescription("La sanction que prendra le membre qui modifie trop les roles").setRequired(true).addChoices(
                     {name: "Derank", value: "derank"},
                     {name: "kick", value: "kick"},
                     {name: "ban", value: "ban"}
@@ -89,7 +89,7 @@ module.exports = {
                 opt => opt.setName("ignore-whitelist").setDescription("True: les whitelists ne seront pas sanctionnés").setRequired(true)
             )
             .addStringOption(
-                opt => opt.setName("frequence").setDescription("l'intervale de temps entre les modifications des channels. ex: '5/15s' ").setRequired(true)
+                opt => opt.setName("frequence").setDescription("l'intervale de temps entre les modifications des roles. ex: '5/15s' ").setRequired(true)
             )
         )
     )
@@ -117,13 +117,13 @@ module.exports = {
         for (const subGroup of subGroup_Array) {
             if (sub === "off") {
                 setTimeout(() => {
-                    client.fonctions.desactivateAntiRaid("anti-massChannel", interaction, {status: false}, subGroup)
+                    client.fonctions.desactivateAntiRaid("anti-massRole", interaction, {status: false}, subGroup)
                 }, 1000)
                 if (i == subGroup_Array.length)
                 interaction.reply({
                     embeds: [
                         new EmbedBuilder()
-                        .setTitle("Vous avez __Désactiver__ l'anti mass Channel avec succès !")
+                        .setTitle("Vous avez __Désactiver__ l'anti mass Role avec succès !")
                         .setColor("Orange")
                     ],
                     ephemeral: true
@@ -139,19 +139,19 @@ module.exports = {
                         la fréqence doit ressemblée à ceci:
                         
                         **x/ys**
-                        x = nombre de channel
+                        x = nombre de Role
                         y = nombre de seconde
                         s = seconde
 
                         __exemple :__
-                        5/15s --> *(5 channels en 15 secondes)*
+                        5/15s --> *(5 Roles en 15 secondes)*
                         `)
                     ],
                     ephemeral: true
                 });
                 setTimeout(() => {
                     client.fonctions.activateAntiRaid(
-                        "anti-massChannel", interaction,
+                        "anti-massRole", interaction,
                         {
                             status: true,
                             ignoreWhitelist: interaction.options.getBoolean("ignore-whitelist"),
@@ -165,7 +165,7 @@ module.exports = {
                 interaction.reply({
                     embeds: [
                         new EmbedBuilder()
-                        .setTitle("Vous avez __Activer__ l'anti mass Channel avec succès !")
+                        .setTitle("Vous avez __Activer__ l'anti mass Role avec succès !")
                         .setColor("Green")
                     ],
                     ephemeral: true

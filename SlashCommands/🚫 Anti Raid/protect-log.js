@@ -21,6 +21,15 @@ module.exports = {
      * @param {EagleClient} client 
      */
     execute(interaction, client) {
+        if (!client.moderation.checkOwner(interaction.member.id)) return interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                .setColor('Red')
+                .setDescription("Vous devez être owner pour utiliser cette commande !")
+            ],
+            ephemeral: true
+        });
+        
         const sub = interaction.options.getSubcommand();
 
         if (sub == "set") {
