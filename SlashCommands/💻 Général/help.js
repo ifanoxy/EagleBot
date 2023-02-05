@@ -200,7 +200,16 @@ module.exports = {
                             )
                         };
                     }
-                    if (nbrAllSubOfAllCommands) {
+                    if (nbrAllSubOfAllCommands > 25) {
+                        let p = []
+                        Object.values(AllCommands).map(cmd => cmd.commandsSize).reduce((a,b,i) => {
+                            if (a + b > 25)
+                            {
+                                p.push(i);
+                                return b
+                            }
+                            else return a+b
+                        })
                         var rowPagination = new ActionRowBuilder()
                         .addComponents(
                             new ButtonBuilder()
@@ -211,7 +220,7 @@ module.exports = {
                             new ButtonBuilder()
                             .setCustomId("[no-check]")
                             .setDisabled(true)
-                            .setLabel(`1/${Math.ceil(nbrAllSubOfAllCommands/25)}`)
+                            .setLabel(`1/${p.length+1}`)
                             .setStyle(1),
                             new ButtonBuilder()
                             .setCustomId("[no-check]Next")
@@ -236,7 +245,7 @@ module.exports = {
                     })
                 } else {
                     inter.update({
-                        embeds: [embedCommands],
+                        embeds: [embedCommands], components: [new ActionRowBuilder().addComponents(SelectMenuHelp)],
                     }).then(msg => {
                         askSelectMenu(msg)
                     })}
@@ -281,7 +290,7 @@ module.exports = {
                         let max = p[position[0] - 2] || Object.keys(AllCommands).length;
                         let k = min;
 
-                        while (j <= i && j < nbrAllSubOfAllCommands && k < max) {   
+                        while (j <= i && k < max) {   
                             let commandName = Object.keys(AllCommands)[k]
                             const commandData = AllCommands[commandName];
                             const command = client.application.commands.cache.find(cmd => cmd.name == commandName);
@@ -358,6 +367,7 @@ module.exports = {
                         let i = Number(position[0])*25+24;
                         let j = Number(position[0])*25;
                         let p = []
+                        
                         Object.values(AllCommands).map(cmd => cmd.commandsSize).reduce((a,b,i) => {
                             if (a + b > 25)
                             {
@@ -370,8 +380,8 @@ module.exports = {
                         let max = p[position[0]] || Object.keys(AllCommands).length;
                         let k = min;
 
-                        while (j <= i && j < nbrAllSubOfAllCommands && k < max) {
-                            let commandName = Object.keys(AllCommands)[k]
+                        while (j <= i && k < max) {
+                            let commandName = Object.keys(AllCommands)[k];
                             const commandData = AllCommands[commandName];
                             const command = client.application.commands.cache.find(cmd => cmd.name == commandName);
                             if (commandData.subGroup)
