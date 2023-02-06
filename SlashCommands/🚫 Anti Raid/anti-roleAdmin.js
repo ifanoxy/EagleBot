@@ -3,7 +3,7 @@ const { EagleClient } = require("../../structures/Client");
 
 module.exports = {
     data: new SlashCommandBuilder()
-    .setName('anti-admin')
+    .setName('anti-roleadmin')
     .setDescription("Vous permet d'interdire l'ajouts de la permission Admin")
     .addSubcommand(
         sub => sub.setName("off").setDescription("Permet de désactiver l'anti admin")
