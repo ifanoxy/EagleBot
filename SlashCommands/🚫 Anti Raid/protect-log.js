@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName("protect-log")
     .setDescription("Channel où sera envoyer les alertes de protection")
+    .setDMPermission(false)
     .addSubcommand(
         sub => sub.setName("set").setDescription("Permet de définir le channel des logs")
         .addChannelOption(

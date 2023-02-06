@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName('anti-masssticker')
     .setDescription("Vous permet de limiter la gestion des stickers")
+    .setDMPermission(false)
     .addSubcommandGroup(
         subGroup => subGroup.setName("create").setDescription("Limiter la création de sticker")
         .addSubcommand(

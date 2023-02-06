@@ -4,6 +4,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName("clear")
     .setDescription("Permet de supprimer un nombre de message dans un channel")
+    .setDMPermission(false)
     .addIntegerOption(
         option => option.setName("nombre-messages").setDescription("Insérer le nombre de message à supprimer").setMaxValue(150).setRequired(true)
     ),

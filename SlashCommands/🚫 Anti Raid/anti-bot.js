@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName('anti-bot')
     .setDescription("Vous permet d'interdire l'ajouts de bot dans votre serveur")
+    .setDMPermission(false)
     .addSubcommand(
         sub => sub.setName("off").setDescription("Permet de désactiver l'anti bot")
     )

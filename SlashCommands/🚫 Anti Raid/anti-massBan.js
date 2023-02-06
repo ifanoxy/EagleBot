@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName('anti-massban')
     .setDescription("Vous permet d'interdire le bannissement massif")
+    .setDMPermission(false)
     .addSubcommand(
         sub => sub.setName("off").setDescription("Permet de désactiver l'anti mass ban")
     )

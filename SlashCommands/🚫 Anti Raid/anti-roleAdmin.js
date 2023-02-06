@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName('anti-roleadmin')
     .setDescription("Vous permet d'interdire l'ajouts de la permission Admin")
+    .setDMPermission(false)
     .addSubcommand(
         sub => sub.setName("off").setDescription("Permet de désactiver l'anti admin")
     )

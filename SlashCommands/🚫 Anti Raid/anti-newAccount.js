@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName('anti-newaccount')
     .setDescription("Vous permet d'interdire les membres trop récents")
+    .setDMPermission(false)
     .addSubcommand(
         sub => sub.setName("off").setDescription("Permet de désactiver l'anti new account")
     )

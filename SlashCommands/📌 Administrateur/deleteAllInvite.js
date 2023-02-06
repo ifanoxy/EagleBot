@@ -3,7 +3,8 @@ const { SlashCommandBuilder, PermissionsBitField, CommandInteraction, EmbedBuild
 module.exports = {
     data: new SlashCommandBuilder()
     .setName("delete-all-invites")
-    .setDescription("Permet de supprimer toute les invitations d'un serveur."),
+    .setDescription("Permet de supprimer toute les invitations d'un serveur.")
+    .setDMPermission(false),
     /**
      * 
      * @param {CommandInteraction} interaction 

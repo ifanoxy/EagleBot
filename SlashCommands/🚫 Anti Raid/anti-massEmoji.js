@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName('anti-massemoji')
     .setDescription("Vous permet de limiter la gestion des emojis")
+    .setDMPermission(false)
     .addSubcommandGroup(
         subGroup => subGroup.setName("create").setDescription("Limiter la création de emoji")
         .addSubcommand(

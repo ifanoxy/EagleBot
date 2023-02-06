@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName('anti-masskick')
     .setDescription("Vous permet d'interdire le kick massif")
+    .setDMPermission(false)
     .addSubcommand(
         sub => sub.setName("off").setDescription("Permet de désactiver l'anti mass kick")
     )
