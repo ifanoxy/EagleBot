@@ -33,7 +33,7 @@ module.exports = {
                     .setFooter({text: "Auto-suppression dans 5s"})
                 ]
             })
-            .then(msg => setTimeout(() => msg.delete(), 5*100))
+            .then(msg => setTimeout(() => {msg.delete()}, 5*1000))
         })
         .catch(() => {
             interaction.reply({

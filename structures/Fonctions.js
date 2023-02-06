@@ -9,7 +9,7 @@ class EagleFonctions {
 
     /**
      * 
-     * @param {"anti-bot" | "anti-massChannel" | "anti-massBan" | "anti-massUnban" | "anti-massKick" | "anti-massSticker" | "anti-massEmoji" |"anti-newAccount" | "anti-webhook" | "anti-roleAdmin"} AntiRaidType
+     * @param {"anti-bot" | "anti-massChannel" | "anti-massBan" | "anti-massUnban" | "anti-massKick" | "anti-massSticker" | "anti-massEmoji" |"anti-newAccount" | "anti-webhook" | "anti-admin"} AntiRaidType
      * @param {CommandInteraction} interaction 
      * @param {{status: Boolean, frequence: string | null, ignoreWhitelist: Boolean, sanction: String | null}} value
      * @param {String | undefined} subGroup
@@ -21,8 +21,11 @@ class EagleFonctions {
 
         let database = this.#client.managers.antiraidManager.getIfExist(interaction.guildId);
         if (database) {
-            database.status[AntiRaidType] = value;
-            database.save();
+            if (subGroup) 
+                database.status[AntiRaidType][subGroup] = value;
+            else
+                database.status[AntiRaidType] = value;
+                database.save();
             if (database.log) {
                 const channel = interaction.guild.channels.cache.get(database.log);
                 if (!channel) return database.log = null;
@@ -42,7 +45,7 @@ class EagleFonctions {
     };
     /**
      * 
-     * @param {"anti-bot" | "anti-massChannel" | "anti-massBan" | "anti-massUnban" | "anti-massKick" | "anti-massSticker" | "anti-massEmoji" |"anti-newAccount" | "anti-webhook" | "anti-roleAdmin"} AntiRaidType
+     * @param {"anti-bot" | "anti-massChannel" | "anti-massBan" | "anti-massUnban" | "anti-massKick" | "anti-massSticker" | "anti-massEmoji" |"anti-newAccount" | "anti-webhook" | "anti-admin"} AntiRaidType
      * @param {CommandInteraction} interaction 
      * @param {{status: Boolean, frequence: string | null, ignoreWhitelist: Boolean, sanction: String | null}} value
      * @param {String | undefined} subGroup

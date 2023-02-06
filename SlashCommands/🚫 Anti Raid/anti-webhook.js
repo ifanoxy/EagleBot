@@ -3,7 +3,7 @@ const { EagleClient } = require("../../structures/Client");
 
 module.exports = {
     data: new SlashCommandBuilder()
-    .setName('anti-masswebhook')
+    .setName('anti-webhook')
     .setDescription("Vous permet de limiter la gestion des webhooks")
     .addSubcommandGroup(
         subGroup => subGroup.setName("create").setDescription("Limiter la création de webhook")
@@ -21,9 +21,6 @@ module.exports = {
             )
             .addBooleanOption(
                 opt => opt.setName("ignore-whitelist").setDescription("True: les whitelists ne seront pas sanctionnés").setRequired(true)
-            )
-            .addStringOption(
-                opt => opt.setName("frequence").setDescription("l'intervale de temps entre les créations de webhook. ex: '5/15s' ").setRequired(true)
             )
         )
     )
@@ -44,9 +41,6 @@ module.exports = {
             .addBooleanOption(
                 opt => opt.setName("ignore-whitelist").setDescription("True: les whitelists ne seront pas sanctionnés").setRequired(true)
             )
-            .addStringOption(
-                opt => opt.setName("frequence").setDescription("l'intervale de temps entre les modifications de webhook. ex: '5/15s' ").setRequired(true)
-            )
         )
     )
     .addSubcommandGroup(
@@ -66,9 +60,6 @@ module.exports = {
             .addBooleanOption(
                 opt => opt.setName("ignore-whitelist").setDescription("True: les whitelists ne seront pas sanctionnés").setRequired(true)
             )
-            .addStringOption(
-                opt => opt.setName("frequence").setDescription("l'intervale de temps entre les suppressions de webhook. ex: '5/15s' ").setRequired(true)
-            )
         )
     )
     .addSubcommandGroup(
@@ -87,9 +78,6 @@ module.exports = {
             )
             .addBooleanOption(
                 opt => opt.setName("ignore-whitelist").setDescription("True: les whitelists ne seront pas sanctionnés").setRequired(true)
-            )
-            .addStringOption(
-                opt => opt.setName("frequence").setDescription("l'intervale de temps entre les modifications des webhooks. ex: '5/15s' ").setRequired(true)
             )
         )
     )
@@ -129,26 +117,6 @@ module.exports = {
                     ephemeral: true
                 })
             } else {
-                const frequence = interaction.options.getString("frequence");
-                if (!client.fonctions.checkFrequence(frequence, "x/yt")) return interaction.reply({
-                    embeds: [
-                        new EmbedBuilder()
-                        .setColor("Red")
-                        .setTitle("Il y a une erreur dans la fréquence !")
-                        .setDescription(`
-                        la fréqence doit ressemblée à ceci:
-                        
-                        **x/ys**
-                        x = nombre de Webhook
-                        y = nombre de seconde
-                        s = seconde
-
-                        __exemple :__
-                        5/15s --> *(5 webhooks en 15 secondes)*
-                        `)
-                    ],
-                    ephemeral: true
-                });
                 setTimeout(() => {
                     client.fonctions.activateAntiRaid(
                         "anti-webhook", interaction,
@@ -156,7 +124,6 @@ module.exports = {
                             status: true,
                             ignoreWhitelist: interaction.options.getBoolean("ignore-whitelist"),
                             sanction: interaction.options.getString("sanction"),
-                            frequence: interaction.options.getString("frequence"),
                         },
                         subGroup
                     );
@@ -165,7 +132,7 @@ module.exports = {
                 interaction.reply({
                     embeds: [
                         new EmbedBuilder()
-                        .setTitle("Vous avez __Activer__ l'anti mass Webhook avec succès !")
+                        .setTitle("Vous avez __Activer__ l'anti Webhook avec succès !")
                         .setColor("Green")
                     ],
                     ephemeral: true

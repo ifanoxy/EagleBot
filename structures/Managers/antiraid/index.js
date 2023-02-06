@@ -41,10 +41,24 @@ module.exports = function (database, modelName, config) {
                         },
                     },
                     "anti-massRole":{
-                        status: false,
-                        frequence: null,
-                        ignoreWhitelist: false,
-                        sanction: null,
+                        create: {
+                            status: false,
+                            frequence: null,
+                            ignoreWhitelist: false,
+                            sanction: null,
+                        },
+                        delete: {
+                            status: false,
+                            frequence: null,
+                            ignoreWhitelist: false,
+                            sanction: null,
+                        },
+                        update: {
+                            status: false,
+                            frequence: null,
+                            ignoreWhitelist: false,
+                            sanction: null,
+                        },
                     },
                     "anti-massBan":{
                         status: false,
@@ -65,16 +79,44 @@ module.exports = function (database, modelName, config) {
                         sanction: null,
                     },
                     "anti-massSticker":{
-                        status: false,
-                        frequence: null,
-                        ignoreWhitelist: false,
-                        sanction: null,
+                        create: {
+                            status: false,
+                            frequence: null,
+                            ignoreWhitelist: false,
+                            sanction: null,
+                        },
+                        delete: {
+                            status: false,
+                            frequence: null,
+                            ignoreWhitelist: false,
+                            sanction: null,
+                        },
+                        update: {
+                            status: false,
+                            frequence: null,
+                            ignoreWhitelist: false,
+                            sanction: null,
+                        },
                     },
                     "anti-massEmoji":{
-                        status: false,
-                        frequence: null,
-                        ignoreWhitelist: false,
-                        sanction: null,
+                        create: {
+                            status: false,
+                            frequence: null,
+                            ignoreWhitelist: false,
+                            sanction: null,
+                        },
+                        delete: {
+                            status: false,
+                            frequence: null,
+                            ignoreWhitelist: false,
+                            sanction: null,
+                        },
+                        update: {
+                            status: false,
+                            frequence: null,
+                            ignoreWhitelist: false,
+                            sanction: null,
+                        },
                     },
                     "anti-newAccount":{
                         status: false,
