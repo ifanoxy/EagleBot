@@ -3,7 +3,8 @@ const { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ButtonBuilder, Bu
 module.exports = {
     data: new SlashCommandBuilder()
     .setName("ticket-setup")
-    .setDescription("permet de créer une configuration de ticket"),
+    .setDescription("permet de créer une configuration de ticket")
+    .setDMPermission(false),
     /**
      * 
      * @param {CommandInteraction} interaction 

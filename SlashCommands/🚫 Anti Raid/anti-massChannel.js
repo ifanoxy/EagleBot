@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName('anti-masschannel')
     .setDescription("Vous permet de limiter la gestion des channels")
+    .setDMPermission(false)
     .addSubcommandGroup(
         subGroup => subGroup.setName("create").setDescription("Limiter la création de channel")
         .addSubcommand(

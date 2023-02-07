@@ -3,6 +3,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("autoreply-delete")
         .setDescription("Vous permet de supprimer une question de l'auto reply")
+        .setDMPermission(false)
         .addStringOption(
             option => option.setName("question").setDescription("la question que vous souhaitez supprimer").setRequired(true).setAutocomplete(true)
         ),

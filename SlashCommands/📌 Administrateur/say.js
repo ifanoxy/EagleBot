@@ -4,6 +4,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName("say")
     .setDescription("permet de dire quelque chose avec le bot - \p pour retour à la ligne")
+    .setDMPermission(false)
     .addStringOption(
         opt => opt.setName("texte").setDescription("ce que vous souhaitez écrire").setRequired(true)
     ),
