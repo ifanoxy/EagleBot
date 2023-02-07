@@ -76,9 +76,7 @@ class EagleClient extends Client {
         });
         this.fonctions = new EagleFonctions(this);
         this.moderation = new Moderation(this);
-        setTimeout(() => {
-            console.log(chalk.bold.greenBright("\n[Eagle BOT]") + chalk.blueBright(`Bot is ready ! Connected on ${this.user.tag}\n`));
-        }, 3500)
+        this.on("ready", () => console.log(chalk.bold.greenBright("\n[Eagle BOT]") + chalk.blueBright(`Bot is ready ! Connected on ${this.user.tag}\n`)))       
     }
 
     startHandler() {
