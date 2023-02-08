@@ -22,14 +22,14 @@ module.exports = {
                                 new EmbedBuilder().setColor("Yellow")
                                 .setTimestamp().setDescription("Votre mute temporaire est terminé sur le serveur **"+client.guilds.cache.get(mute.guildId).name+"** !")
                             ]
-                        })
+                        });
+                        let database = client.managers.mutesManager.getIfExist(`${mute.guildId}-${mute.memberId}`);
+                        try {
+                            database.delete()
+                        } catch (err) {
+                            client.error(err)
+                        }
                     }).catch(() => {})
-                    let database = client.managers.mutesManager.getIfExist(`${mute.guildId}-${mute.memberId}`);
-                    try {
-                        database.delete()
-                    } catch (err) {
-                        client.err(err)
-                    }
                 }, TimeRemaining * 1000)
             }
         }

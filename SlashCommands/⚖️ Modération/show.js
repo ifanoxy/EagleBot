@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionsBitField } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,6 +12,15 @@ module.exports = {
         opt => opt.setName("role-show").setDescription("Le role qui verra le channel")
     ),
     execute(interaction, client) {
+        const executor = interaction.member;
+        if (!executor.permissions.has(PermissionsBitField.Flags.MuteMembers)) return interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                .setColor('Red')
+                .setDescription("Vous n'avez pas la permission d'utiliser cette commande !")
+            ],
+            ephemeral: true
+        });
         const channel = interaction.options.getChannel("channel")
         channel.permissionOverwrites.create(interaction.options.getRole("role-show") || interaction.guild.roles.everyone, {
             ViewChannel: true 
