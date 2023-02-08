@@ -27,8 +27,8 @@ module.exports = {
             ],
             ephemeral: true
         });
-        const cible = interaction.options.getMember("utilisateur")
-        if (!cible.bannable) return interaction.reply({
+        const cible = interaction.options.getUser("utilisateur")
+        if (!interaction.guild.members.cache.get(cible.id).bannable) return interaction.reply({
             embeds: [
                 new EmbedBuilder()
                 .setColor('Red')
@@ -36,7 +36,7 @@ module.exports = {
             ],
             ephemeral: true
         });
-        if (Number(cible.permissions) > Number(executor.permissions)) return interaction.reply({
+        if (Number(interaction.guild.members.cache.get(cible.id).permissions) > Number(executor.permissions)) return interaction.reply({
             embeds: [
                 new EmbedBuilder()
                 .setColor('Red')
@@ -45,19 +45,20 @@ module.exports = {
             ephemeral: true
         });
 
-        const reponsekick = cible.ban(`${executor.user.tag} | ${interaction.options.getString('raison') ? interaction.options.getString('raison') : "pas de raison"}`)
+        interaction.guild.members.ban(cible.id, {reason: `${interaction.options.getString('raison') ? interaction.options.getString('raison') : "pas de raison"}`})
         .then(() => {
             interaction.reply({
                 embeds: [
                     new EmbedBuilder()
                     .setColor("DarkOrange")
-                    .setDescription(`\`${cible.nickname}\` a été banni par <@${executor.id}>`)
+                    .setDescription(`\`${cible.tag}\` a été banni par <@${executor.id}>`)
                     .setTimestamp()
                 ]
             });
             return 1
         })
-        .catch(() => {
+        .catch((err) => {
+            client.error(err)
             interaction.reply({
                 embeds: [
                     new EmbedBuilder()
@@ -68,7 +69,6 @@ module.exports = {
             });
             return 0
         })
-        if (!reponsekick)return
 
         const memberData = await client.managers.membersManager.getAndCreateIfNotExists(interaction.guildId, {
             guildId: interaction.guildId,

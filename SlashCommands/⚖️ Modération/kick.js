@@ -27,7 +27,7 @@ module.exports = {
             ],
             ephemeral: true
         });
-        const cible = interaction.options.getMember("utilisateur")
+        const cible = interaction.guild.members.cacha.get(interaction.options.getUser("utilisateur").id)
         if (!cible.kickable) return interaction.reply({
             embeds: [
                 new EmbedBuilder()

@@ -63,9 +63,18 @@ module.exports = {
                     let rolesBackup = [];
                     let emojisBackup = [];
                     let bansBackup = [];
-                    for (const channel of interaction.guild.channels.cache) {
-                        channelsBackup.push(channel[1])
-                    }
+                    interaction.guild.channels.cache.map(channel => {
+                        channelsBackup.push({
+                            name: channel.name,
+                            type: channel.type,
+                            parentId: channel.parentId,
+                            id: channel.id,
+                            nsfw: channel.nsfw,
+                            topic: channel.topic,
+                            rawPosition: channel.rawPosition,
+                        });
+                    });
+                    
                     interaction.editReply({
                         embeds: [
                             new EmbedBuilder()
@@ -80,9 +89,17 @@ module.exports = {
                             .setTimestamp()
                         ],
                     })
-                    for (const role of interaction.guild.roles.cache) {
-                        rolesBackup.push(role[1])
-                    }
+                    interaction.guild.roles.cache.map(role => {
+                        if (Object.keys(role.tags).lenght == 0 || role.name == "@everyone")return;
+                        rolesBackup.push({
+                            id: role.id,
+                            name: role.name,
+                            color: role.color,
+                            rawPosition: role.rawPosition,
+                            mentionable: role.mentionable,
+                            permissions: role.permissions,
+                        })
+                    })
                     interaction.editReply({
                         embeds: [
                             new EmbedBuilder()
@@ -97,9 +114,12 @@ module.exports = {
                             .setTimestamp()
                         ],
                     })
-                    for (const emoji of interaction.guild.emojis.cache) {
-                        emojisBackup.push(emoji[1])
-                    }
+                    interaction.guild.emojis.cache.map(emoji => {
+                        emojisBackup.push({
+                            name: emoji.name,
+                            url: emoji.url,
+                        })
+                    })
                     interaction.editReply({
                         embeds: [
                             new EmbedBuilder()
@@ -133,6 +153,30 @@ module.exports = {
                     })
     
                     let Data = client.managers.backupManager.getIfExist(interaction.member.id);
+                    if (Data) {
+                        if(Object.values(Data.data.data).includes(name)) {
+                            const i = Object.values(Data.data.data).findIndex(name)
+                            Data.data.data[i] = {
+                                name: name,
+                                channels: {
+                                    lenght: channelsBackup.length,
+                                    channelsBackup: channelsBackup,
+                                },
+                                roles: {
+                                    lenght: rolesBackup.length,
+                                    rolesBackup: rolesBackup,
+                                },
+                                emojis: {
+                                    lenght: emojisBackup.length,
+                                    emojisBackup: emojisBackup,
+                                },
+                                bans: {
+                                    lenght: bansBackup.length,
+                                    bansBackup: bansBackup,
+                                },
+                            }
+                        }
+                    }
                     if(Data != null){
                         Data.data.data.push({
                             name: name,
@@ -187,6 +231,14 @@ module.exports = {
             case "utiliser" : {
                 const name = interaction.options.getString("nom")
                 const backupData = await client.managers.backupManager.getIfExist(interaction.user.id)
+                if (!backupData)return interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                        .setColor("LuminousVividPink")
+                        .setTitle("Je n'ai trouvé aucune backup avec ce nom")
+                    ],  
+                    ephemeral: true
+                });
                 let check = {nbr: 0, bol: false};
                 for (const backup of backupData.data.data) {
                     if(backup.name == name){
@@ -222,7 +274,10 @@ module.exports = {
                             guild.bans.create(b)
                         });
                         backupData.data.data[check.nbr].emojis.emojisBackup.map(e => {
-                            guild.emojis.create(e)
+                            guild.emojis.create({
+                                name: e.name,
+                                attachment: e.url,
+                            })
                         });
                         let inviteSend = false
                         while (inviteSend == false) {

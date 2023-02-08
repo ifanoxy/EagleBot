@@ -1,4 +1,5 @@
 const chalk = require("chalk");
+const { AntiCrash } = require("./AntiCrash");
 const { EventsHandler } = require("./Events");
 const { FonctionHandler } = require("./FonctionHandler");
 const { SlashCommandsHandler } = require("./SlashCommands");
@@ -6,7 +7,6 @@ const { SlashCommandsHandler } = require("./SlashCommands");
 class EagleHandler {
     constructor(EagleClient) {
         this.EagleClient = EagleClient;
-        //this.langHandler = new LangHandler(this);
         this.slashCommandsHandler = new SlashCommandsHandler(this);
         setTimeout(() => {
             console.log(chalk.bold.greenBright("[Eagle BOT]") + chalk.redBright(`All Slash Commands successfully loaded`));
@@ -19,9 +19,7 @@ class EagleHandler {
                 }, 200);
             }, 200);
         }, 200);
-        
-        // this.anticrashHanlder = new AntiCrashHandler(this);
-        //this.commandHandler = new CommandHandler(this);
+        new AntiCrash(this.EagleClient);
     }
   
     getFiles(path, handler) {
