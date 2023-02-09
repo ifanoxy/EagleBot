@@ -16,7 +16,6 @@ module.exports = {
     async execute(interaction, client) {
         const id = interaction.options.getString("id");
         const database = client.managers.lastnameManager.getIfExist(id);
-        console.log(database);
 
         if (!database || database?.namelist.length == 0)return interaction.reply({
             embeds: [
