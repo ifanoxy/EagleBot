@@ -21,7 +21,7 @@ module.exports = {
                 **Titre:** ${page.title}
                 **Description:\n** ${(await translate(page.extract, {from: "en", to: "fr"})).replaceAll(".",".\n")}
                 `)
-                .setThumbnail(page.thumbnail.source)
+                .setThumbnail(page?.thumbnail?.source)
                 .setTimestamp()
                 .setColor("White")
                 .setFooter({text: "demandé par" + interaction.user.username, iconURL: interaction.user.avatarURL()})

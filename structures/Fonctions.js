@@ -1,4 +1,4 @@
-const { CommandInteraction, EmbedBuilder } = require("discord.js");
+const { CommandInteraction, EmbedBuilder, Message, ComponentType } = require("discord.js");
 
 class EagleFonctions {
     #client;
@@ -94,6 +94,29 @@ class EagleFonctions {
         
         return true;
     };
+
+    /**
+     * 
+     * @param {Message} msg 
+     * @returns 
+     */
+    askWithButton(msg) {
+        return msg.awaitMessageComponent({
+            componentType: ComponentType.Button,
+            filter: i => i.customId.startsWith("[no-check]embed"),
+            time: 30 * 60
+        })
+        .then(inter => {
+            return inter
+        })
+        .catch(() => {
+            msg.components.map(row => row.components.map(cpt => cpt.disabled = true));
+            interaction.editReply({
+                components: msg.components
+            });
+            return null
+        })
+    }
 }
 
 module.exports = { EagleFonctions }

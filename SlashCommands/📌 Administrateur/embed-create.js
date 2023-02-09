@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require("discord.js");
 const { EagleClient } = require("../../structures/Client");
 
 module.exports = {
@@ -24,16 +24,42 @@ module.exports = {
                 Vous pourrez ensuite envoyer cette embed et/ou le sauvegarder
                 pour le réutiliser pour tard !
                 `)
+                .setColor("Blue")
             ],
             components: [
                 new ActionRowBuilder().addComponents(
                     new ButtonBuilder()
                     .setCustomId("[no-check]embed_short")
                     .setLabel("Rapide")
-                    .setStyle(ButtonStyle.Primary)
+                    .setStyle(ButtonStyle.Primary),
+                    new ButtonBuilder()
+                    .setCustomId("[no-check]embed_advanced")
+                    .setLabel("Avancé")
+                    .setStyle(ButtonStyle.Success)
                 )
             ],
             ephemeral: true
         })
+        .then(client.fonctions.askWithButton(msg)
+            .then(inter => {
+                const type = inter.customId.split("_")[1];
+
+                if (type == "short")
+                inter.update({
+                    embeds: [
+                        new EmbedBuilder()
+                        .setTitle("Créateur d'embed | Rapide")
+                        .setDescription("Quel titre voulez vous définir pour votre embed ?")
+                        .setColor("DarkAqua")
+                    ],
+                    ephemeral: true
+                })
+                .then(msg => client.fonctions.askWithButton(msg)
+                    .then(inter => {
+
+                    })
+                )
+            })
+        )
     }
 }
