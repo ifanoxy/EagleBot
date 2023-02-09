@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, PermissionsBitField } = require("discord.js");
 const { EagleClient } = require("../../structures/Client");
 const mute = require("./mute");
 
@@ -13,6 +13,15 @@ module.exports = {
      * @param {EagleClient} client 
      */
     execute(interaction, client) {
+        const executor = interaction.member;
+        if (!executor.permissions.has(PermissionsBitField.Flags.MuteMembers)) return interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                .setColor('Red')
+                .setDescription("Vous n'avez pas la permission d'utiliser cette commande !")
+            ],
+            ephemeral: true
+        });
         let muteArray = []
         const muteData = client.managers.mutesManager.map(p => p).filter(f => f.guildId == interaction.guildId)
         for (let mute of muteData) {

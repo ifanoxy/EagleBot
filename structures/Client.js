@@ -6,10 +6,12 @@ const { Moderation } = require("./Moderation");
 const chalk = require("chalk");
 const { AntiRaidClient } = require("./AntiRaidClient");
 const { EagleFonctions } = require("./Fonctions");
+const { AntiCrash } = require("./Handler/AntiCrash");
 
 class EagleClient extends Client {
     constructor() {
         super({
+            closeTimeout: 7 * 1000,
             intents: 3276799,
             partials: [Partials.Channel, Partials.GuildMember, Partials.GuildScheduledEvent, Partials.Message, Partials.Reaction, Partials.ThreadMember, Partials.User],
         })
@@ -76,7 +78,7 @@ class EagleClient extends Client {
         });
         this.fonctions = new EagleFonctions(this);
         this.moderation = new Moderation(this);
-        this.on("ready", () => console.log(chalk.bold.greenBright("\n[Eagle BOT]") + chalk.blueBright(`Bot is ready ! Connected on ${this.user.tag}\n`)))       
+        this.on("ready", () => console.log(chalk.bold.greenBright("\n[Eagle BOT]") + chalk.blueBright(`Bot is ready ! Connected on ${this.user.tag}\n`)))     
     }
 
     startHandler() {
@@ -101,7 +103,7 @@ class EagleClient extends Client {
     }
 
     error(err) {
-        console.log(chalk.bold.greenBright("[Eagle BOT]") + chalk.red.bold(" an error has occurred :\n" + err.stack))
+        console.log(chalk.bold.greenBright("[Eagle BOT]") + chalk.red.bold(" an error has occurred :\n" + err))
     }
 }
 

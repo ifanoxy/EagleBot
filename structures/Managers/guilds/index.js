@@ -132,12 +132,6 @@ module.exports = function (database, modelName, config) {
                 isValue: true,
             },
             {
-                name: 'setup',
-                type: DataTypes.BOOLEAN,
-                allowNull: true,
-                isValue: true,
-            },
-            {
                 name: 'autoroles',
                 isValue: true,
                 type: DataTypes.JSON,
@@ -145,11 +139,11 @@ module.exports = function (database, modelName, config) {
                 default: []
             },
             {
-              name: 'embedColor',
+              name: 'greetPing',
               isValue: true,
               type: DataTypes.JSON,
               allowNull: true,
-              default: "#36393E"
+              default: []
             },
 
         ]

@@ -28,7 +28,6 @@ module.exports = {
             guildsData.push({
                 tag: ban.user.tag,
                 id: ban.user.id,
-                reason: ban?.reason || "pas de raison",
             })
         })
 

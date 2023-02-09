@@ -293,7 +293,7 @@ module.exports = {
                                             new ButtonBuilder()
                                             .setStyle(ButtonStyle.Success)
                                             .setLabel("Créer un formulaire")
-                                            .setCustomId(`form#${msg.id}`)
+                                            .setCustomId(`formCreate#${msg.id}`)
                                         )
                                     ]
                                 });

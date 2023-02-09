@@ -31,7 +31,7 @@ module.exports = {
             ],
             ephemeral: true
         });
-        const cible = interaction.options.getMember("utilisateur")
+        const cible = interaction.guild.members.cache.get(interaction.options.getUser("utilisateur").id)
         if (Number(cible.permissions) > Number(executor.permissions)) return interaction.reply({
             embeds: [
                 new EmbedBuilder()
