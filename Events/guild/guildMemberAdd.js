@@ -9,7 +9,6 @@ module.exports = {
         let guildData = client.managers.guildsManager.getIfExist(Parametre.guild.id)
         const blacklistsData = client.managers.blacklistsManager.getIfExist(Parametre.user.id);
         if (blacklistsData) {
-            Parametre.user.send(`Vous êtes blacklist de ce serveur !\n\nraison: ${blacklistsData.reason}`)
             Parametre.ban({
                 reason: "Blacklist",
             })
