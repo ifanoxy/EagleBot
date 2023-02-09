@@ -6,7 +6,7 @@ module.exports = {
     repeat: true,
     execute(client) {
         const mutesData = client.managers.mutesManager.map(m => m.values)
-        console.log(chalk.green.bold("[Eagle BOT]") + chalk.magenta("Checking mutes peoples..."));
+        console.log(chalk.green.bold("[Eagle BOT - Fonctions]") + chalk.magenta("Checking mutes peoples..."));
 
         for (const mute of mutesData) {
             if(mute.expiredAt == null) continue;

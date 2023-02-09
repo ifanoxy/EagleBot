@@ -5,7 +5,7 @@ module.exports = {
     name: "channelstats",
     repeat: true,
     async execute(client) {
-        console.log(chalk.green.bold("[Eagle BOT]") + chalk.magenta("checking servers stats channels..."));
+        console.log(chalk.green.bold("[Eagle BOT - Fonctions]") + chalk.magenta("checking servers stats channels..."));
         const statsData = client.managers.statsManager.map(m => m.values)
         for (let guildData of statsData) {
             const guild = client.guilds.cache.get(guildData.guildId);

@@ -145,6 +145,17 @@ module.exports = function (database, modelName, config) {
               allowNull: true,
               default: []
             },
+            {
+              name: 'presenceRole',
+              isValue: true,
+              type: DataTypes.JSON,
+              allowNull: true,
+              default: {
+                roleId: null,
+                presence: null,
+                type: null
+              }
+            },
 
         ]
         const t = {};
