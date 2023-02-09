@@ -143,7 +143,10 @@ module.exports = function (database, modelName, config) {
               isValue: true,
               type: DataTypes.JSON,
               allowNull: true,
-              default: []
+              default: {
+                status: false,
+                channels: []
+              }
             },
             {
               name: 'presenceRole',

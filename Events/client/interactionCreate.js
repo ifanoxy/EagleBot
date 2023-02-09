@@ -22,7 +22,11 @@ module.exports = {
                     ephemeral: true
                 });
 
-                file.execute(interaction, client);
+                try {
+                    file.execute(interaction, client);
+                } catch (err) {
+                    client.error(err)
+                }
             }break;
             case interaction.isAutocomplete() : {
                 const command = client.handlers.slashCommandsHandler.SlashCommandsList.get(interaction.commandName);
@@ -50,8 +54,11 @@ module.exports = {
                     ],
                     ephemeral: true
                 });
-
-                file.execute(interaction, client);
+                try {
+                    file.execute(interaction, client);
+                } catch (err) {
+                    client.error(err)
+                }
             }break;
             case interaction.isChatInputCommand() : {
                 const command = client.handlers.slashCommandsHandler.SlashCommandsList.get(interaction.commandName);
@@ -64,8 +71,11 @@ module.exports = {
                     ],
                     ephemeral: true
                 });
-        
-                command.execute(interaction, client)
+                try {
+                    command.execute(interaction, client)
+                } catch (err) {
+                    client.error(err)
+                }
             }break;
             case interaction.isModalSubmit() : {
                 if (interaction.customId.startsWith("[no-check]")) return;
@@ -79,8 +89,11 @@ module.exports = {
                     ],
                     ephemeral: true
                 });
-
-                file.execute(interaction, client);
+                try {
+                    file.execute(interaction, client);
+                } catch (err) {
+                    client.error(err)
+                }
             }
         }
     }

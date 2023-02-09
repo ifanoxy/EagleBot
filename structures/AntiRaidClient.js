@@ -32,7 +32,7 @@ class AntiRaidClient extends Client {
     }
 
     log(msg, color = chalk.blue) {
-        console.log(chalk.bold.green("[Eagle BOT]")+chalk.bold.magenta("{Anti Raid}") + color(msg))
+        console.log(chalk.bold.green("[Eagle BOT - Anti Raid]")+ color(msg))
     }
 }
 

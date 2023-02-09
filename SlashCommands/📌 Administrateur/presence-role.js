@@ -49,6 +49,7 @@ module.exports = {
                 new EmbedBuilder()
                 .setColor("Blurple")
                 .setDescription(`Vous venez de définir le presence role\n\nRole: <@&${roleId}>\nPrésence: ${presence}\nType: ${type}`)
+                .setFooter({text: "Actualisation toute les 15 minutes"})
             ]
         }).then(() => {
             client.handlers.fonctionHandler.startFonction([client.handlers.fonctionHandler.FonctionsList.get("presencerole")], client)

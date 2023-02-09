@@ -1,4 +1,4 @@
-const { CommandInteraction, EmbedBuilder, Message, ComponentType } = require("discord.js");
+const { CommandInteraction, EmbedBuilder, Message, ComponentType, ActionRowBuilder } = require("discord.js");
 
 class EagleFonctions {
     #client;
@@ -98,21 +98,71 @@ class EagleFonctions {
     /**
      * 
      * @param {Message} msg 
+     * @param {ActionRowBuilder} components
      * @returns 
      */
-    askWithButton(msg) {
+    askWithButton(msg, components, interaction, time = 30) {
         return msg.awaitMessageComponent({
             componentType: ComponentType.Button,
-            filter: i => i.customId.startsWith("[no-check]embed"),
-            time: 30 * 60
+            filter: i => i.customId.startsWith("[no-check]"),
+            time: time * 1000
         })
         .then(inter => {
             return inter
         })
         .catch(() => {
-            msg.components.map(row => row.components.map(cpt => cpt.disabled = true));
+            components.components.map(row => row.setDisabled(true));
             interaction.editReply({
-                components: msg.components
+                components: [components]
+            });
+            return null
+        })
+    }
+    /**
+     * 
+     * @param {Message} msg 
+     * @param {Number} time
+     * @param {ActionRowBuilder} components
+     * @returns 
+     */
+    askWithSelectMenuChannel(msg, components, interaction, time = 30) {
+        return msg.awaitMessageComponent({
+            componentType: ComponentType.ChannelSelect,
+            filter: i => i.customId.startsWith("[no-check]"),
+            time: time * 1000
+        })
+        .then(inter => {
+            return inter
+        })
+        .catch(() => {
+            components.components.map(row => row.setDisabled(true));
+            interaction.editReply({
+                components: [components]
+            });
+            return null
+        })
+    }
+    
+    /**
+     * 
+     * @param {Message} msg 
+     * @param {Number} time
+     * @param {ActionRowBuilder} components
+     * @returns 
+     */
+    askWithSelectMenuString(msg, components, interaction, time = 30) {
+        return msg.awaitMessageComponent({
+            componentType: ComponentType.StringSelect,
+            filter: i => i.customId.startsWith("[no-check]"),
+            time: time * 1000
+        })
+        .then(inter => {
+            return inter
+        })
+        .catch(() => {
+            components.components.map(row => row.setDisabled(true));
+            interaction.editReply({
+                components: [components]
             });
             return null
         })

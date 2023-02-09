@@ -28,7 +28,11 @@ class FonctionHandler {
 
         setInterval(function myFunction() {
             list.map(file => {
-                file.execute(client)
+                try {
+                    file.execute(client)
+                } catch (err) {
+                    client.error(err)
+                }
             })
             return myFunction;
           }(), 10 * 60 * 1000)
