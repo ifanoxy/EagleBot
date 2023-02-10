@@ -14,10 +14,10 @@ module.exports = {
         const database = client.antiraid.getIfExist(guild.id);
         if (!database)return;
         if (!member?.bot)return;
-        const AuditLog = await guild.getAuditLog({limit: 1});
-        if (AuditLog.entries[0].actionType != 28)return;
         const protectData = database.status["anti-bot"];
         if (!protectData.status)return;
+        const AuditLog = await guild.getAuditLog({limit: 1});
+        if (AuditLog.entries[0].actionType != 28)return;
         if (protectData.ignoreWhitelist) {
             if(client.checkWhitelist(AuditLog.entries[0].user.id))return;
         };

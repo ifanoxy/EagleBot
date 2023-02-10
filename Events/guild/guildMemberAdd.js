@@ -32,5 +32,8 @@ module.exports = {
                 }, 500)
             }
         }
+        if (guildData?.autoroles?.length != 0) {
+            Parametre.roles.add(guildData.autoroles, "Auto Role").catch(() => {})
+        }
     }
 };

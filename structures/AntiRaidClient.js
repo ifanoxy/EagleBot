@@ -83,7 +83,7 @@ class AntiRaidClient extends Client {
                     channel.createMessage({
                         embeds: [
                             {
-                                title: "Vous avez été banni par l'anti raid du serveur "+member.guild.name+" !\n\nRaison: \`${type}\`",
+                                title: `Vous avez été banni par l'anti raid du serveur ${member.guild.name} !\n\nRaison: \`${type}\``,
                                 color: 14592837,
                             }
                         ]
@@ -129,7 +129,7 @@ class AntiRaidClient extends Client {
                     channel.createMessage({
                         embeds: [
                             {
-                                title: "Vous avez été derank par l'anti raid du serveur "+member.guild.name+" !\n\nRaison: \`${type}\`",
+                                title: `Vous avez été derank par l'anti raid du serveur ${member.guild.name} !\n\nRaison: \`${type}\``,
                                 color: 14592837,
                             }
                         ]
@@ -177,7 +177,7 @@ class AntiRaidClient extends Client {
                     channel.createMessage({
                         embeds: [
                             {
-                                title: "Vous avez été kick par l'anti raid du serveur "+member.guild.name+" !\n\nRaison: \`${type}\`",
+                                title: `Vous avez été kick par l'anti raid du serveur ${member.guild.name} !\n\nRaison: \`${type}\``,
                                 color: 14592837,
                             }
                         ]

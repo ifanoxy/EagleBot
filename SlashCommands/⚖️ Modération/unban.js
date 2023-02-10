@@ -32,7 +32,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                     .setColor("DarkOrange")
-                    .setDescription(`\`<@${cible}>\` a été débanni par <@${executor.id}>`)
+                    .setDescription(`\`${cible}\` a été débanni par <@${executor.id}>`)
                     .setTimestamp()
                 ]
             });

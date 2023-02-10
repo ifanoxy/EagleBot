@@ -142,6 +142,30 @@ class EagleFonctions {
             return null
         })
     }
+    /**
+     * 
+     * @param {Message} msg 
+     * @param {Number} time
+     * @param {ActionRowBuilder} components
+     * @returns 
+     */
+    askWithSelectMenuRole(msg, components, interaction, time = 30) {
+        return msg.awaitMessageComponent({
+            componentType: ComponentType.RoleSelect,
+            filter: i => i.customId.startsWith("[no-check]"),
+            time: time * 1000
+        })
+        .then(inter => {
+            return inter
+        })
+        .catch(() => {
+            components.components.map(row => row.setDisabled(true));
+            interaction.editReply({
+                components: [components]
+            });
+            return null
+        })
+    }
     
     /**
      * 
