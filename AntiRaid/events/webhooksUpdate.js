@@ -13,16 +13,12 @@ module.exports = {
         const guild = client.guilds.get(data.guildID)
         const AuditLog = await guild.getAuditLog({limit: 1});
         if (![50, 51, 52].includes(AuditLog.entries[0].actionType))return;
-        switch (AuditLog.entries[0].actionType) {
-            case 50 : {
-                console.log("webhook créer", AuditLog, guild.shard.latency +  Math.round(new Date().getTime()/1000) - emitTimestamp)
-            }break;
-            case 51 : {
-                console.log("webhook modifé", AuditLog, guild.shard.latency +  Math.round(new Date().getTime()/1000) - emitTimestamp)
-            }break;
-            case 52 : {
-                console.log("webhook supprimer", AuditLog, guild.shard.latency + Math.round(new Date().getTime()/1000) - emitTimestamp)
-            }break;
-        }
+        const protectData = database.status["anti-webhook"];
+        if (!protectData.status)return;
+        if (protectData.ignoreWhitelist) {
+            if(client.checkWhitelist(AuditLog.entries[0].user.id))return;
+        };
+        const member = await guild.fetchMembers({limit: 1, userIDs: [AuditLog.entries[0].user.id]});
+        client.applySanction(member[0], protectData.sanction, database.log, client.ping(guild)+Math.round(new Date().getTime()/1000)-emitTimestamp);
     }
 }

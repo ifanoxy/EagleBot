@@ -18,7 +18,7 @@ module.exports = {
         .setColor("White")
         .setTitle(`Les des protections du serveur ${interaction.guild.name}`)
         .setDescription(`
-        Logs des messages d'alerte : ${database?.log ? `<#database?.log>` : "❌ `Inactif`"}\n
+        Logs des messages d'alerte : ${database?.log ? `<#${database.log}>` : "❌ `Inactif`"}\n
         `)
         .setFields(
             {

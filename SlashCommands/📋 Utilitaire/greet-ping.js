@@ -88,7 +88,8 @@ module.exports = {
                                 if (!inter2)return;
                                 guildData.greetPing.channels.push(...inter2.values);
                                 guildData.save();
-                                return inter2.update({
+                                inter2.message.delete();
+                                return interaction.editReply({
                                     embeds: [
                                         createEmbed()
                                     ],
@@ -130,7 +131,8 @@ module.exports = {
                                 if (!inter2)return;
                                 guildData.greetPing.channels = guildData.greetPing.channels.filter(m => !inter2.values.includes(m));
                                 guildData.save();
-                                return inter2.update({
+                                inter2.message.delete();
+                                return interaction.editReply({
                                     embeds: [
                                         createEmbed()
                                     ],

@@ -22,7 +22,7 @@ module.exports = {
                         new ActionRowBuilder().addComponents(
                             new ButtonBuilder()
                             .setStyle(ButtonStyle.Link)
-                            .setLabel("Cliquez ici !")
+                            .setLabel(new URL(interaction.options.getString("url")).hostname)
                             .setURL(interaction.options.getString("url"))
                         )
                     ]
@@ -49,7 +49,7 @@ module.exports = {
                             new ActionRowBuilder().addComponents(
                                 new ButtonBuilder()
                                 .setStyle(ButtonStyle.Link)
-                                .setLabel("Cliquez ici")
+                                .setLabel(new URL(interaction.options.getString("url")).hostname)
                                 .setURL(interaction.options.getString("url"))
                             )
                         ]
