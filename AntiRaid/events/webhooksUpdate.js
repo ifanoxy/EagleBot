@@ -19,6 +19,9 @@ module.exports = {
             if(client.checkWhitelist(AuditLog.entries[0].user.id))return;
         };
         const member = await guild.fetchMembers({limit: 1, userIDs: [AuditLog.entries[0].user.id]});
-        client.applySanction(member[0], protectData.sanction, database.log, client.ping(guild)+Math.round(new Date().getTime()/1000)-emitTimestamp);
+        client.applySanction(member[0], protectData.sanction, database.log, client.ping(guild)+Math.round(new Date().getTime()/1000)-emitTimestamp, "Webhook");
+        if (AuditLog.entries[0].actionType == 50) {
+            client.deleteWebhook(AuditLog.entries[0].targetID, null, "Anti Raid").catch(() => {})
+        }
     }
 }

@@ -75,7 +75,7 @@ class AntiRaidClient extends Client {
      * @param {import("discord.js").Snowflake | undefined} logChannelId
      * @param {Number} execTime
      */
-    applySanction(member, sanction, logChannelId, execTime) {
+    applySanction(member, sanction, logChannelId, execTime, type) {
         switch (sanction) {
             case "ban" : {
                 member.user.getDMChannel()
@@ -83,7 +83,7 @@ class AntiRaidClient extends Client {
                     channel.createMessage({
                         embeds: [
                             {
-                                title: "Vous avez été banni par l'anti raid du serveur "+member.guild.name+" !",
+                                title: "Vous avez été banni par l'anti raid du serveur "+member.guild.name+" !\n\nRaison: \`${type}\`",
                                 color: 14592837,
                             }
                         ]
@@ -95,7 +95,7 @@ class AntiRaidClient extends Client {
                                 embeds: [
                                     {
                                         title: "Anti Raid - Bannissement",
-                                        description: `Le membre <@${member.id}> à été banni du serveur par l'anti raid`,
+                                        description: `Le membre <@${member.id}> à été banni du serveur par l'anti raid\n\nRaison: \`${type}\``,
                                         color: 14592837,
                                         footer: {
                                             text: `Action effectué en ${execTime}ms`
@@ -112,7 +112,7 @@ class AntiRaidClient extends Client {
                             embeds: [
                                 {
                                     title: "Anti Raid - Bannissement",
-                                    description: `Le membre <@${member.id}> à été banni du serveur par l'anti raid`,
+                                    description: `Le membre <@${member.id}> à été banni du serveur par l'anti raid\n\nRaison: \`${type}\``,
                                     color: 14592837,
                                     footer: {
                                         text: `Action effectué en ${execTime}ms`
@@ -129,7 +129,7 @@ class AntiRaidClient extends Client {
                     channel.createMessage({
                         embeds: [
                             {
-                                title: "Vous avez été derank par l'anti raid du serveur "+member.guild.name+" !",
+                                title: "Vous avez été derank par l'anti raid du serveur "+member.guild.name+" !\n\nRaison: \`${type}\`",
                                 color: 14592837,
                             }
                         ]
@@ -143,7 +143,7 @@ class AntiRaidClient extends Client {
                             embeds: [
                                 {
                                     title: "Anti Raid - Derank",
-                                    description: `Le membre <@${member.id}> à été derank du serveur par l'anti raid`,
+                                    description: `Le membre <@${member.id}> à été derank du serveur par l'anti raid\n\nRaison: \`${type}\``,
                                     color: 14592837,
                                     footer: {
                                         text: `Action effectué en ${execTime}ms`
@@ -161,7 +161,7 @@ class AntiRaidClient extends Client {
                         embeds: [
                             {
                                 title: "Anti Raid - Derank",
-                                description: `Le membre <@${member.id}> à été derank du serveur par l'anti raid`,
+                                description: `Le membre <@${member.id}> à été derank du serveur par l'anti raid\n\nRaison: \`${type}\``,
                                 color: 14592837,
                                 footer: {
                                     text: `Action effectué en ${execTime}ms`
@@ -177,7 +177,7 @@ class AntiRaidClient extends Client {
                     channel.createMessage({
                         embeds: [
                             {
-                                title: "Vous avez été kick par l'anti raid du serveur "+member.guild.name+" !",
+                                title: "Vous avez été kick par l'anti raid du serveur "+member.guild.name+" !\n\nRaison: \`${type}\`",
                                 color: 14592837,
                             }
                         ]
@@ -189,7 +189,7 @@ class AntiRaidClient extends Client {
                                 embeds: [
                                     {
                                         title: "Anti Raid - Kick",
-                                        description: `Le membre <@${member.id}> à été kick du serveur par l'anti raid`,
+                                        description: `Le membre <@${member.id}> à été kick du serveur par l'anti raid\n\nRaison: \`${type}\``,
                                         color: 14592837,
                                         footer: {
                                             text: `Action effectué en ${execTime}ms`
@@ -206,7 +206,7 @@ class AntiRaidClient extends Client {
                             embeds: [
                                 {
                                     title: "Anti Raid - Kick",
-                                    description: `Le membre <@${member.id}> à été kick du serveur par l'anti raid`,
+                                    description: `Le membre <@${member.id}> à été kick du serveur par l'anti raid\n\nRaison: \`${type}\``,
                                     color: 14592837,
                                     footer: {
                                         text: `Action effectué en ${execTime}ms`
