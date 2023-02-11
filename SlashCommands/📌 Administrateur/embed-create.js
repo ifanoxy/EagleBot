@@ -207,7 +207,7 @@ module.exports = {
                     const selectMenu = new ActionRowBuilder().addComponents(
                         new StringSelectMenuBuilder()
                         .setCustomId("[no-check]embed_advance")
-                        .setMaxValues(15)
+                        .setMaxValues(9)
                         .setMinValues(1)
                         .setPlaceholder("Choisissez les éléments")
                         .setOptions(
@@ -257,7 +257,9 @@ module.exports = {
                             let interTemp = inter2
                             let FinalEmbed = new EmbedBuilder();
                             for (let choice of choices) {
-                                [ FinalEmbed, interTemp ] = await client.fonctions.embedCreator[`ask${choice}`](FinalEmbed, interTemp, interaction);
+                                const respond = await client.fonctions.embedCreator[`ask${choice}`](FinalEmbed, interTemp, interaction);
+                                interTemp = respond.interaction;
+                                FinalEmbed = respond.embed;
                                 if (!interTemp)break;
                             }
                         })

@@ -209,7 +209,7 @@ class EagleFonctions {
             return inter
         })
         .catch(() => {
-            inter.message.components.map(row => row.setDisabled(true));
+            inter.message.components.map(row => row.components.map(cp => cp.disabled = true));
             interaction.editReply({
                 components: [components]
             });
@@ -230,7 +230,6 @@ class EmbedCreator {
         this.#fonctions = EagleFonctions
     }
 
-
     /**
      * 
      * @param {MessageComponentInteraction} interaction 
@@ -244,20 +243,24 @@ class EmbedCreator {
                 CreatorEmbed
             ],
             components: [
-                new ButtonBuilder()
-                .setCustomId("[no-check]embedCreator_openModal")
-                .setLabel("Ouvrir le modal")
-                .setStyle(ButtonStyle.Secondary)
+                new ActionRowBuilder().addComponents(
+                    new ButtonBuilder()
+                    .setCustomId("[no-check]embedCreator_openModal")
+                    .setLabel("Ouvrir le modal")
+                    .setStyle(ButtonStyle.Secondary)
+                )
             ]
         })
         .then(msg => {
             return this.#fonctions.askWithButton(
                 msg,
                 [
-                    new ButtonBuilder()
-                    .setCustomId("[no-check]embedCreator_openModal")
-                    .setLabel("Ouvrir le modal")
-                    .setStyle(ButtonStyle.Secondary)
+                    new ActionRowBuilder().addComponents(
+                        new ButtonBuilder()
+                        .setCustomId("[no-check]embedCreator_openModal")
+                        .setLabel("Ouvrir le modal")
+                        .setStyle(ButtonStyle.Secondary)
+                    )
                 ],
                 interaction
             )
@@ -266,6 +269,8 @@ class EmbedCreator {
                 return this.#fonctions.askWithModal(
                     interactionButton,
                     CreatorModal,
+                    150,
+                    interaction,
                 )
                 .then(interactionModal => {
                     if (!interactionModal)return null;
@@ -330,7 +335,7 @@ class EmbedCreator {
             url: interactionModal.fields.getTextInputValue("URL") || null,
         });
 
-        return [embed, interactionModal]
+        return {embed: embed, interaction: interactionModal };
     }
 
     /**
@@ -368,7 +373,7 @@ class EmbedCreator {
         embed.setURL(interactionModal.fields.getTextInputValue("titre_url") || null);
         embed.setTitle(interactionModal.fields.getTextInputValue("titre"));
 
-        return [embed, interactionModal];
+        return {embed: embed, interaction: interactionModal };
     }
 
     /**
@@ -400,7 +405,7 @@ class EmbedCreator {
         
         embed.setDescription(interactionModal.fields.getTextInputValue("description"));
 
-        return [embed, interactionModal];
+        return {embed: embed, interaction: interactionModal };
     }
 
     /**
@@ -414,7 +419,7 @@ class EmbedCreator {
             interaction,
             failInteraction,
             new EmbedBuilder()
-            .setTitle("Création de la 'Coleur' de l'embed")
+            .setTitle("Création de la 'Couleur' de l'embed")
             .setColor("Blurple")
             .setDescription(`La couleur de l'embed peut être une couleur hexadécimal ou en "Random"`),
             new ModalBuilder()
@@ -426,10 +431,10 @@ class EmbedCreator {
                 ),
             ),
         );
-        
+
         embed.setColor(interactionModal.fields.getTextInputValue("color") || 'Random');
 
-        return [embed, interactionModal];
+        return {embed: embed, interaction: interactionModal };
     }
 
     /**
@@ -458,7 +463,7 @@ class EmbedCreator {
         
         embed.setThumbnail(interactionModal.fields.getTextInputValue("url"));
 
-        return [embed, interactionModal];
+        return {embed: embed, interaction: interactionModal };
     }
 
     /**
@@ -487,7 +492,7 @@ class EmbedCreator {
         
         embed.setThumbnail(interactionModal.fields.getTextInputValue("url"));
 
-        return [embed, interactionModal];
+        return {embed: embed, interaction: interactionModal };
     }
 
     /**
@@ -509,14 +514,14 @@ class EmbedCreator {
             .setCustomId("[no-check]embedCreator_modal")
             .addComponents(
                 new ActionRowBuilder().addComponents(
-                    new TextInputBuilder().setCustomId("time").setLabel("Lien de l'image").setMaxLength(64).setRequired(true).setStyle(1)
+                    new TextInputBuilder().setCustomId("time").setLabel("Temps en Milisecond (ou now)").setMaxLength(64).setRequired(true).setStyle(1)
                 ),
             ),
         );
         
         embed.setTimestamp(interactionModal.fields.getTextInputValue("time") == "now" ? Date.now() : Number(interactionModal.fields.getTextInputValue("time")));
 
-        return [embed, interactionModal];
+        return {embed: embed, interaction: interactionModal };
     }
 
     /**
@@ -545,7 +550,7 @@ class EmbedCreator {
                     new TextInputBuilder().setCustomId("text").setLabel("Texte du footer").setMaxLength(64).setRequired(true).setStyle(1)
                 ),
                 new ActionRowBuilder().addComponents(
-                    new TextInputBuilder().setCustomId("url").setLabel("Lien de l'image").setMaxLength(64).setRequired(true).setStyle(1)
+                    new TextInputBuilder().setCustomId("url").setLabel("Lien de l'image").setMaxLength(64).setRequired(false).setStyle(1)
                 ),
             ),
         );
@@ -553,9 +558,9 @@ class EmbedCreator {
         embed.setFooter({
             text: interactionModal.fields.getTextInputValue("text"),
             iconURL: interactionModal.fields.getTextInputValue("url")
-        });
+        })
 
-        return [embed, interactionModal];
+        return {embed: embed, interaction: interactionModal };
     }
 }
 
