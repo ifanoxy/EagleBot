@@ -88,7 +88,7 @@ class EagleClient extends Client {
             console.log(chalk.bold.greenBright("[Eagle BOT]") + chalk.yellow(`Adding ${this.handlers.slashCommandsHandler.SlashCommandsList.size} slash commands`))
             this.application.commands.set(this.handlers.slashCommandsHandler.SlashCommandsList.map(s => s.data.toJSON()))
             
-            this.antiraidClient = new AntiRaidClient();
+            this.antiraidClient = new AntiRaidClient(this);
         })
     }
 

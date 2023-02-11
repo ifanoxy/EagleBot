@@ -18,6 +18,7 @@ module.exports = {
         if (!protectData.status)return;
         const AuditLog = await guild.getAuditLog({limit: 1});
         if (AuditLog.entries[0].actionType != 28)return;
+        if (client.isOwner(userId))return;
         if (protectData.ignoreWhitelist) {
             if(client.checkWhitelist(AuditLog.entries[0].user.id))return;
         };

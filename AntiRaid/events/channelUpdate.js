@@ -10,15 +10,16 @@ module.exports = {
      */
     async execute(client, channel, emitTimestamp) {
         if (client.checkOwner(userId))return;
-        const database = client.antiraid.getIfExist(channel.guild.id);
+        const database = client.antiraid.getIfExist(channel.guild?.id);
         if (!database)return;
         const protectData = database.status["anti-massChannel"].update;
         if (!protectData.status)return;
         const guild = client.guilds.get(channel.guild.id)
         const AuditLog = await guild.getAuditLog({limit: 1});
-        const userId = AuditLog.entries[0].user.id
+        const userId = AuditLog.entries[0].user.id;
+        if (client.isOwner(userId))return;
         if (protectData.ignoreWhitelist) {
-            if(client.checkWhitelist(userId))return;
+            if(client.isWhitelist(userId))return;
         };
         if (AuditLog.entries[0].actionType != 10)return;
 

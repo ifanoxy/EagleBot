@@ -1,26 +1,27 @@
+const { Guild, Role } = require("eris");
 const { AntiRaidClient } = require("../../structures/AntiRaidClient");
 
 module.exports = {
-    name: "roleCreate",
+    name: "guildRoleUpdate",
     /**
      * 
      * @param {AntiRaidClient} client 
-     * @param {import("eris").AnyChannel} role 
+     * @param {Guild} guild
+     * @param {Role} role
      * @param {Number} emitTimestamp 
      */
-    async execute(client, role, emitTimestamp) {
-        if (client.checkOwner(userId))return;
-        const database = client.antiraid.getIfExist(role.guild.id);
+    async execute(client, guild, role, oldRole, emitTimestamp) {
+        const database = client.antiraid.getIfExist(guild.id);
         if (!database)return;
-        const protectData = database.status["anti-massRole"].create;
+        const protectData = database.status["anti-massRole"].update;
         if (!protectData.status)return;
-        const guild = client.guilds.get(role.guild.id)
         const AuditLog = await guild.getAuditLog({limit: 1});
         const userId = AuditLog.entries[0].user.id
+        if (client.isOwner(userId))return;
         if (protectData.ignoreWhitelist) {
             if(client.checkWhitelist(userId))return;
         };
-        if (AuditLog.entries[0].actionType != 10)return;
+        if (AuditLog.entries[0].actionType != 31)return;
 
         const maxfrequence = protectData.frequence.split('/')[0];
         try {
@@ -28,12 +29,12 @@ module.exports = {
         } catch {
             var frequenceData = {};
         }
-        if ((frequenceData?.roleCreate || 1) < maxfrequence) {
-            frequenceData.roleCreate = (frequenceData?.roleCreate || 0) + 1;
+        if ((frequenceData?.roleUpdate || 1) < maxfrequence) {
+            frequenceData.roleUpdate = (frequenceData?.roleUpdate || 0) + 1;
             client._fs.writeFileSync(`./AntiRaid/frequence/${userId}.json`, JSON.stringify(frequenceData));
             setTimeout(() => {
                 try {
-                    frequenceData.roleCreate -= 1;
+                    frequenceData.roleUpdate -= 1;
                     client._fs.writeFileSync(`./AntiRaid/frequence/${userId}.json`, JSON.stringify(frequenceData));
                 } catch {}
             }, (Number(protectData.frequence.split('/')[1].slice(0, protectData.frequence.split('/')[1].length - 1)) * 1000))
@@ -41,8 +42,8 @@ module.exports = {
         }
 
         const member = await guild.fetchMembers({limit: 1, userIDs: [userId]});
-        client.applySanction(member[0], protectData.sanction, database.log, client.ping(guild)+Math.round(new Date().getTime()/1000)-emitTimestamp, "Mass Role Create");
-        delete frequenceData?.roleCreate;
+        client.applySanction(member[0], protectData.sanction, database.log, client.ping(guild)+Math.round(new Date().getTime()/1000)-emitTimestamp, "Mass Role Update");
+        delete frequenceData?.roleUpdate;
         client._fs.writeFileSync(`./AntiRaid/frequence/${userId}.json`, JSON.stringify(frequenceData));
     }
 }

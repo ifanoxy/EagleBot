@@ -7,13 +7,13 @@ const { AntiraidHandler } = require("./Handler/AntiraidHandler");
 const { EmbedBuilder } = require("@discordjs/builders");
 
 class AntiRaidClient extends Client {
-    constructor() {
+    constructor(client) {
         super(config.discord.token, {
             autoreconnect: true,
             compress: false,
-            intents: ["guilds", "guildBans", "guildWebhooks", "guildMessages", "guildMembers", "directMessages"],
+            intents: ["guilds", "guildBans", "guildWebhooks", "guildMessages", "guildMembers", "directMessages", "guildEmojisAndStickers"],
         });
-        
+        this.client = client
         this.Collection = Collection;
         this._fs = require("fs");
         this.log("Lancement de l'anti raid", chalk.yellow);
@@ -28,7 +28,7 @@ class AntiRaidClient extends Client {
     }
 
     startHandler() {
-        this.connect()
+        this.connect();
         this.handler = new AntiraidHandler(this)
     }
 
@@ -49,10 +49,10 @@ class AntiRaidClient extends Client {
      * 
      * @param {User} userId 
      */
-    checkWhitelist(userId) {
-        const whitelistData = this.EagleClient.managers.whitelistsManager.getIfExist(userId);
-        if (!whitelistData)return false;
-        return true;
+    isWhitelist(userId) {
+        const whitelistData = this.client.managers.whitelistsManager.getIfExist(userId);
+        if (whitelistData)return true;
+        return false;
     }
 
     /**
@@ -60,11 +60,11 @@ class AntiRaidClient extends Client {
      * @param {User} userId 
      * @returns 
      */
-    checkOwner(userId) {
-        const ownerData = this.EagleClient.managers.ownerManager.getIfExist(userId);
-        if (userId == this.EagleClient.config.ownerId)return true;
-        if (!ownerData)return false;
-        return true;
+    isOwner(userId) {
+        const ownerData = this.client.managers.ownerManager.getIfExist(userId);
+        if (userId == this.client.config.ownerId)return true;
+        if (ownerData)return true;
+        return false;
     }
 
     /**
