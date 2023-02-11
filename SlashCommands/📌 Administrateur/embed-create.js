@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require("discord.js");
+const { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, ModalBuilder, TextInputBuilder } = require("discord.js");
 const { EagleClient } = require("../../structures/Client");
 
 module.exports = {
@@ -49,16 +49,47 @@ module.exports = {
                     embeds: [
                         new EmbedBuilder()
                         .setTitle("Créateur d'embed | Rapide")
-                        .setDescription("Quel titre voulez vous définir pour votre embed ?")
+                        .setDescription("Définissez les éléments principaux d'un embed: \n\nCouleur \nTitre\nDescription\nFooter")
                         .setColor("DarkAqua")
                     ],
                     ephemeral: true
                 })
                 .then(msg => client.fonctions.askWithButton(msg)
-                    .then(inter => {
+                    .then(inter => client.fonctions.askWithModal(
+                            inter,
+                            new ModalBuilder()
+                            .setCustomId("[no-check]embed_fast")
+                            .setTitle("Créateur d'Embed | Rapide")
+                            .setComponents(
+                                new ActionRowBuilder().addComponents(
+                                    new TextInputBuilder().setCustomId("title").setLabel("Titre de votre embed").setRequired(false).setStyle(1).setMaxLength(256)
+                                ),
+                                new ActionRowBuilder().addComponents(
+                                    new TextInputBuilder().setCustomId("description").setLabel("Description de votre embed").setRequired(true).setStyle(2).setMaxLength(3500).setPlaceholder("/p --> retour à la ligne")
+                                ),
+                                new ActionRowBuilder().addComponents(
+                                    new TextInputBuilder().setCustomId("color").setLabel("Couleur de votre embed (hexadécimal ex: #9283ab)").setRequired(false).setStyle(1).setMaxLength(7)
+                                ),
+                                new ActionRowBuilder().addComponents(
+                                    new TextInputBuilder().setCustomId("footer").setLabel("Footer de votre embed").setRequired(false).setStyle(1).setMaxLength(256)
+                                ),
+                            )
+                        )
+                        .then(inter2 => {
+                            const titre = inter2.fields.getTextInputValue('title');
+                            const description = inter2.fields.getTextInputValue('description');
+                            const color = inter2.fields.getTextInputValue('color');
+                            const footer = inter2.fields.getTextInputValue('footer');
 
-                    })
-                )
+                            inter2.update({
+                                embeds: [
+                                    new EmbedBuilder()
+                                    .setTitle("Vous avez terminé la création de votre embed !")
+                                ]
+                            })
+                        })
+                    )
+                );
             })
         )
     }

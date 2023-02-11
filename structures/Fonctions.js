@@ -1,4 +1,4 @@
-const { CommandInteraction, EmbedBuilder, Message, ComponentType, ActionRowBuilder } = require("discord.js");
+const { CommandInteraction, EmbedBuilder, Message, ComponentType, ActionRowBuilder, ButtonInteraction } = require("discord.js");
 
 class EagleFonctions {
     #client;
@@ -179,6 +179,31 @@ class EagleFonctions {
             componentType: ComponentType.StringSelect,
             filter: i => i.customId.startsWith("[no-check]"),
             time: time * 1000
+        })
+        .then(inter => {
+            return inter
+        })
+        .catch(() => {
+            components.components.map(row => row.setDisabled(true));
+            interaction.editReply({
+                components: [components]
+            });
+            return null
+        })
+    }
+
+
+    /**
+     * 
+     * @param {ButtonInteraction} inter 
+     * @param {ModalBuilder} modal 
+     * @param {Number} time 
+     */
+    askWithModal(inter, modal, time = 120) {
+        inter.showModal(modal);
+        return inter.awaitModalSubmit({
+            filter: i => i.customId == modal.data.customId,
+            time: time * 1000,
         })
         .then(inter => {
             return inter

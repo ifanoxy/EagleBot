@@ -41,8 +41,11 @@ class AntiRaidClient extends Client {
      * @param {Guild} guild 
      */
     ping(guild) {
-        if (guild.shard.latency != Infinity)return guild.shard.latency
-        return guild.shard.lastHeartbeatReceived - guild.shard.lastHeartbeatSent;
+        if (guild.shard.latency == Infinity) {
+            return this.client.ws.ping
+        } else {
+            return guild.shard.latency
+        }
     }
 
     /**
@@ -135,7 +138,7 @@ class AntiRaidClient extends Client {
                     })
                     .then(() => {
                         member.roles.map(role => {
-                            member.removeRole(role.id, "Anti Raid").catch(() => {})
+                            member.removeRole(role, "Anti Raid").catch(() => {})
                         })
                         if (!logChannelId)return;
                         member.guild.channels.get(logChannelId).createMessage({
