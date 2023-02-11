@@ -21,9 +21,6 @@ module.exports = {
             client.managers.rolesManager.filter(g => g.guildId === guild.id).forEach(s => s.delete());
         } catch {}
         try {
-            client.managers.membersManager.filter(g => g.guildId === guild.id).forEach(s => s.delete());
-        } catch {}
-        try {
             client.managers.mutesManager.filter(g => g.guildId === guild.id).forEach(s => s.delete());
         } catch {}
         

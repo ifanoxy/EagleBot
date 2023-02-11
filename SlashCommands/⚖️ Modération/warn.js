@@ -40,8 +40,7 @@ module.exports = {
             guildId: interaction.guildId
         });
 
-        const cibledata = await client.managers.membersManager.getAndCreateIfNotExists(interaction.guildId, {
-            guildId: interaction.guildId,
+        const cibledata = await client.managers.membersManager.getAndCreateIfNotExists(executor.id, {
             memberId: executor.id,
         })
         cibledata.moderation.warn++;
@@ -101,8 +100,7 @@ module.exports = {
             }
         }
 
-        const memberData = await client.managers.membersManager.getAndCreateIfNotExists(interaction.guildId, {
-            guildId: interaction.guildId,
+        const memberData = await client.managers.membersManager.getAndCreateIfNotExists(executor.id, {
             memberId: executor.id,
         })
         if (guildData.logs.enable.warn) {

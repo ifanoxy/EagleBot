@@ -34,8 +34,7 @@ module.exports = {
             ephemeral: true
         })
 
-        const cibledata = await client.managers.membersManager.getAndCreateIfNotExists(interaction.guildId, {
-            guildId: interaction.guildId,
+        const cibledata = await client.managers.membersManager.getAndCreateIfNotExists(executor.id, {
             memberId: executor.id,
         })
         if (!cibledata.moderation.warn > 0)return interaction.reply({

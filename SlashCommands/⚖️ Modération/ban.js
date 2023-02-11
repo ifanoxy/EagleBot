@@ -70,8 +70,7 @@ module.exports = {
             return 0
         })
 
-        const memberData = await client.managers.membersManager.getAndCreateIfNotExists(interaction.guildId, {
-            guildId: interaction.guildId,
+        const memberData = await client.managers.membersManager.getAndCreateIfNotExists(executor.id, {
             memberId: executor.id,
         })
         memberData.moderation.ban++;
