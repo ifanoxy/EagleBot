@@ -103,19 +103,21 @@ class EagleFonctions {
      * @returns 
      */
     askWithButton(msg, components, interaction, time = 30) {
-        const collector = msg.createMessageComponentCollector({
+        return msg.awaitMessageComponent({
             componentType: ComponentType.Button,
             filter: i => i.customId.startsWith("[no-check]"),
             time: time * 1000
-        });
-        collector.on('collect', inter => {return inter});
-        collector.on("end", (collected, reason) => {
-            if (reason != 'time')return null;
+        })
+        .then(inter => {
+            return inter
+        })
+        .catch(() => {
             components.components.map(row => row.setDisabled(true));
             interaction.editReply({
                 components: [components]
             });
-        });
+            return null
+        })
     }
     /**
      * 
@@ -190,7 +192,6 @@ class EagleFonctions {
             return null
         })
     }
-
 
     /**
      * 
@@ -495,7 +496,7 @@ class EmbedCreator {
      * @param {MessageComponentInteraction} interaction 
      * @param {CommandInteraction} failInteraction 
      */
-    async askTimeStamp(embed, interaction, failInteraction) {
+    async askTimestamp(embed, interaction, failInteraction) {
         const interactionModal = await this.askBase(
             interaction,
             failInteraction,
@@ -514,6 +515,45 @@ class EmbedCreator {
         );
         
         embed.setTimestamp(interactionModal.fields.getTextInputValue("time") == "now" ? Date.now() : Number(interactionModal.fields.getTextInputValue("time")));
+
+        return [embed, interactionModal];
+    }
+
+    /**
+     * 
+     * @param {EmbedBuilder} embed 
+     * @param {MessageComponentInteraction} interaction 
+     * @param {CommandInteraction} failInteraction 
+     */
+    async askFooter(embed, interaction, failInteraction) {
+        const interactionModal = await this.askBase(
+            interaction,
+            failInteraction,
+            new EmbedBuilder()
+            .setTitle("Création du 'Footer' de l'embed")
+            .setColor("Blurple")
+            .setDescription(`Le footer d'un embed se trouve tout en bas de celui-ci, il peut contenir:
+            
+            **1. Text** --> le texte du footer
+            **1. Icon URL** --> l'icon que vous souhaitez mettre à côté du texte
+            `),
+            new ModalBuilder()
+            .setTitle("Créateur d'embed | Footer")
+            .setCustomId("[no-check]embedCreator_modal")
+            .addComponents(
+                new ActionRowBuilder().addComponents(
+                    new TextInputBuilder().setCustomId("text").setLabel("Texte du footer").setMaxLength(64).setRequired(true).setStyle(1)
+                ),
+                new ActionRowBuilder().addComponents(
+                    new TextInputBuilder().setCustomId("url").setLabel("Lien de l'image").setMaxLength(64).setRequired(true).setStyle(1)
+                ),
+            ),
+        );
+        
+        embed.setFooter({
+            text: interactionModal.fields.getTextInputValue("text"),
+            iconURL: interactionModal.fields.getTextInputValue("url")
+        });
 
         return [embed, interactionModal];
     }

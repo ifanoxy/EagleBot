@@ -1,7 +1,7 @@
 const { EagleClient } = require("../../structures/Client")
 
 module.exports = {
-    name: "checkMute",
+    name: "clearAntiRaid",
     repeat: true,
     /**
      * 
