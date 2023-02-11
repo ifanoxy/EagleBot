@@ -3,7 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder, PermissionsBitField } = require("disc
 module.exports = {
     data: new SlashCommandBuilder()
     .setName("say")
-    .setDescription("permet de dire quelque chose avec le bot - \p pour retour à la ligne")
+    .setDescription("permet de dire quelque chose avec le bot - /p pour retour à la ligne")
     .setDMPermission(false)
     .addStringOption(
         opt => opt.setName("texte").setDescription("ce que vous souhaitez écrire").setRequired(true)
@@ -17,7 +17,7 @@ module.exports = {
             ],
             ephemeral: true
         });
-        interaction.channel.send(interaction.options.getString("texte").replaceAll("\p", "\n"))
+        interaction.channel.send(interaction.options.getString("texte").replaceAll("/p", "\n"))
         interaction.reply({
             embeds: [
                 new EmbedBuilder().setColor("Blurple").setDescription("Votre message à bien été envoyé")

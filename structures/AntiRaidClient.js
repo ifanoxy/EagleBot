@@ -51,7 +51,6 @@ class AntiRaidClient extends Client {
      */
     checkWhitelist(userId) {
         const whitelistData = this.EagleClient.managers.whitelistsManager.getIfExist(userId);
-        if (this.checkOwner)return true;
         if (!whitelistData)return false;
         return true;
     }
