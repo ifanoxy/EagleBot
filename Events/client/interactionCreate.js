@@ -25,7 +25,7 @@ module.exports = {
                 try {
                     file.execute(interaction, client);
                 } catch (err) {
-                    client.error(err)
+                    client.error(err.stack)
                 }
             }break;
             case interaction.isAutocomplete() : {
@@ -39,7 +39,7 @@ module.exports = {
                 try {
                     await command.autocomplete(interaction, client);
                 } catch (error) {
-                    console.error(error);
+                    console.error(error.stack);
                 }
             }break;
             case interaction.isButton() : {
@@ -57,7 +57,7 @@ module.exports = {
                 try {
                     file.execute(interaction, client);
                 } catch (err) {
-                    client.error(err)
+                    client.error(err.stack)
                 }
             }break;
             case interaction.isChatInputCommand() : {
@@ -74,7 +74,7 @@ module.exports = {
                 try {
                     command.execute(interaction, client)
                 } catch (err) {
-                    client.error(err)
+                    client.error(err.stack)
                 }
             }break;
             case interaction.isModalSubmit() : {
@@ -92,7 +92,7 @@ module.exports = {
                 try {
                     file.execute(interaction, client);
                 } catch (err) {
-                    client.error(err)
+                    client.error(err.stack)
                 }
             }
         }

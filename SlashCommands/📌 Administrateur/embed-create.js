@@ -159,6 +159,7 @@ module.exports = {
                                         inter2
                                     )
                                     .then(inter3 => {
+                                        if(!inter3)return;
                                         if (inter3.customId == "[no-check]embed_save") {
                                             client.fonctions.askWithModal(
                                                 inter3,
@@ -167,7 +168,7 @@ module.exports = {
                                                 .setCustomId("[no-check]embed_saving")
                                                 .addComponents(
                                                     new ActionRowBuilder().addComponents(
-                                                        new TextInputBuilder().setCustomId("name").setLabel("Donner un nom pour votre sauvegarde").setRequired(true).setMaxLength(30)
+                                                        new TextInputBuilder().setStyle(1).setCustomId("name").setLabel("Donner un nom pour votre sauvegarde").setRequired(true).setMaxLength(30)
                                                     )
                                                 )
                                             )
@@ -297,7 +298,7 @@ module.exports = {
                                             .setLabel("Sauvegarder l'embed.")
                                         )
                                     ],
-                                    inter2
+                                    interTemp
                                 )
                                 .then(inter3 => {
                                     if (inter3.customId == "[no-check]embed_save") {
@@ -308,7 +309,7 @@ module.exports = {
                                             .setCustomId("[no-check]embed_saving")
                                             .addComponents(
                                                 new ActionRowBuilder().addComponents(
-                                                    new TextInputBuilder().setCustomId("name").setLabel("Donner un nom pour votre sauvegarde").setRequired(true).setMaxLength(30)
+                                                    new TextInputBuilder().setStyle(1).setCustomId("name").setLabel("Donner un nom pour votre sauvegarde").setRequired(true).setMaxLength(30)
                                                 )
                                             )
                                         )
@@ -316,19 +317,20 @@ module.exports = {
                                             inter4.reply({
                                                 embeds: [
                                                     new EmbedBuilder()
-                                                    .setTitle("Sauvegarde en cours de votre embed")
+                                                    .setTitle("Embed sauvegardé avec succès !")
                                                     .setColor("Blurple")
-                                                ]
+                                                ],
+                                                ephemeral: true
                                             })
                                             let memberData = client.managers.membersManager.getAndCreateIfNotExists(interaction.user.id, {
                                                 memberId: interaction.user.id
                                             });
-                                            memberData.embeds[FinalEmbed] = embed.toJSON();
+                                            memberData.embeds[inter4.fields.getTextInputValue("name")] = FinalEmbed.toJSON();
                                             memberData.save();
                                         });
                                     } else {
                                         interaction.channel.send({
-                                            embeds: [embed]
+                                            embeds: [FinalEmbed]
                                         }).then(() => {
                                             inter3.reply({
                                                 embeds: [
