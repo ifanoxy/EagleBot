@@ -323,7 +323,7 @@ module.exports = {
                                             let memberData = client.managers.membersManager.getAndCreateIfNotExists(interaction.user.id, {
                                                 memberId: interaction.user.id
                                             });
-                                            memberData.embeds[inter4.fields.getTextInputValue("name")] = embed.toJSON();
+                                            memberData.embeds[FinalEmbed] = embed.toJSON();
                                             memberData.save();
                                         });
                                     } else {
