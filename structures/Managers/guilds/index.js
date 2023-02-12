@@ -139,6 +139,32 @@ module.exports = function (database, modelName, config) {
                 default: []
             },
             {
+                name: 'join',
+                isValue: true,
+                type: DataTypes.JSON,
+                allowNull: true,
+                default: {
+                    channelId: null,
+                    message: {
+                        content: null,
+                        embed: null,
+                    }
+                }
+            },
+            {
+                name: 'leave',
+                isValue: true,
+                type: DataTypes.JSON,
+                allowNull: true,
+                default: {
+                    channelId: null,
+                    message: {
+                        content: null,
+                        embed: null,
+                    }
+                }
+            },
+            {
               name: 'greetPing',
               isValue: true,
               type: DataTypes.JSON,
