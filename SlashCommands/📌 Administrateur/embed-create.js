@@ -254,14 +254,93 @@ module.exports = {
                         client.fonctions.askWithSelectMenuString(msg, [selectMenu], interaction)
                         .then(async inter2 => {
                             const choices = inter2.values;
-                            let interTemp = inter2
+                            let interTemp = inter2;
                             let FinalEmbed = new EmbedBuilder();
                             for (let choice of choices) {
                                 const respond = await client.fonctions.embedCreator[`ask${choice}`](FinalEmbed, interTemp, interaction);
                                 interTemp = respond.interaction;
                                 FinalEmbed = respond.embed;
                                 if (!interTemp)break;
-                            }
+                            };
+                            await interTemp.update({
+                                embeds: [
+                                    new EmbedBuilder()
+                                    .setTitle("Vous avez terminé la création de votre embed !")
+                                    .setColor("Yellow")
+                                    .setDescription("Prévualisation en dessous."),
+                                    FinalEmbed
+                                ],
+                                components: [
+                                    new ActionRowBuilder().addComponents(
+                                        new ButtonBuilder()
+                                        .setStyle(ButtonStyle.Success)
+                                        .setLabel("Envoyer dans ce channel")
+                                        .setCustomId("[no-check]embed_send"),
+                                        new ButtonBuilder()
+                                        .setCustomId("[no-check]embed_save")
+                                        .setStyle(ButtonStyle.Primary)
+                                        .setLabel("Sauvegarder l'embed.")
+                                    )
+                                ]
+                            }).then(msg => {
+                                client.fonctions.askWithButton(
+                                    msg,
+                                    [
+                                        new ActionRowBuilder().addComponents(
+                                            new ButtonBuilder()
+                                            .setStyle(ButtonStyle.Success)
+                                            .setLabel("Envoyer dans ce channel")
+                                            .setCustomId("[no-check]embed_send"),
+                                            new ButtonBuilder()
+                                            .setCustomId("[no-check]embed_save")
+                                            .setStyle(ButtonStyle.Primary)
+                                            .setLabel("Sauvegarder l'embed.")
+                                        )
+                                    ],
+                                    inter2
+                                )
+                                .then(inter3 => {
+                                    if (inter3.customId == "[no-check]embed_save") {
+                                        client.fonctions.askWithModal(
+                                            inter3,
+                                            new ModalBuilder()
+                                            .setTitle("Savegarde embed")
+                                            .setCustomId("[no-check]embed_saving")
+                                            .addComponents(
+                                                new ActionRowBuilder().addComponents(
+                                                    new TextInputBuilder().setCustomId("name").setLabel("Donner un nom pour votre sauvegarde").setRequired(true).setMaxLength(30)
+                                                )
+                                            )
+                                        )
+                                        .then(inter4 => {
+                                            inter4.reply({
+                                                embeds: [
+                                                    new EmbedBuilder()
+                                                    .setTitle("Sauvegarde en cours de votre embed")
+                                                    .setColor("Blurple")
+                                                ]
+                                            })
+                                            let memberData = client.managers.membersManager.getAndCreateIfNotExists(interaction.user.id, {
+                                                memberId: interaction.user.id
+                                            });
+                                            memberData.embeds[inter4.fields.getTextInputValue("name")] = embed.toJSON();
+                                            memberData.save();
+                                        });
+                                    } else {
+                                        interaction.channel.send({
+                                            embeds: [embed]
+                                        }).then(() => {
+                                            inter3.reply({
+                                                embeds: [
+                                                    new EmbedBuilder().setColor("Blurple")
+                                                    .setDescription("L'embed a été envoyé avec succès !")
+                                                ],
+                                                ephemeral: true
+                                            })
+                                        })
+                                    }
+                                });
+                            });
                         })
                     });
                 };

@@ -1,4 +1,4 @@
-const { CommandInteraction, EmbedBuilder, Message, ComponentType, ActionRowBuilder, ButtonInteraction, StringSelectMenuInteraction, MessageComponentInteraction, ButtonBuilder, ButtonStyle, ModalBuilder, TextInputBuilder } = require("discord.js");
+const { CommandInteraction, EmbedBuilder, Message, ComponentType, ActionRowBuilder, ButtonInteraction, StringSelectMenuInteraction, MessageComponentInteraction, ButtonBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, StringSelectMenuBuilder } = require("discord.js");
 
 class EagleFonctions {
     #client;
@@ -561,6 +561,88 @@ class EmbedCreator {
         })
 
         return {embed: embed, interaction: interactionModal };
+    }
+
+    /**
+    * 
+    * @param {EmbedBuilder} embed 
+    * @param {MessageComponentInteraction} interaction 
+    * @param {CommandInteraction} failInteraction 
+    */
+    async askFields(embed, interaction, failInteraction) {
+        let nowInteraction;
+        let row = new ActionRowBuilder().addComponents(
+            new StringSelectMenuBuilder()
+            .setCustomId("[no-check]embedCreator_fields")
+            .setMaxValues(1)
+        )
+        for (let i of [...Array(15).keys()]) {
+            row.components[0].addOptions({
+                label: `${i+1} Fields`,
+                value: `${i+1}`
+            });
+        }
+        return await interaction.update({
+            embeds: [
+                new EmbedBuilder()
+                .setTitle("Création des 'Fields' de l'embed")
+                .setColor("Blurple")
+                .setDescription(`Les fields d'un embed se trouve entre la description et l'image.
+
+                Vous devez tout d'abord définir le nombre de fields que vous souhaitez.
+                `),
+            ],
+            components: [ row ]
+        }).then(msg => {
+            return this.#fonctions.askWithSelectMenuString(
+                msg,
+                row,
+                failInteraction,
+                45
+            ).then(async interactionSelectMenu => {
+                if (!interactionSelectMenu)return;
+                nowInteraction = interactionSelectMenu;
+                const value = interactionSelectMenu.values;
+                for (let i of [...Array(Number(value)).keys()]) {
+                    const interactionModal = await this.askBase(
+                        nowInteraction,
+                        failInteraction,
+                        new EmbedBuilder()
+                        .setTitle(`Création du 'Field' ${i+1}/${value}`)
+                        .setColor("Blurple")
+                        .setDescription(`Un field contient:
+                        
+                        **1. name** --> Le titre du field
+                        **2. Value** --> La 'description' du field,
+                        **3. inline** --> Quand Actif cela alligne les fields selon les options des autres (3 par lignes max)
+                        `),
+                        new ModalBuilder()
+                        .setTitle("Créateur d'embed | Fields")
+                        .setCustomId("[no-check]embedCreator_modal")
+                        .addComponents(
+                            new ActionRowBuilder().addComponents(
+                                new TextInputBuilder().setCustomId("name").setLabel("Le titre du field").setMaxLength(128).setRequired(true).setStyle(1)
+                            ),
+                            new ActionRowBuilder().addComponents(
+                                new TextInputBuilder().setCustomId("value").setLabel("La description du field").setMaxLength(1024).setRequired(true).setStyle(2)
+                            ),
+                            new ActionRowBuilder().addComponents(
+                                new TextInputBuilder().setCustomId("inline").setLabel("inline 0 -> Inactif | 1 -> Actif").setMaxLength(1).setRequired(false).setStyle(1)
+                            ),
+                        ),
+                    );
+                    
+                    nowInteraction = interactionModal
+                    
+                    embed.addFields({
+                        name: nowInteraction.fields.getTextInputValue("name"),
+                        value: (nowInteraction.fields.getTextInputValue("value")),
+                        inline: nowInteraction.fields.getTextInputValue("inline") == "1" ? true : false,
+                    });
+                }
+                return { embed: embed, interaction: nowInteraction}
+            })
+        });
     }
 }
 
