@@ -557,7 +557,7 @@ class EmbedCreator {
         
         embed.setFooter({
             text: interactionModal.fields.getTextInputValue("text"),
-            iconURL: interactionModal.fields.getTextInputValue("url")
+            iconURL: interactionModal.fields.getTextInputValue("url") || null,
         })
 
         return {embed: embed, interaction: interactionModal };
