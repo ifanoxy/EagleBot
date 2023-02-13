@@ -1,8 +1,10 @@
 const { AuditLogEvent, GuildMember, EmbedBuilder } = require("discord.js");
+const { EagleClient } = require("../../structures/Client");
 
 module.exports = {
     name: "guildMemberAdd",
     /**
+     * @param {EagleClient} client
      * @param {GuildMember} Parametre
      */
     async execute(client, Parametre) {
@@ -34,6 +36,9 @@ module.exports = {
         }
         if (guildData?.autoroles?.length != 0) {
             Parametre.roles.add(guildData.autoroles, "Auto Role").catch(() => {})
+        }
+        if (guildData.join?.channel) {
+            client.fonctions.sendJoinMessage(Parametre.guild.id, Parametre)
         }
     }
 };

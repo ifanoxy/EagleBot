@@ -73,7 +73,7 @@ module.exports = {
                 ephemeral: true
             });
 
-            if (embedName) database.join.message.embed = client.managers.membersManager.getIfExist(interaction.user.id)[embedName];
+            if (embedName) database.join.message.embed = client.managers.membersManager.getIfExist(interaction.user.id).embeds[embedName];
             if (message) database.join.message.content = message;
 
             database.join.channelId = channel.id;

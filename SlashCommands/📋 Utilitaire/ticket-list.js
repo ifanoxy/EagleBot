@@ -21,9 +21,7 @@ module.exports = {
             ephemeral: true
         });
 
-        const userData = client.managers.ticketsManager.getIfExist(interaction.user.id, {
-            userId: interaction.user.id,
-        });
+        const userData = client.managers.ticketsManager.getIfExist(interaction.user.id);
 
         let Embed = new EmbedBuilder().setColor("Green").setTitle(`Liste de vos ${Object.keys(userData.data).length} templates de ticket`);
         let Row = new ActionRowBuilder()
