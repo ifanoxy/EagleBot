@@ -106,8 +106,7 @@ class EagleFonctions {
         
         return true;
     };
-
-    
+ 
     sendJoinMessage(guildId, member) {
         let guildData = this.#client.managers.guildsManager.getIfExist(guildId);
         if (!guildData)return;
@@ -123,7 +122,43 @@ class EagleFonctions {
         let embed = guildData.join.message.embed;
 
         const find = ["{member-name}","{member-tag}","{member-id}","{member-mention}","{member-avatar}","{member-age}"];
-        const replace = [member.user.username, member.user.tag, member.id, `<@${member.id}>`, member.user.avatarURL(), `<t:${Math.round(member.user.createdTimestamp)}>`];
+        const replace = [member.user.username, member.user.tag, member.id, `<@${member.id}>`, member.user.avatarURL(), `<t:${Math.round(member.user.createdTimestamp/1000)}>`];
+
+        if (content) {
+            content = content.replaceArray(find, replace);
+        }
+        if (embed) {
+            embed = JSON.parse(JSON.stringify(embed).replaceArray(find, replace));
+        }
+
+        if (content && embed) return channel.send({
+            content: content,
+            embeds: [ embed ]
+        })
+        else if (content) return channel.send({
+            content: content
+        })
+        else return channel.send({
+            embeds: [embed]
+        })
+    }
+
+    sendLeaveMessage(guildId, member) {
+        let guildData = this.#client.managers.guildsManager.getIfExist(guildId);
+        if (!guildData)return;
+        
+        const channel = this.#client.guilds.cache.get(guildId).channels.cache.get(guildData.leave?.channelId);
+        if (!channel) {
+            guildData.leave = {channelId: null, message: {content: null, embed: null}};
+            guildData.save();
+            return;
+        }
+
+        let content = guildData.leave.message.content;
+        let embed = guildData.leave.message.embed;
+
+        const find = ["{member-name}","{member-tag}","{member-id}","{member-mention}","{member-avatar}","{member-age}"];
+        const replace = [member.user.username, member.user.tag, member.id, `<@${member.id}>`, member.user.avatarURL(), `<t:${Math.round(member.user.createdTimestamp/1000)}>`];
 
         if (content) {
             content = content.replaceArray(find, replace);

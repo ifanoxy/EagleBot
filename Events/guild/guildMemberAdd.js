@@ -37,7 +37,7 @@ module.exports = {
         if (guildData?.autoroles?.length != 0) {
             Parametre.roles.add(guildData.autoroles, "Auto Role").catch(() => {})
         }
-        if (guildData.join?.channel) {
+        if (guildData.join?.channelId) {
             client.fonctions.sendJoinMessage(Parametre.guild.id, Parametre)
         }
     }
