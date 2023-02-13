@@ -17,12 +17,6 @@ module.exports = {
         client.managers.guildsManager.getAndCreateIfNotExists(guild.id, {
             guildId: guild.id
         }).delete();
-        try {
-            client.managers.rolesManager.filter(g => g.guildId === guild.id).forEach(s => s.delete());
-        } catch {}
-        try {
-            client.managers.mutesManager.filter(g => g.guildId === guild.id).forEach(s => s.delete());
-        } catch {}
         
         if(!guild.available)return;
         webhook.send({

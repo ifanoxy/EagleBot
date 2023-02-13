@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionsBitField } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -37,6 +37,15 @@ module.exports = {
 		); 
     },
     execute(interaction, client) {
+        if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) return interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                .setColor('Red')
+                .setDescription("Vous n'avez pas la permission d'utiliser cette commande !")
+            ],
+            ephemeral: true
+        });
+        
         let database = client.managers.guildsManager.getAndCreateIfNotExists(interaction.guildId, {
             guildId: interaction.guildId
         })
@@ -50,6 +59,16 @@ module.exports = {
                     new EmbedBuilder()
                     .setColor("Red")
                     .setDescription("Vous devez définir au moins un message ou un embed de bienvenue")
+                ],
+                ephemeral: true
+            });
+
+            if (embedName == "Vous n'avez pas créer d'embed --> /embed-create")return interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                    .setColor("DarkPurple")
+                    .setTitle("Vous n'avez pas d'embed créé")
+                    .setDescription(`Utiliser la commande ${client.application.commands.cache.filter(i => i.name == "embed-create").map(a => `</${a.name}:${a.id}>`)} pour en créer`)
                 ],
                 ephemeral: true
             });

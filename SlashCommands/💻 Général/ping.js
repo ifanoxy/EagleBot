@@ -18,7 +18,7 @@ module.exports = {
                 .setDescription(`
                 **Latence du bot:** \`${Date.now() - interaction.createdTimestamp}ms\`
                 **Latence API:** \`${Math.round(client.ws.ping)}ms\`
-                **Latence Anti Raid:** \`${client.antiraidClient.guilds.get(interaction.guildId).shard.latency}ms\`
+                **Latence Anti Raid:** \`${client.antiraidClient.ping(client.antiraidClient.guilds.get(interaction.guildId))}ms\`
                 `)
                 .setColor("Aqua")
             ],

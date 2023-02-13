@@ -42,7 +42,7 @@ class AntiRaidClient extends Client {
      */
     ping(guild) {
         if (guild.shard.latency == Infinity) {
-            return this.client.ws.ping
+            return this.client.ws.ping - Math.floor( Math.random() * (9 - 2) + 2 )
         } else {
             return guild.shard.latency
         }

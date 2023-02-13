@@ -262,8 +262,9 @@ module.exports = {
         }
 
         function askPagination(msg, commandsEmbed, AllCommands, nbrAllSubOfAllCommands, embedCommands, rowPagination) {
+            
             msg.awaitMessageComponent({
-                filter: i => i.customId.startsWith("[no-check]"),
+                filter: i => i.customId.startsWith("[no-check]") && i.message.embeds[0].data.title.split(" ")[4] == commandsEmbed.data.title.split(" ")[4],
                 componentType: ComponentType.Button,
                 time: 30 * 1000
             })
@@ -360,7 +361,7 @@ module.exports = {
                                 rowPagination
                             ]
                         }).then(msg => {
-                            askPagination(msg, commandsEmbed, AllCommands, nbrAllSubOfAllCommands, embedCommands, rowPagination)
+                            askPagination(msg, Embed, AllCommands, nbrAllSubOfAllCommands, embedCommands, rowPagination)
                         })
                     }break;
                     case "Next" : {
@@ -450,19 +451,21 @@ module.exports = {
                                 rowPagination
                             ]
                         }).then(msg => {
-                            askPagination(msg, commandsEmbed, AllCommands, nbrAllSubOfAllCommands, embedCommands, rowPagination)
+                            askPagination(msg, Embed, AllCommands, nbrAllSubOfAllCommands, embedCommands, rowPagination)
                         })
                     }break;
                 }
             })
             .catch((err) => {
-                interaction.editReply({
-                    components: [
-                        new ActionRowBuilder().addComponents(
-                            SelectMenuHelp
-                        ),
-                    ],
-                });
+                try {
+                    interaction.editReply({
+                        components: [
+                            new ActionRowBuilder().addComponents(
+                                SelectMenuHelp
+                            ),
+                        ],
+                    });
+                } catch {}
             })
         }
     }
