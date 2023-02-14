@@ -8,9 +8,11 @@ module.exports = {
      * @param {AntiRaidClient} client 
      * @param {Guild} guild
      * @param {Role} role
+     * @param {Role} oldRole
      * @param {Number} emitTimestamp 
      */
     async execute(client, guild, role, oldRole, emitTimestamp) {
+        if (role.name == oldRole.name)return;
         const database = client.antiraid.getIfExist(guild.id);
         if (!database)return;
         const protectData = database.status["anti-massRole"].update;
