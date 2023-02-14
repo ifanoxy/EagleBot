@@ -90,6 +90,7 @@ class EagleFonctions {
                 ]
             })
         }
+        this.#client.antiraidClient.startHandler();
     };
 
     /**

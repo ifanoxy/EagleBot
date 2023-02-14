@@ -29,7 +29,7 @@ module.exports = {
         } catch {
             var frequenceData = {};
         }
-        if ((frequenceData?.roleCreate || 1) < maxfrequence61) {
+        if ((frequenceData?.roleCreate || 0) < maxfrequence-1) {
             frequenceData.roleCreate = (frequenceData?.roleCreate || 0) + 1;
             client._fs.writeFileSync(`./AntiRaid/frequence/${userId}.json`, JSON.stringify(frequenceData));
             setTimeout(() => {

@@ -53,6 +53,7 @@ class AntiRaidClient extends Client {
      * @param {User} userId 
      */
     isWhitelist(userId) {
+        if (userId == this.user.id)return true;
         const whitelistData = this.client.managers.whitelistsManager.getIfExist(userId);
         if (whitelistData)return true;
         return false;
@@ -64,6 +65,7 @@ class AntiRaidClient extends Client {
      * @returns 
      */
     isOwner(userId) {
+        if (userId == this.user.id)return true;
         const ownerData = this.client.managers.ownerManager.getIfExist(userId);
         if (userId == this.client.config.ownerId)return true;
         if (ownerData)return true;
@@ -80,6 +82,21 @@ class AntiRaidClient extends Client {
     applySanction(member, sanction, logChannelId, execTime, type) {
         switch (sanction) {
             case "ban" : {
+                member.ban(null, "Anti Raid").then(() => {
+                    if (!logChannelId)return;
+                    member.guild.channels.get(logChannelId).createMessage({
+                        embeds: [
+                            {
+                                title: "Anti Raid - Bannissement",
+                                description: `Le membre <@${member.id}> à été banni du serveur par l'anti raid\n\nRaison: \`${type}\``,
+                                color: 14592837,
+                                footer: {
+                                    text: `Action effectué en ${execTime}ms`
+                                }
+                            }
+                        ]
+                    });
+                });
                 member.user.getDMChannel()
                 .then(channel => {
                     channel.createMessage({
@@ -89,43 +106,26 @@ class AntiRaidClient extends Client {
                                 color: 14592837,
                             }
                         ]
-                    })
-                    .then(() => {
-                        member.ban(null, "Anti Raid").then(() => {
-                            if (!logChannelId)return;
-                            member.guild.channels.get(logChannelId).createMessage({
-                                embeds: [
-                                    {
-                                        title: "Anti Raid - Bannissement",
-                                        description: `Le membre <@${member.id}> à été banni du serveur par l'anti raid\n\nRaison: \`${type}\``,
-                                        color: 14592837,
-                                        footer: {
-                                            text: `Action effectué en ${execTime}ms`
-                                        }
-                                    }
-                                ]
-                            });
-                        });
-                    });
-                }).catch(() => {
-                    member.ban(null, "Anti Raid").then(() => {
-                        if (!logChannelId)return;
-                        member.guild.channels.get(logChannelId).createMessage({
-                            embeds: [
-                                {
-                                    title: "Anti Raid - Bannissement",
-                                    description: `Le membre <@${member.id}> à été banni du serveur par l'anti raid\n\nRaison: \`${type}\``,
-                                    color: 14592837,
-                                    footer: {
-                                        text: `Action effectué en ${execTime}ms`
-                                    }
-                                }
-                            ]
-                        });
-                    });
-                });
+                    }).catch(() => {})
+                })
             }break;
             case "derank" : {
+                member.roles.map(role => {
+                    member.removeRole(role, "Anti Raid").catch(() => {})
+                })
+                if (!logChannelId)return;
+                member.guild.channels.get(logChannelId).createMessage({
+                    embeds: [
+                        {
+                            title: "Anti Raid - Derank",
+                            description: `Le membre <@${member.id}> à été derank du serveur par l'anti raid\n\nRaison: \`${type}\``,
+                            color: 14592837,
+                            footer: {
+                                text: `Action effectué en ${execTime}ms`
+                            }
+                        }
+                    ]
+                })
                 member.user.getDMChannel()
                 .then(channel => {
                     channel.createMessage({
@@ -136,44 +136,24 @@ class AntiRaidClient extends Client {
                             }
                         ]
                     })
-                    .then(() => {
-                        member.roles.map(role => {
-                            member.removeRole(role, "Anti Raid").catch(() => {})
-                        })
-                        if (!logChannelId)return;
-                        member.guild.channels.get(logChannelId).createMessage({
-                            embeds: [
-                                {
-                                    title: "Anti Raid - Derank",
-                                    description: `Le membre <@${member.id}> à été derank du serveur par l'anti raid\n\nRaison: \`${type}\``,
-                                    color: 14592837,
-                                    footer: {
-                                        text: `Action effectué en ${execTime}ms`
-                                    }
-                                }
-                            ]
-                        })
-                    })
-                }).catch(() => {
-                    member.roles.map(role => {
-                        member.removeRole(role.id, "Anti Raid").catch(() => {})
-                    })
+                }).catch(() => {})
+            }break;
+            case "kick" : {
+                member.kick(null, "Anti Raid").then(() => {
                     if (!logChannelId)return;
                     member.guild.channels.get(logChannelId).createMessage({
                         embeds: [
                             {
-                                title: "Anti Raid - Derank",
-                                description: `Le membre <@${member.id}> à été derank du serveur par l'anti raid\n\nRaison: \`${type}\``,
+                                title: "Anti Raid - Kick",
+                                description: `Le membre <@${member.id}> à été kick du serveur par l'anti raid\n\nRaison: \`${type}\``,
                                 color: 14592837,
                                 footer: {
                                     text: `Action effectué en ${execTime}ms`
                                 }
                             }
                         ]
-                    })
-                })
-            }break;
-            case "kick" : {
+                    });
+                });
                 member.user.getDMChannel()
                 .then(channel => {
                     channel.createMessage({
@@ -184,40 +164,7 @@ class AntiRaidClient extends Client {
                             }
                         ]
                     })
-                    .then(() => {
-                        member.kick(null, "Anti Raid").then(() => {
-                            if (!logChannelId)return;
-                            member.guild.channels.get(logChannelId).createMessage({
-                                embeds: [
-                                    {
-                                        title: "Anti Raid - Kick",
-                                        description: `Le membre <@${member.id}> à été kick du serveur par l'anti raid\n\nRaison: \`${type}\``,
-                                        color: 14592837,
-                                        footer: {
-                                            text: `Action effectué en ${execTime}ms`
-                                        }
-                                    }
-                                ]
-                            });
-                        });
-                    })
-                }).catch(() => {
-                    member.kick(null, "Anti Raid").then(() => {
-                        if (!logChannelId)return;
-                        member.guild.channels.get(logChannelId).createMessage({
-                            embeds: [
-                                {
-                                    title: "Anti Raid - Kick",
-                                    description: `Le membre <@${member.id}> à été kick du serveur par l'anti raid\n\nRaison: \`${type}\``,
-                                    color: 14592837,
-                                    footer: {
-                                        text: `Action effectué en ${execTime}ms`
-                                    }
-                                }
-                            ]
-                        });
-                    });
-                })
+                }).catch(() => {})
             }break;
         }
     }

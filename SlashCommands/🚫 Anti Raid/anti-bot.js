@@ -47,7 +47,7 @@ module.exports = {
                     .setColor("Orange")
                 ],
                 ephemeral: true
-            })
+            });
         } else {
             client.fonctions.activateAntiRaid(
                 "anti-bot", interaction,

@@ -16,7 +16,6 @@ module.exports = {
         const guild = client.guilds.get(channel.guild.id)
         const AuditLog = await guild.getAuditLog({limit: 1});
         const userId = AuditLog.entries[0].user.id;
-        if (client.checkOwner(userId))return;
         if (client.isOwner(userId))return;
         if (protectData.ignoreWhitelist) {
             if(client.isWhitelist(userId))return;
@@ -29,7 +28,7 @@ module.exports = {
         } catch {
             var frequenceData = {};
         }
-        if ((frequenceData.channelUpdate || 1) < maxfrequence-1) {
+        if ((frequenceData.channelUpdate || 0) < maxfrequence-1) {
             frequenceData.channelUpdate = (frequenceData.channelUpdate || 0) + 1;
             client._fs.writeFileSync(`./AntiRaid/frequence/${userId}.json`, JSON.stringify(frequenceData));
             setTimeout(() => {

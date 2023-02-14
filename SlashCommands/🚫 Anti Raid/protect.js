@@ -32,6 +32,27 @@ module.exports = {
         sub => sub
         .setName("remove")
         .setDescription("Permet d'activer tout les protections au maximum")
+    )
+    .addSubcommand(
+        sub => sub
+        .setName("set-all")
+        .setDescription("Définir toute les options de l'anti raid d'un coups")
+        .addStringOption(
+            opt => opt.setName('sanction').setDescription("La sanction que prendra le membre qui banni trop de personne").setRequired(true).addChoices(
+                {name: "Derank", value: "derank"},
+                {name: "kick", value: "kick"},
+                {name: "ban", value: "ban"}
+            )
+        )
+        .addBooleanOption(
+            opt => opt.setName("ignore-whitelist").setDescription("True: les whitelists ne seront pas sanctionnés").setRequired(true)
+        )
+        .addStringOption(
+            opt => opt.setName("frequence").setDescription("l'intervale de temps entre les bannissement. ex: '5/15s' ").setRequired(true)
+        )
+        .addStringOption(
+            opt => opt.setName('temps-minimum').setDescription("Le temps minimum de création du compte").setRequired(true)
+        )
     ),
     execute(interaction, client) {
         const sub = interaction.options.getSubcommandGroup() || interaction.options.getSubcommand();
@@ -285,6 +306,7 @@ module.exports = {
                     },
                 };
                 database.save();
+                client.antiraidClient.startHandler();
         
                 interaction.reply({
                     embeds: [
@@ -434,6 +456,7 @@ module.exports = {
                     },
                 };
                 database.save();
+                client.antiraidClient.startHandler();
         
                 interaction.reply({
                     embeds: [
@@ -459,6 +482,185 @@ module.exports = {
                     })
                 }
             }break;
+            case "set-all" : {
+                const frequence = interaction.options.getString("frequence");
+                const sanction = interaction.options.getString("sanction");
+                const ignoreWhitelist = interaction.options.getBoolean("ignore-whitelist");
+                const ageMin = interaction.options.getString("temps-minimum");
+                if (!client.fonctions.checkFrequence(frequence, "x/yt")) return interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                        .setColor("Red")
+                        .setTitle("Il y a une erreur dans la fréquence !")
+                        .setDescription(`
+                        la fréqence doit ressemblée à ceci:
+                        
+                        **x/ys**
+                        x = nombre de channel
+                        y = nombre de seconde
+                        s = seconde
+
+                        __exemple :__
+                        5/15s --> *(5 channels en 15 secondes)*
+                        `)
+                    ],
+                    ephemeral: true
+                });
+
+                let database = client.managers.antiraidManager.getAndCreateIfNotExists(interaction.guildId, {guildId: interaction.guildId});
+
+                database.status = {
+                    "anti-bot": {
+                        status: true,
+                        ignoreWhitelist: ignoreWhitelist,
+                        sanction: sanction,
+                    },
+                    "anti-massChannel": {
+                        create: {
+                            status: true,
+                            frequence: frequence,
+                            ignoreWhitelist: ignoreWhitelist,
+                            sanction: sanction,
+                        },
+                        delete: {
+                            status: true,
+                            frequence: frequence,
+                            ignoreWhitelist: ignoreWhitelist,
+                            sanction: sanction,
+                        },
+                        update: {
+                            status: true,
+                            frequence: frequence,
+                            ignoreWhitelist: ignoreWhitelist,
+                            sanction: sanction,
+                        },
+                    },
+                    "anti-massRole":{
+                        create: {
+                            status: true,
+                            frequence: frequence,
+                            ignoreWhitelist: ignoreWhitelist,
+                            sanction: sanction,
+                        },
+                        delete: {
+                            status: true,
+                            frequence: frequence,
+                            ignoreWhitelist: ignoreWhitelist,
+                            sanction: sanction,
+                        },
+                        update: {
+                            status: true,
+                            frequence: frequence,
+                            ignoreWhitelist: ignoreWhitelist,
+                            sanction: sanction,
+                        },
+                    },
+                    "anti-massBan":{
+                        status: true,
+                        frequence: frequence,
+                        ignoreWhitelist: ignoreWhitelist,
+                        sanction: sanction,
+                    },
+                    "anti-massUnban":{
+                        status: true,
+                        frequence: frequence,
+                        ignoreWhitelist: ignoreWhitelist,
+                        sanction: sanction,
+                    },
+                    "anti-massKick":{
+                        status: true,
+                        frequence: frequence,
+                        ignoreWhitelist: ignoreWhitelist,
+                        sanction: sanction,
+                    },
+                    "anti-massSticker":{
+                        create: {
+                            status: true,
+                            frequence: frequence,
+                            ignoreWhitelist: ignoreWhitelist,
+                            sanction: sanction,
+                        },
+                        delete: {
+                            status: true,
+                            frequence: frequence,
+                            ignoreWhitelist: ignoreWhitelist,
+                            sanction: sanction,
+                        },
+                        update: {
+                            status: true,
+                            frequence: frequence,
+                            ignoreWhitelist: ignoreWhitelist,
+                            sanction: sanction,
+                        },
+                    },
+                    "anti-massEmoji":{
+                        create: {
+                            status: true,
+                            frequence: frequence,
+                            ignoreWhitelist: ignoreWhitelist,
+                            sanction: sanction,
+                        },
+                        delete: {
+                            status: true,
+                            frequence: frequence,
+                            ignoreWhitelist: ignoreWhitelist,
+                            sanction: sanction,
+                        },
+                        update: {
+                            status: true,
+                            frequence: frequence,
+                            ignoreWhitelist: ignoreWhitelist,
+                            sanction: sanction,
+                        },
+                    },
+                    "anti-newAccount":{
+                        status: true,
+                        ageMin: ageMin,
+                    },
+                    "anti-webhook":{
+                        status: true,
+                        ignoreWhitelist: ignoreWhitelist,
+                        sanction: sanction,
+                    },
+                    "anti-roleAdmin":{
+                        status: true,
+                        ignoreWhitelist: ignoreWhitelist,
+                        sanction: sanction,
+                    },
+                };
+                database.save();
+                client.antiraidClient.startHandler();
+
+                interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                        .setTitle("Vous avez modifiés toutes les protections !")
+                        .setDescription(`
+                        status : \`Actif\`,
+                        ignoreWhitelist : \`${ignoreWhitelist}\`
+                        sanction : \`${sanction}\`
+                        temps minimum : \`${ageMin}\`
+                        `)
+                        .setColor("Orange")
+                    ],
+                    ephemeral: true
+                });
+        
+                if (database.log) {
+                    const channel = interaction.guild.channels.cache.get(database.log);
+                    if (!channel) return database.log = null;
+                    channel.send({
+                        embeds: [
+                            new EmbedBuilder()
+                            .setColor("Orange")
+                            .setAuthor({name: "Protect Logs"})
+                            .setTitle(`Changement de toute les protections !`)
+                            .setDescription(`Action effectuer par <@${interaction.user.id}> (${interaction.user.id})`)
+                            .setTimestamp()
+                        ]
+                    })
+                }
+            }
         }
     }
 }
