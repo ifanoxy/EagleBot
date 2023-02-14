@@ -87,7 +87,7 @@ module.exports = {
                             new EmbedBuilder()
                             .setColor("DarkPurple")
                             .setTitle("Vous n'avez pas d'embed créé")
-                            .setDescription(`Utiliser la commande ${client.application.commands.cache.filter(i => i.name == "embed-create").map(a => `</${a.name}:${a.id}>`)} pour en créer`)
+                            .setDescription(`Utiliser la commande ${client.application.commands.cache.filter(i => i.name == "embed").map(a => `</${a.name} create:${a.id}>`)} pour en créer`)
                         ],
                         ephemeral: true
                     });
