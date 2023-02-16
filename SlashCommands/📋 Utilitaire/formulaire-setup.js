@@ -227,7 +227,7 @@ module.exports = {
                             interTemp = inter4;
                             TextInputData.push({
                                 question: inter4.fields.getTextInputValue("question"),
-                                style: inter4.fields.getTextInputValue("style") == "1" ? TextInputStyle.Short : TextInputStyle.Paragraph,
+                                style: inter4.fields.getTextInputValue("style") == 1 ? TextInputStyle.Short : TextInputStyle.Paragraph,
                                 required: inter4.fields.getTextInputValue("required") == 1 ? true : false,
                                 max: Number(inter4.fields.getTextInputValue("max")) < Number(inter4.fields.getTextInputValue("min")) ? 4000 : Number(inter4.fields.getTextInputValue("max")) > 4000 ? 4000 : Number(inter4.fields.getTextInputValue("max")) > 1 ? Number(inter4.fields.getTextInputValue("max")) : 1,
                                 min: Number(inter4.fields.getTextInputValue("min")) > Number(inter4.fields.getTextInputValue("max")) ? 1 : Number(inter4.fields.getTextInputValue("min")) < 1 ? 1 : Number(inter4.fields.getTextInputValue("min")) < 4000 ? Number(inter4.fields.getTextInputValue("min")) : 4000,
