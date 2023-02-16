@@ -196,9 +196,9 @@ class EagleFonctions {
             return inter
         })
         .catch(() => {
-            components.components.map(row => row.setDisabled(true));
+            msg.components.map(row => row.components.map(cpt => cpt.data.disabled = true));
             interaction.editReply({
-                components: [components]
+                components: msg.components
             });
             return null
         })
