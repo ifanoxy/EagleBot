@@ -276,7 +276,9 @@ export interface Guilds {
         }
     },
     permissions?: {
-        calc: PermissionsBitField
+        calc: number,
+        kick: number,
+        vkick: number,
     }
     form?: {
         [key: string]: Array<{

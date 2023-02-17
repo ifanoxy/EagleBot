@@ -2,7 +2,7 @@ import chalk from "chalk";
 import { EmbedBuilder } from "discord.js";
 import { EagleClient } from "../../structures/Client";
 
-module.exports = {
+export default {
     name: "presenceRole",
     execute(client: EagleClient) {
         const guildsData = client.managers.guildsManager.map(m => m.values).filter(p => p.presenceRole.roleId)

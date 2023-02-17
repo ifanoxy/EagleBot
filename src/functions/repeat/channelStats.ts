@@ -1,7 +1,7 @@
 const chalk = require("chalk");
 const { ChannelType } = require("discord.js")
 
-module.exports = {
+export default {
     name: "channelstats",
     repeat: true,
     async execute(client) {

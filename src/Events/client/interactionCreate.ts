@@ -51,12 +51,12 @@ export default {
                 const command = client.handlers.slashCommandsHandler.SlashCommandsList.get(interaction.commandName);
 
                 const NotPerm = client.hasNotPermissions(interaction);
-                console.log(NotPerm)
+
                 if (NotPerm) return interaction.reply({
                     embeds: [
                         new EmbedBuilder()
                             .setColor('Orange')
-                            .setDescription(`Il vous manque permission \`${NotPerm}\` pour utiliser cette commande !`)
+                            .setDescription(`Il vous manque la permission \`${NotPerm}\` pour utiliser cette commande !`)
                     ],
                     ephemeral: true
                 });

@@ -122,6 +122,8 @@ export default function (database: EagleDatabaseSqlite, modelName: string) {
                 isValue: true,
                 default: {
                     calc: Number(PermissionsBitField.Flags.ManageGuild),
+                    kick: Number(PermissionsBitField.Flags.KickMembers),
+                    vkick: Number(PermissionsBitField.Flags.MoveMembers),
                 },
             },
             {

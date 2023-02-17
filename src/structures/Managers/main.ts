@@ -80,7 +80,7 @@ class DatabaseManager<Type> {
         this.values_ = {};
         this.manager.model.filter(m => m.name !== "id").forEach(v => {
             v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values_)[v.name] = values_[v.name] || !v.default ? values_[v.name] : v.default : '';
-            this[v.name] = this[v.isWhere ? "wheres" : "values"][v.name];
+            this[v.name] = this[v.isWhere ? "wheres" : "values_"][v.name]
         });
         // @ts-ignore
         this.values = {...this.wheres, ...this.values_};

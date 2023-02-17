@@ -32,9 +32,6 @@ export class EagleClient extends Client {
         this.database.auth().then(() => {
             this.log("Database connection...")
             this.managers = new EagleManagers(this);
-            setTimeout(() => {
-                console.log(this.managers.guildsManager)
-            }, 5000)
         });
         this.on("ready", () => {
             this.log(`Bot is ready ! Connected on ${this.user.tag}\n`);
@@ -66,9 +63,22 @@ export class EagleClient extends Client {
         console.log(chalk.bold.greenBright("\n[Eagle BOT]") + chalk.red.bold(" an error has occurred :\n" + err))
     }
 
+    isWhitelist(userId: string) {
+        if (this.isOwner(userId))return true;
+        if (this.managers.whitelistManager.getIfExist(userId))return true;
+        else return false;
+    }
+
+    isOwner(userId: string) {
+        if (userId == this.config.ownerId)return true;
+        if (this.managers.ownerManager.getIfExist(userId))return true;
+        else return false;
+    }
+
     hasNotPermissions(interaction: ChatInputCommandInteraction) {
         const guildData = this.managers.guildsManager.getAndCreateIfNotExists(interaction.guildId, {guildId: interaction.guildId}); guildData.save();
         const commandPermission = BigInt(guildData.values.permissions[interaction.commandName]);
+        if (this.isOwner(interaction.user.id))return false;
         if (!commandPermission || interaction.memberPermissions.has(commandPermission))return false;
         else return new PermissionsBitField(commandPermission).toArray();
     }

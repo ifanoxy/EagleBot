@@ -1,4 +1,5 @@
-enum DiscordColor {
+export enum DiscordColor {
+    Eagle = 2172744,
     Default = 0,
     Aqua = 1752220,
     DarkAqua = 1146986,

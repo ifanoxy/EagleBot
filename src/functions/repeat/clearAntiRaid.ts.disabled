@@ -1,6 +1,6 @@
 import { EagleClient } from "../../structures/Client";
 
-module.exports = {
+export default {
     name: "clearAntiRaid",
     execute(client: EagleClient) {
         const AntiRaidFiles = client._fs.readdirSync("./AntiRaid/frequence");
