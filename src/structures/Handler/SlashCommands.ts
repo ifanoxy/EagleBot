@@ -15,7 +15,7 @@ export class SlashCommandsHandler {
     }
 
     registerFile(file) {
-        const pull = require(file);
+        const pull = require(file).default;
         if (pull.data.name) {
             this.SlashCommandsList.set(pull.data.name.toLowerCase(), pull);
             delete require.cache[require.resolve(file)]

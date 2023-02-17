@@ -5,6 +5,7 @@ import { EagleDatabaseSqlite } from "./DataBase";
 import EagleManagers from "./Managers";
 import chalk from "chalk";
 import * as fs from "fs";
+import Functions from "../functions/main";
 
 export class EagleClient extends Client {
     Collection: typeof Collection;
@@ -13,6 +14,8 @@ export class EagleClient extends Client {
     database: EagleDatabaseSqlite;
     managers: EagleManagers;
     handlers: EagleHandler;
+    func: Functions;
+
     constructor() {
         super({
             closeTimeout: 7 * 1000,
@@ -25,6 +28,7 @@ export class EagleClient extends Client {
         this.Collection = Collection;
         this._fs = require("fs");
         this.database = new EagleDatabaseSqlite();
+        this.func = new Functions(this);
         this.database.auth().then(() => {
             this.log("Database connection...")
             this.managers = new EagleManagers(this);
@@ -32,7 +36,17 @@ export class EagleClient extends Client {
                 console.log(this.managers.guildsManager)
             }, 5000)
         });
-        this.on("ready", () => this.log(`Bot is ready ! Connected on ${this.user.tag}\n`));
+        this.on("ready", () => {
+            this.log(`Bot is ready ! Connected on ${this.user.tag}\n`);
+            this.user.setPresence({
+                status: "online",
+                activities: [{
+                    name: `Version ${this.config.version}`,
+                    type: 3,
+
+                }]
+            });
+        });
     }
 
     log(message: string, couleur: any = chalk.blueBright) {
@@ -54,7 +68,7 @@ export class EagleClient extends Client {
 
     hasNotPermissions(interaction: ChatInputCommandInteraction) {
         const guildData = this.managers.guildsManager.getAndCreateIfNotExists(interaction.guildId, {guildId: interaction.guildId}); guildData.save();
-        const commandPermission = BigInt(guildData.permissions[interaction.commandName]);
+        const commandPermission = BigInt(guildData.values.permissions[interaction.commandName]);
         if (!commandPermission || interaction.memberPermissions.has(commandPermission))return false;
         else return new PermissionsBitField(commandPermission).toArray();
     }
