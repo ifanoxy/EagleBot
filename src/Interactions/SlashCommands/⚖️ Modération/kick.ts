@@ -30,6 +30,9 @@ export default {
                         }
                     ]
                 });
+                let executorData = client.managers.membersManager.getAndCreateIfNotExists(interaction.user.id, { memberId: interaction.user.id });
+                executorData.moderation.kick++;
+                executorData.save();
             })
             .catch(reason => {
                 interaction.reply({
