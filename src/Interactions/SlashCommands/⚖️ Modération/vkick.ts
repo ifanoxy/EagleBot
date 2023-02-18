@@ -1,4 +1,4 @@
-import {CommandInteraction, SlashCommandBuilder } from "discord.js";
+import {ChatInputCommandInteraction, CommandInteraction, SlashCommandBuilder } from "discord.js";
 import { EagleClient } from "../../../structures/Client";
 import { DiscordColor } from "../../../structures/Enumerations/Embed";
 
@@ -10,7 +10,7 @@ export default {
         .addUserOption(
             opt => opt.setName("utilisateur").setDescription("L'utilisateur que vous souhaitez kick du vocal").setRequired(true)
         ),
-    execute(interaction: CommandInteraction, client: EagleClient)
+    execute(interaction: ChatInputCommandInteraction, client: EagleClient)
     {
         const memberCible = interaction.guild.members.cache.get(interaction.options.getUser("utilisateur").id);
         const memberExecutor = interaction.guild.members.cache.get(interaction.user.id);

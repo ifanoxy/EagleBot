@@ -76,7 +76,7 @@ export default class Moderation {
             });
             return false;
         };
-        if (this.executorIsOverCible(member, executor))
+        if (!this.executorIsOverCible(member, executor))
         {
             interaction.reply({
                 embeds: [
@@ -150,7 +150,7 @@ export default class Moderation {
             });
             return false;
         };
-        if (this.executorIsOverCible(member, executor))
+        if (!this.executorIsOverCible(member, executor))
         {
             interaction.reply({
                 embeds: [

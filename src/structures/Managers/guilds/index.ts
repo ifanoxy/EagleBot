@@ -124,6 +124,8 @@ export default function (database: EagleDatabaseSqlite, modelName: string) {
                     calc: Number(PermissionsBitField.Flags.ManageGuild),
                     kick: Number(PermissionsBitField.Flags.KickMembers),
                     vkick: Number(PermissionsBitField.Flags.MoveMembers),
+                    warn: Number(PermissionsBitField.Flags.ModerateMembers),
+                    "user-info": Number(PermissionsBitField.Flags.UseApplicationCommands),
                 },
             },
             {
@@ -132,12 +134,6 @@ export default function (database: EagleDatabaseSqlite, modelName: string) {
                 allowNull: true,
                 isValue: true,
                 default: {},
-            },
-            {
-                name: 'member',
-                type: DataTypes.STRING(25),
-                allowNull: true,
-                isValue: true,
             },
             {
                 name: 'mute',

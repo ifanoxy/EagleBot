@@ -1,4 +1,4 @@
-import {CommandInteraction, SlashCommandBuilder } from "discord.js";
+import {ChatInputCommandInteraction, CommandInteraction, SlashCommandBuilder } from "discord.js";
 import { EagleClient } from "../../../structures/Client";
 import { DiscordColor } from "../../../structures/Enumerations/Embed";
 
@@ -13,7 +13,7 @@ export default {
         .addStringOption(
             opt => opt.setName("raison").setDescription("La raison du kick pour se membre")
         ),
-    async execute(interaction: CommandInteraction, client: EagleClient)
+    async execute(interaction: ChatInputCommandInteraction, client: EagleClient)
     {
         const memberCible = interaction.guild.members.cache.get(interaction.options.getUser("utilisateur").id);
         const memberExecutor = interaction.guild.members.cache.get(interaction.user.id);

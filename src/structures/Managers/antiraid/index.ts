@@ -160,6 +160,5 @@ export default function (database: EagleDatabaseSqlite, modelName: string) {
         } catch (e) {
             reject(e);
         }
-
     })
 }

@@ -1,43 +1,34 @@
 import chalk from "chalk";
 import { Collection } from "discord.js";
-import ModelTypes, { Antiraid, Backup,
-    Guilds,
-    Lastname,
-    Members,
-    Mute,
-    Owner,
-    Stats,
-    Tickets,
-    Whitelist
-} from "../Interfaces/Managers";
+import { Guilds } from "../Interfaces/Managers";
 import Managers from "../Managers";
-
+type A = () => void;
 export default class Manager<Type> extends Collection<string, DatabaseManager<Type>> {
     EagleManager: Managers;
-    modelName: string;
+    modelName: "antiraid" | "backup" | "blacklist" | "guilds" | "lastname" | "members" | "mute" | "owners" | "stats" | "tickets" | "whitelist";
     model: any;
 
-    constructor(EagleManagers: Managers, modelName: "guilds") {
+    constructor(EagleManagers: Managers, modelName: "antiraid" | "backup" | "blacklist" | "guilds" | "lastname" | "members" | "mute" | "owners" | "stats" | "tickets" | "whitelist") {
         super();
         this.EagleManager = EagleManagers;
         this.modelName = modelName;
         this.init();
     }
 
-    add(key: string, value: Type) {
+    add(key, value: Type) {
         return this.set(key, new DatabaseManager<Type>(this, key, value)).get(key);
     }
 
-    getIfExist(key: string) {
+    getIfExist(key: string): DatabaseManager<Type> | null {
         return this.has(key) ? this.get(key) : null;
     }
 
-    getAndCreateIfNotExists(key: string, values: Type) {
+    getAndCreateIfNotExists(key, values: Type) {
         return this.has(key) ? this.get(key) : this.add(key, values);
     }
 
     init() {
-        require(`./${this.modelName}`).default(this.EagleManager.EagleClient.database, this.modelName, this.EagleManager.EagleClient.config).then(data => {
+        require(`./${this.modelName}`).default(this.EagleManager.EagleClient?.database, this.modelName).then(data => {
             this.model = data;
             this.loadTable();
         });
@@ -54,10 +45,10 @@ export default class Manager<Type> extends Collection<string, DatabaseManager<Ty
         });
     }
 
-    async loadTables(data: { model: string, key: string[], add: string }) {
+    async loadTables(data: {model: string, key: Array<string>, add: string}) {
         for await (const element of (await this.EagleManager.EagleClient?.database.models[data.model].findAll()))
             this[data.add](data.key.map(k => k.startsWith("{") && k.endsWith("}") ? element[k.slice(1, -1)] : k).join(''), element.get());
-        this.EagleManager.EagleClient.log(`Database - Successfully loaded ${this.size} ${data.model.charAt(0).toUpperCase()}${data.model.slice(1)}`, chalk.redBright)
+        console.log(chalk.bold.greenBright("[Eagle BOT]") + chalk.redBright(`Database - Successfully loaded ${this.size} ${data.model.charAt(0).toUpperCase()}${data.model.slice(1)}`))
         this.EagleManager.actualModelLoad++;
         if (this.EagleManager.actualModelLoad >= (this.EagleManager.EagleClient?.database.modelManager.models.length || 1)) {
             this.EagleManager.actualModelLoad = 0
@@ -66,14 +57,14 @@ export default class Manager<Type> extends Collection<string, DatabaseManager<Ty
     }
 }
 
-class DatabaseManager<Type> {
-    manager: Manager<Type>;
+class DatabaseManager<T> {
+    manager: Manager<T>;
     key: string;
     wheres: {};
+    values: T;
     values_: {};
-    values: Type;
 
-    constructor(manager: Manager<Type>, key: string, values_: Type) {
+    constructor(manager: Manager<T>, key: string, values_: T) {
         this.manager = manager;
         this.key = key;
         this.wheres = {};

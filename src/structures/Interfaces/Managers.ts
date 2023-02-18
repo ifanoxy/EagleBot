@@ -1,4 +1,5 @@
 import {EmbedData, PermissionsBitField } from "discord.js";
+import {DataType } from "sequelize";
 import Manager from "../Managers/main";
 
 export default interface ModelTypes {
@@ -279,6 +280,8 @@ export interface Guilds {
         calc: number,
         kick: number,
         vkick: number,
+        warn: number,
+        "user-info": number,
     }
     form?: {
         [key: string]: Array<{

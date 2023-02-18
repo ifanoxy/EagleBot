@@ -26,10 +26,7 @@ export default function (database, modelName) {
                 name: 'warn',
                 type: DataTypes.JSON,
                 isValue: true,
-                default: {
-                    nombre: 0,
-                    raison: [],
-                }
+                default: []
             },
             {
                 name: 'embeds',
