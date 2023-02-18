@@ -77,7 +77,7 @@ export default {
                             value: "`"+member.permissions.toArray().join('`, `')+"`"
                         },
                     ],
-                    color: DiscordColor.Eagle,
+                    color: member.displayColor,
                 }
             ]
         })

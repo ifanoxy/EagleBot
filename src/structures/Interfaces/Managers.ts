@@ -281,6 +281,7 @@ export interface Guilds {
         kick: number,
         vkick: number,
         warn: number,
+        unwarn: number,
         "user-info": number,
     }
     form?: {

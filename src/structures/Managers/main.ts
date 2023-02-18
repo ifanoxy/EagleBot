@@ -58,6 +58,7 @@ export default class Manager<Type> extends Collection<string, DatabaseManager<Ty
 }
 
 class DatabaseManager<T> {
+    [name: string]: any;
     manager: Manager<T>;
     key: string;
     wheres: {};

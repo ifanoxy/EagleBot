@@ -125,6 +125,7 @@ export default function (database: EagleDatabaseSqlite, modelName: string) {
                     kick: Number(PermissionsBitField.Flags.KickMembers),
                     vkick: Number(PermissionsBitField.Flags.MoveMembers),
                     warn: Number(PermissionsBitField.Flags.ModerateMembers),
+                    unwarn: Number(PermissionsBitField.Flags.ModerateMembers),
                     "user-info": Number(PermissionsBitField.Flags.UseApplicationCommands),
                 },
             },
