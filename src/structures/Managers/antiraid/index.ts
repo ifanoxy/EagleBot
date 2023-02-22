@@ -1,6 +1,6 @@
 import { EagleDatabaseSqlite } from "../../DataBase";
 
-export default function (database: EagleDatabaseSqlite, modelName: string) {
+export default function (database: EagleDatabaseSqlite, modelName: string): Promise<Array<{name: string, type: any, allowNull?: boolean, isValue?: boolean, isWhere?: boolean, primaryKey?: boolean, default?: any}>> {
     return new Promise((resolve, reject) => {
         const DataTypes = database.DataTypes;
         const data = [

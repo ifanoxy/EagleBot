@@ -2,8 +2,8 @@ import chalk from "chalk";
 import { Collection } from "discord.js";
 import { Guilds } from "../Interfaces/Managers";
 import Managers from "../Managers";
-type A = () => void;
-export default class Manager<Type> extends Collection<string, DatabaseManager<Type>> {
+
+export default class Manager<Type> extends Collection<string, DatabaseManager<Type> & Type > {
     EagleManager: Managers;
     modelName: "antiraid" | "backup" | "blacklist" | "guilds" | "lastname" | "members" | "mute" | "owners" | "stats" | "tickets" | "whitelist";
     model: any;
@@ -15,11 +15,12 @@ export default class Manager<Type> extends Collection<string, DatabaseManager<Ty
         this.init();
     }
 
-    add(key, value: Type) {
+    add(key: string, value: Type) {
+        // @ts-ignore
         return this.set(key, new DatabaseManager<Type>(this, key, value)).get(key);
     }
 
-    getIfExist(key: string): DatabaseManager<Type> | null {
+    getIfExist(key: string) {
         return this.has(key) ? this.get(key) : null;
     }
 
@@ -58,24 +59,22 @@ export default class Manager<Type> extends Collection<string, DatabaseManager<Ty
 }
 
 class DatabaseManager<T> {
-    [name: string]: any;
     manager: Manager<T>;
     key: string;
     wheres: {};
     values: T;
-    values_: {};
 
     constructor(manager: Manager<T>, key: string, values_: T) {
         this.manager = manager;
         this.key = key;
         this.wheres = {};
-        this.values_ = {};
-        this.manager.model.filter(m => m.name !== "id").forEach(v => {
-            v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values_)[v.name] = values_[v.name] || !v.default ? values_[v.name] : v.default : '';
-            this[v.name] = this[v.isWhere ? "wheres" : "values_"][v.name]
-        });
         // @ts-ignore
-        this.values = {...this.wheres, ...this.values_};
+        this.values = {};
+        this.manager.model.filter(m => m.name !== "id").forEach(v => {
+            v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values)[v.name] = values_[v.name] || !v.default ? values_[v.name] : v.default : '';
+            this[v.name] = this[v.isWhere ? "wheres" : "values"][v.name]
+        });
+        this.values = {...this.wheres, ...this.values};
     }
 
     set(key, value) {

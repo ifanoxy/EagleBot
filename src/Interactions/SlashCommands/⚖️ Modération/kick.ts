@@ -11,7 +11,7 @@ export default {
             opt => opt.setName("utilisateur").setDescription("Choisissez l'utilisateur que vous souhaitez kick.").setRequired(true)
         )
         .addStringOption(
-            opt => opt.setName("raison").setDescription("La raison du kick pour se membre")
+            opt => opt.setName("raison").setDescription("La raison du kick pour se membre").setMaxLength(450)
         ),
     async execute(interaction: ChatInputCommandInteraction, client: EagleClient)
     {

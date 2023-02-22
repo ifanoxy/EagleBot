@@ -8,15 +8,81 @@ export default class Moderation {
         this.#client = client;
     }
 
+    cibleRoleIsBetter(cible: GuildMember, executor: GuildMember) {
+        if (cible.roles.highest.rawPosition >= executor.roles.highest.rawPosition)
+            return true;
+        else return false;
+    }
+
     executorIsOverCible(cible: GuildMember, executor: GuildMember) {
         const cibleWL: boolean = this.#client.isWhitelist(cible.id);
         const executorWL: boolean = this.#client.isWhitelist(executor.id);
-        if (!cibleWL && executorWL)return true;
-        if (!cibleWL && !executorWL || cibleWL && !executorWL)return false;
+        if (!cibleWL && executorWL)return 2;
+        if (cibleWL && !executorWL)return null;
+        if (!cibleWL && !executorWL)return 1;
         const cibleOwner: boolean = this.#client.isOwner(cible.id);
-        const excutorOwner: boolean = this.#client.isOwner(executor.id);
-        if (!cibleOwner && excutorOwner)return true;
-        return false
+        const executorOwner: boolean = this.#client.isOwner(executor.id);
+        if (!cibleOwner && executorOwner)return 2;
+        if (cibleOwner && !executorOwner)return null;
+        return 1
+    }
+
+    memberBannable(member: GuildMember, executor: GuildMember, interaction: CommandInteraction) {
+        if (member.user.id == this.#client.user.id)
+        {
+            interaction.reply({
+                embeds: [{
+                        title: `Permissions insuffisantes`,
+                        description: `Je ne peux pas m'auto bannir !`,
+                        color: DiscordColor.Orange
+                    }],
+                ephemeral: true
+            });
+            return false;
+        };
+        if (!member.bannable)
+        {
+            interaction.reply({
+                embeds: [{
+                        title: `Permissions insuffisantes`,
+                        description: `Je n'ai pas la permission de bannir cette personne !`,
+                        color: DiscordColor.Red
+                    }],
+                ephemeral: true
+            });
+            return false;
+        };
+        const res = this.executorIsOverCible(member, executor)
+        if (!res)
+        {
+            interaction.reply({
+                embeds: [
+                    {
+                        title: `Permissions insuffisantes`,
+                        description: `Vous ne pouvez pas bannir un membre qui est owner ou whitelist alors que vous non !`,
+                        color: DiscordColor.DarkPurple
+                    }
+                ],
+                ephemeral: true
+            });
+            return false
+        }
+        if (res == 2)return true;
+        if (this.cibleRoleIsBetter(member, executor))
+        {
+            interaction.reply({
+                embeds: [
+                    {
+                        title: `Permissions insuffisantes`,
+                        description: `Vous ne pouvez pas bannir un membre avec un role supérieur ou égal au votre !`,
+                        color: DiscordColor.Orange
+                    }
+                ],
+                ephemeral: true
+            });
+            return false;
+        };
+        return true;
     }
 
     memberKicable(member: GuildMember, executor: GuildMember, interaction: CommandInteraction) {
@@ -48,35 +114,8 @@ export default class Moderation {
             });
             return false;
         }
-        if (!executor.permissions.has(PermissionsBitField.Flags.KickMembers))
-        {
-            interaction.reply({
-                embeds: [
-                    {
-                        title: `Permissions insuffisantes`,
-                        description: `Vous avez besoin de la permission \`Kick_Members\` pour utiliser cette commande !`,
-                        color: DiscordColor.Orange
-                    }
-                ],
-                ephemeral: true
-            });
-            return false;
-        };
-        if (member.roles.highest.rawPosition >= executor.roles.highest.rawPosition)
-        {
-            interaction.reply({
-                embeds: [
-                    {
-                        title: `Permissions insuffisantes`,
-                        description: `Vous ne pouvez pas expulser un membre avec un role supérieur ou égal au votre !`,
-                        color: DiscordColor.Orange
-                    }
-                ],
-                ephemeral: true
-            });
-            return false;
-        };
-        if (!this.executorIsOverCible(member, executor))
+        const res = this.executorIsOverCible(member, executor);
+        if (!res)
         {
             interaction.reply({
                 embeds: [
@@ -90,6 +129,21 @@ export default class Moderation {
             });
             return false
         }
+        if (res == 2)return true
+        if (this.cibleRoleIsBetter(member, executor))
+        {
+            interaction.reply({
+                embeds: [
+                    {
+                        title: `Permissions insuffisantes`,
+                        description: `Vous ne pouvez pas expulser un membre avec un role supérieur ou égal au votre !`,
+                        color: DiscordColor.Orange
+                    }
+                ],
+                ephemeral: true
+            });
+            return false;
+        };
         return true;
     };
 
@@ -136,21 +190,8 @@ export default class Moderation {
             });
             return false;
         };
-        if (member.roles.highest.rawPosition >= executor.roles.highest.rawPosition)
-        {
-            interaction.reply({
-                embeds: [
-                    {
-                        title: `Permissions insuffisantes`,
-                        description: `Vous ne pouvez pas expulser un membre avec un role supérieur ou égal au votre !`,
-                        color: DiscordColor.Orange
-                    }
-                ],
-                ephemeral: true
-            });
-            return false;
-        };
-        if (!this.executorIsOverCible(member, executor))
+        const res = this.executorIsOverCible(member, executor)
+        if (!res)
         {
             interaction.reply({
                 embeds: [
@@ -164,6 +205,21 @@ export default class Moderation {
             });
             return false
         }
+        if (res == 2)return true;
+        if (this.cibleRoleIsBetter(member, executor))
+        {
+            interaction.reply({
+                embeds: [
+                    {
+                        title: `Permissions insuffisantes`,
+                        description: `Vous ne pouvez pas expulser un membre avec un role supérieur ou égal au votre !`,
+                        color: DiscordColor.Orange
+                    }
+                ],
+                ephemeral: true
+            });
+            return false;
+        };
         return true;
     };
 }

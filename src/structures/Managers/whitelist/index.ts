@@ -1,7 +1,7 @@
-export default function (database, modelName, config) {
+export default function (database, modelName): Promise<Array<{name: string, type: any, allowNull?: boolean, isValue?: boolean, isWhere?: boolean, primaryKey?: boolean, default?: any}>> {
     return new Promise((resolve, reject) => {
         const DataTypes = database.DataTypes;
-        const data = [
+        const data: Array<{name: string, type: any, allowNull?: boolean, isValue?: boolean, isWhere?: boolean, primaryKey?: boolean, default?: any}> = [
             {
                 name: "userId",
                 type: DataTypes.STRING(25),

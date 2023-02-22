@@ -1,4 +1,4 @@
-export default function (database, modelName, config) {
+export default function (database, modelName, config): Promise<Array<{name: string, type: any, allowNull?: boolean, isValue?: boolean, isWhere?: boolean, primaryKey?: boolean, default?: any}>> {
     return new Promise((resolve, reject) => {
         const DataTypes = database.DataTypes;
         const data = [

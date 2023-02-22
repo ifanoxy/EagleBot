@@ -2,7 +2,7 @@ import {EmbedData, PermissionsBitField } from "discord.js";
 import {DataType } from "sequelize";
 import Manager from "../Managers/main";
 
-export default interface ModelTypes {
+export interface ModelTypes {
     guildsManager: Manager<Guilds>
     antiraidManager: Manager<Antiraid>
     backupManager: Manager<Backup>

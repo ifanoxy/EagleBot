@@ -9,6 +9,9 @@ export default {
         .setDMPermission(false)
         .addUserOption(
             opt => opt.setName("utilisateur").setDescription("L'utilisateur que vous souhaitez kick du vocal").setRequired(true)
+        )
+        .addStringOption(
+            opt => opt.setName("raison").setDescription("La raison du voice kick pour se membre").setMaxLength(450)
         ),
     execute(interaction: ChatInputCommandInteraction, client: EagleClient)
     {

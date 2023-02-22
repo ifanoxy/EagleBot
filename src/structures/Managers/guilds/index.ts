@@ -1,7 +1,7 @@
 import { EagleDatabaseSqlite } from "../../DataBase";
 import { PermissionsBitField } from "discord.js";
 
-export default function (database: EagleDatabaseSqlite, modelName: string) {
+export default function (database: EagleDatabaseSqlite, modelName: string): Promise<Array<{name: string, type: any, allowNull?: boolean, isValue?: boolean, isWhere?: boolean, primaryKey?: boolean, default?: any}>> {
     return new Promise((resolve, reject) => {
         const DataTypes = database.DataTypes;
         const data = [
@@ -123,6 +123,9 @@ export default function (database: EagleDatabaseSqlite, modelName: string) {
                 default: {
                     calc: Number(PermissionsBitField.Flags.ManageGuild),
                     kick: Number(PermissionsBitField.Flags.KickMembers),
+                    ban: Number(PermissionsBitField.Flags.BanMembers),
+                    unban: Number(PermissionsBitField.Flags.BanMembers),
+                    "ban-list": Number(PermissionsBitField.Flags.BanMembers),
                     vkick: Number(PermissionsBitField.Flags.MoveMembers),
                     warn: Number(PermissionsBitField.Flags.ModerateMembers),
                     unwarn: Number(PermissionsBitField.Flags.ModerateMembers),

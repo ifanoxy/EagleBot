@@ -11,7 +11,7 @@ export default {
             opt => opt.setName("utilisateur").setDescription("L'utilisateur que vous souhaitez avertir").setRequired(true)
         )
         .addStringOption(
-            opt => opt.setName("raison").setDescription("La raison de l'avertissement de ce membre").setRequired(true)
+            opt => opt.setName("raison").setDescription("La raison de l'avertissement de ce membre").setRequired(true).setMaxLength(450)
         ),
     execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
         const member = interaction.guild.members.cache.get(interaction.options.getUser("utilisateur").id)
@@ -50,17 +50,15 @@ export default {
                 ephemeral: true
             })
 
-        let memberData = client.managers.membersManager.getAndCreateIfNotExists(member.id, { memberId: member.id });
-        // @ts-ignore
+        let memberData = client.managers.membersManager.getAndCreateIfNotExists(member.id, { memberId: member.id});
         memberData.warn.push({
             userId: interaction.user.id,
             reason: raison,
             date: new Date(),
-        })
+        });
         memberData.save();
 
         let executorData = client.managers.membersManager.getAndCreateIfNotExists(interaction.user.id, { memberId: interaction.user.id });
-        // @ts-ignore
         executorData.moderation.warn++;
         executorData.save();
 

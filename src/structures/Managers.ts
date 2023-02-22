@@ -1,8 +1,7 @@
 import * as path from "path";
 import { EagleClient } from "./Client";
-import ModeltTypes, {Antiraid, Backup, Guilds, Lastname, Members, Mute, Owner, Stats, Tickets, Whitelist} from "./Interfaces/Managers";
+import {Antiraid, Backup, Guilds, Lastname, Members, ModelTypes, Mute, Owner, Stats, Tickets, Whitelist} from "./Interfaces/Managers";
 import Manager from './Managers/main';
-import ModelTypes from "./Interfaces/Managers";
 
 export default class Managers implements ModelTypes {
 
