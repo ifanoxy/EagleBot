@@ -65,7 +65,7 @@ export default {
                         },
                         {
                             name: "Modération",
-                            value: `${memberData?.values.moderation.warn || "0"} Warns Donnés\n${memberData?.values.moderation.kick || "0"} Membres Kick\n${memberData?.values.moderation.mute || "0"} Membres Mutes\n${memberData?.values.moderation.ban || "0"} Membres Bannis\n${memberData?.values.moderation.removedMessage || "0"} Messages Supprimés`,
+                            value: `\`${memberData?.values.moderation.warn || "0"}\` Warns Donnés\n\`${memberData?.values.moderation.kick || "0"}\` Membres Kick\n${memberData?.values.moderation.mute || "0"} Membres Mutes\n\`${memberData?.values.moderation.ban || "0"}\` Membres Bannis\n\`${memberData?.values.moderation.removedMessage || "0"}\` Messages Supprimés`,
                             inline: true
                         },
                         {
