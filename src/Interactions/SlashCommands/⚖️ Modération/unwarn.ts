@@ -6,6 +6,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName("unwarn")
         .setDescription("Vous permet de supprimer un warn d'un membre")
+        .setDMPermission(false)
         .addUserOption(
             opt => opt.setName('utilisateur').setDescription("l'utilisateur que vous souhaitez unwarn").setRequired(true)
         )

@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction, CommandInteraction, SlashCommandBuilder } from "discord.js";
+import {ChatInputCommandInteraction, CommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { EagleClient } from "../../../structures/Client";
 import { DiscordColor } from "../../../structures/Enumerations/Embed";
 
@@ -24,10 +24,10 @@ export default {
             .then(kickMember => {
                 interaction.reply({
                     embeds: [
-                        {
-                            description: `Le membre ${kickMember.user.tag} (<@${kickMember.id}>) a été kick avec succès !\n\nraison: \`${interaction.options["getString"]("raison") || 'Pas de raison'}\``,
-                            color: DiscordColor.Eagle
-                        }
+                        new EmbedBuilder()
+                            .setColor(DiscordColor.Eagle)
+                            .setDescription(`Le membre ${kickMember.user.tag} (<@${kickMember.id}>) a été kick avec succès !\n\nraison: \`${interaction.options["getString"]("raison") || 'Pas de raison'}\``)
+                            .setTimestamp()
                     ]
                 });
                 let executorData = client.managers.membersManager.getAndCreateIfNotExists(interaction.user.id, { memberId: interaction.user.id });

@@ -89,4 +89,8 @@ export default class Utils {
             return embed;
         }
     }
+
+    numberFormat(nbr: number) {
+        return new Intl.NumberFormat("fr", {notation: "compact"}).format(nbr)
+    }
 }

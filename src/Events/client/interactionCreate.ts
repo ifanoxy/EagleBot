@@ -50,35 +50,36 @@ export default {
             case interaction.isChatInputCommand() : {
                 const command = client.handlers.slashCommandsHandler.SlashCommandsList.get(interaction.commandName);
 
-                const NotPerm = client.hasNotPermissions(interaction);
+                if (interaction.inGuild()) {
+                    const NotPerm = client.hasNotPermissions(interaction);
 
-                if (NotPerm) {
-                    if (NotPerm == "owner")return interaction.reply({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor('Orange')
-                                .setDescription(`Vous devez être owner pour utiliser cette commande !`)
-                        ],
-                        ephemeral: true
-                    });
-                    else if (NotPerm == "whitelist")return interaction.reply({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor('Orange')
-                                .setDescription(`Vous devez être whitelist pour utiliser cette commande !`)
-                        ],
-                        ephemeral: true
-                    });
-                    else return interaction.reply({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor('Orange')
-                                .setDescription(`Il vous manque la permission \`${NotPerm}\` pour utiliser cette commande !`)
-                        ],
-                        ephemeral: true
-                    });
+                    if (NotPerm) {
+                        if (NotPerm == "owner") return interaction.reply({
+                            embeds: [
+                                new EmbedBuilder()
+                                    .setColor('Orange')
+                                    .setDescription(`Vous devez être owner pour utiliser cette commande !`)
+                            ],
+                            ephemeral: true
+                        });
+                        else if (NotPerm == "whitelist") return interaction.reply({
+                            embeds: [
+                                new EmbedBuilder()
+                                    .setColor('Orange')
+                                    .setDescription(`Vous devez être whitelist pour utiliser cette commande !`)
+                            ],
+                            ephemeral: true
+                        });
+                        else return interaction.reply({
+                                embeds: [
+                                    new EmbedBuilder()
+                                        .setColor('Orange')
+                                        .setDescription(`Il vous manque la permission \`${NotPerm}\` pour utiliser cette commande !`)
+                                ],
+                                ephemeral: true
+                            });
+                    }
                 }
-
                 if (!command) return interaction.reply({
                     embeds: [
                         new EmbedBuilder()

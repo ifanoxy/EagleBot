@@ -9,7 +9,11 @@ export default {
         opt => opt.setName("calcul").setDescription("Définissez le calcul que vous souhaitez résoudre").setRequired(true)
     ),
     execute(interaction, client: EagleClient) {
-        const calcul = interaction.options.getString("calcul")
-        interaction.reply(`le calcul **${calcul.replaceAll("*", "\\*")}** est égal à **${eval(calcul)}**`)
+        const calcul = interaction.options.getString("calcul");
+        try {
+            interaction.reply(`le calcul **${calcul.replaceAll("*", "\\*")}** est égal à **${eval(calcul)}**`)
+        } catch {
+            interaction.reply(`Votre calcul est incorrecte`)
+        }
     }
 }

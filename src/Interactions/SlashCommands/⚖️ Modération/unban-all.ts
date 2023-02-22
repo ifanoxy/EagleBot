@@ -4,9 +4,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName("unban-all")
         .setDescription("Unban all users from the server")
-        .addStringOption(opt =>
-            opt.setName("reason").setDescription("The reason for the unban").setRequired(false)
-        ),
+        .setDMPermission(false),
     async execute(interaction: ChatInputCommandInteraction) {
         const bans = await interaction.guild.bans.fetch();
         if (bans.size == 0)return interaction.reply({

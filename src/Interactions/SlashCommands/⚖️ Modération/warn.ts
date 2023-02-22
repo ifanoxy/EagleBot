@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import {ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { EagleClient } from "../../../structures/Client";
 import { DiscordColor } from "../../../structures/Enumerations/Embed";
 
@@ -64,10 +64,10 @@ export default {
 
         interaction.reply({
             embeds: [
-                {
-                    description: `Le membre ${member.user.tag} (<@${member.id}>) a été warn avec succès !\n\nraisson: \`${raison}\``,
-                    color: DiscordColor.Eagle
-                }
+                new EmbedBuilder()
+                    .setColor(DiscordColor.Eagle)
+                    .setDescription(`Le membre ${member.user.tag} (<@${member.id}>) a été warn avec succès !\n\nraison: \`${raison}\``)
+                    .setTimestamp()
             ]
         });
     }

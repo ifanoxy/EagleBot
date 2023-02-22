@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import {ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { EagleClient } from "../../../structures/Client";
 import { DiscordColor } from "../../../structures/Enumerations/Embed";
 
@@ -39,10 +39,10 @@ export default {
             .then(BanMember => {
                 interaction.reply({
                     embeds: [
-                        {
-                            description: `Le membre ${BanMember.user.tag} (<@${BanMember.id}>) a été banni(e) avec succès !\n\nraison: \`${interaction.options["getString"]("raison") || 'Pas de raison'}\``,
-                            color: DiscordColor.Eagle
-                        }
+                        new EmbedBuilder()
+                            .setColor(DiscordColor.Eagle)
+                            .setDescription(`Le membre ${BanMember.user.tag} (<@${BanMember.id}>) a été banni(e) avec succès !\n\nraison: \`${interaction.options["getString"]("raison") || 'Pas de raison'}\``)
+                            .setTimestamp()
                     ]
                 });
                 let executorData = client.managers.membersManager.getAndCreateIfNotExists(interaction.user.id, { memberId: interaction.user.id });
