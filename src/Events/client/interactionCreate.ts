@@ -52,14 +52,32 @@ export default {
 
                 const NotPerm = client.hasNotPermissions(interaction);
 
-                if (NotPerm) return interaction.reply({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor('Orange')
-                            .setDescription(`Il vous manque la permission \`${NotPerm}\` pour utiliser cette commande !`)
-                    ],
-                    ephemeral: true
-                });
+                if (NotPerm) {
+                    if (NotPerm == "owner")return interaction.reply({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor('Orange')
+                                .setDescription(`Vous devez être owner pour utiliser cette commande !`)
+                        ],
+                        ephemeral: true
+                    });
+                    else if (NotPerm == "whitelist")return interaction.reply({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor('Orange')
+                                .setDescription(`Vous devez être whitelist pour utiliser cette commande !`)
+                        ],
+                        ephemeral: true
+                    });
+                    else return interaction.reply({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor('Orange')
+                                .setDescription(`Il vous manque la permission \`${NotPerm}\` pour utiliser cette commande !`)
+                        ],
+                        ephemeral: true
+                    });
+                }
 
                 if (!command) return interaction.reply({
                     embeds: [

@@ -126,6 +126,7 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     ban: Number(PermissionsBitField.Flags.BanMembers),
                     unban: Number(PermissionsBitField.Flags.BanMembers),
                     "ban-list": Number(PermissionsBitField.Flags.BanMembers),
+                    "unban-all": "whitelist",
                     vkick: Number(PermissionsBitField.Flags.MoveMembers),
                     warn: Number(PermissionsBitField.Flags.ModerateMembers),
                     unwarn: Number(PermissionsBitField.Flags.ModerateMembers),

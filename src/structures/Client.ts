@@ -77,9 +77,20 @@ export class EagleClient extends Client {
 
     hasNotPermissions(interaction: ChatInputCommandInteraction) {
         const guildData = this.managers.guildsManager.getAndCreateIfNotExists(interaction.guildId, {guildId: interaction.guildId}); guildData.save();
-        const commandPermission = BigInt(guildData.values.permissions[interaction.commandName]);
-        if (this.isOwner(interaction.user.id))return false;
-        if (!commandPermission || interaction.memberPermissions.has(commandPermission))return false;
-        else return new PermissionsBitField(commandPermission).toArray();
+        const commandPermission: string | number = guildData.values.permissions[interaction.commandName];
+        if (typeof commandPermission == "string") {
+            if (commandPermission == "whitelist") {
+                if (this.isWhitelist(interaction.user.id))return false;
+                else return "whitelist";
+            }
+            if (commandPermission == "owner") {
+                if (this.isOwner(interaction.user.id))return false;
+                else return "owner";
+            }
+        } else {
+            if (this.isOwner(interaction.user.id))return false;
+            if (!BigInt(commandPermission) || interaction.memberPermissions.has(BigInt(commandPermission)))return false;
+            else return new PermissionsBitField(BigInt(commandPermission)).toArray();
+        }
     }
 }
