@@ -8,22 +8,22 @@ export default {
         .setDescription("Vous permet d'obtenir des renseignements sur un membre")
         .setDMPermission(false)
         .addUserOption(
-            opt => opt.setName("utilisateur").setDescription("L'utilisateur dont vous souhaitez voir les informations").setRequired(true)
+            opt => opt.setName("utilisateur").setDescription("L'utilisateur dont vous souhaitez voir les informations").setRequired(false)
         ),
-    execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
-        const user = interaction.options.getUser("utilisateur");
+    async execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
+        const user = await (interaction.options.getUser("utilisateur")?.fetch(true) || interaction.user.fetch(true))  ;
         const member = interaction.guild.members.cache.get(user.id);
         const memberData = client.managers.membersManager.getIfExist(user.id);
         let i = 0;
         interaction.reply({
             embeds: [
                 {
+                    image: {
+                        url: user.bannerURL({size: 1024}) || null
+                    },
                     author: {
                         icon_url: user.avatarURL(),
                         name: `Informations sur l'utilisateur ${user.username}`
-                    },
-                    thumbnail: {
-                        url: user.bannerURL() || null
                     },
                     fields: [
                         {
@@ -65,12 +65,12 @@ export default {
                         },
                         {
                             name: "Modération",
-                            value: `\`${memberData?.values.moderation.warn || "0"}\` Warns Donnés\n\`${memberData?.values.moderation.kick || "0"}\` Membres Kick\n${memberData?.values.moderation.mute || "0"} Membres Mutes\n\`${memberData?.values.moderation.ban || "0"}\` Membres Bannis\n\`${memberData?.values.moderation.removedMessage || "0"}\` Messages Supprimés`,
+                            value: `\`${memberData?.values.moderation.warn || "0"}\` Warns Donnés\n\`${memberData?.values.moderation.kick || "0"}\` Membres Kick\n\`${memberData?.values.moderation.mute || "0"}\` Membres Mutes\n\`${memberData?.values.moderation.ban || "0"}\` Membres Bannis\n\`${memberData?.values.moderation.removedMessage || "0"}\` Messages Supprimés`,
                             inline: true
                         },
                         {
                             name: "Avertisements",
-                            value: memberData?.values.warn.map(x => `Donné par <@${x.userId}> <t:${Math.round(new Date(x.date).getTime()/1000)}:R> pour la raison: ${x.reason}`).join("\n") || "``Aucun Avertissements``",
+                            value: memberData?.values.warn.map(x => `Donné par <@${x.userId}> <t:${Math.round(new Date(x.date).getTime()/1000)}:R> pour la raison: \`${x.reason}\``).join("\n") || "``Aucun Avertissements``",
                         },
                         {
                             name: "Permissions",
