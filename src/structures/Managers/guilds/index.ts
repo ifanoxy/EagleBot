@@ -136,6 +136,8 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     "clear-channel": Number(PermissionsBitField.Flags.ManageChannels),
                     lock: Number(PermissionsBitField.Flags.ManageChannels),
                     unlock: Number(PermissionsBitField.Flags.ManageChannels),
+                    show: Number(PermissionsBitField.Flags.ManageChannels),
+                    hide: Number(PermissionsBitField.Flags.ManageChannels),
                     "move-all": Number(PermissionsBitField.Flags.Administrator),
                     mute: Number(PermissionsBitField.Flags.MuteMembers),
                     unmute: Number(PermissionsBitField.Flags.MuteMembers),
