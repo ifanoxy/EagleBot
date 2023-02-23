@@ -93,4 +93,8 @@ export default class Utils {
     numberFormat(nbr: number) {
         return new Intl.NumberFormat("fr", {notation: "compact"}).format(nbr)
     }
+
+    slashCommandSend(name: string, sub: string = "", subGroup: string = "") {
+        return `</${name}${subGroup}${sub}:${this.#client.application.commands.cache.find(x => x.name == name).id}>`;
+    }
 }

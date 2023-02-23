@@ -88,9 +88,14 @@ export class EagleClient extends Client {
                 else return "owner";
             }
         } else {
-            if (this.isOwner(interaction.user.id))return false;
-            if (!BigInt(commandPermission) || interaction.memberPermissions.has(BigInt(commandPermission)))return false;
-            else return new PermissionsBitField(BigInt(commandPermission)).toArray();
+            try {
+                if (this.isOwner(interaction.user.id)) return false;
+                if (!BigInt(commandPermission) || interaction.memberPermissions.has(BigInt(commandPermission))) return false;
+                else return new PermissionsBitField(BigInt(commandPermission)).toArray();
+            }catch {
+                this.error(`La commande ${interaction.commandName} n'a pas de permision !`);
+                return "Permission Error"
+            }
         }
     }
 }

@@ -133,6 +133,10 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     "user-info": Number(PermissionsBitField.Flags.UseApplicationCommands),
                     clear: Number(PermissionsBitField.Flags.ManageMessages),
                     "clear-user": Number(PermissionsBitField.Flags.ManageMessages),
+                    "clear-channel": Number(PermissionsBitField.Flags.ManageChannels),
+                    lock: Number(PermissionsBitField.Flags.ManageChannels),
+                    unlock: Number(PermissionsBitField.Flags.ManageChannels),
+                    "move-all": Number(PermissionsBitField.Flags.Administrator),
                 },
             },
             {
