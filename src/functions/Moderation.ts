@@ -298,7 +298,7 @@ export default class Moderation {
         const member = this.#client.guilds.cache.get(guildId).members.cache.get(userId);
         const role = await this.#checkMuteRole(guildId);
         member.roles.add(role).then(() => {
-            this.#client.managers.muteManager.getAndCreateIfNotExists(`${guildId}-${member.id}`, {
+            this.#client.managers.muteManager.getAndCreateIfNotExists(`${member.id}-${guildId}`, {
                 guildId: guildId,
                 memberId: member.id,
                 createdAt: new Date().getTime(),
@@ -316,8 +316,8 @@ export default class Moderation {
         if (guildData.muteRoleId) {
             if (this.#client.guilds.cache.get(guildId).roles.cache.has(guildData.muteRoleId))return guildData.muteRoleId;
         }
-        if (this.#client.guilds.cache.get(guildId).roles.cache.find(x => x.name == "Mute")) {
-            guildData.muteRoleId = this.#client.guilds.cache.get(guildId).roles.cache.find(x => x.name == "Mute").id;
+        if (this.#client.guilds.cache.get(guildId).roles.cache.find(x => x.name == "Mute")?.id) {
+            guildData.muteRoleId = (this.#client.guilds.cache.get(guildId).roles.cache.find(x => x.name == "Mute").id);
             guildData.save()
             return guildData.muteRoleId;
         }

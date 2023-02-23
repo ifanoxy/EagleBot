@@ -13,7 +13,8 @@ export default {
     async autocomplete(interaction: AutocompleteInteraction, client: EagleClient) {
         const focusedValue = interaction.options.getFocused();
         let choices: Array<{username: string, id: string, reason: string}> = [];
-        client.managers.muteManager.filter(mute => mute.guildId == interaction.guildId).map(mute => {
+        client.managers.muteManager.map(mute => {
+            if (mute.guildId != interaction.guildId)return;
             choices.push({
                 username: interaction.guild.members.cache.get(mute.memberId).user.tag,
                 id: mute.memberId,
@@ -27,7 +28,7 @@ export default {
     },
     execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
         const muteId = interaction.options.getString("utilisateur");
-        let muteData = client.managers.muteManager.getIfExist(`${interaction.guildId}-${muteId}`);
+        let muteData = client.managers.muteManager.getIfExist(`${muteId}-${interaction.guildId}`);
         const guildData = client.managers.guildsManager.getIfExist(interaction.guildId);
         client.guilds.cache.get(interaction.guildId).members.cache.get(muteId).roles.remove(guildData.muteRoleId)
             .then(() => {

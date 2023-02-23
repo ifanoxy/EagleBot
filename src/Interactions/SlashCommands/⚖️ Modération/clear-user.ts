@@ -31,8 +31,12 @@ export default {
                     }).catch(err => {});
                 })
             ).then(() => {
-                if (interaction.isRepliable()) {
+                if (user.id != client.user.id) {
                     interaction.editReply({
+                        embeds: [embed.setDescription(`Nombre de messages supprimés : \`${nbrSup}\``)]
+                    });
+                } else {
+                    interaction.channel.send({
                         embeds: [embed.setDescription(`Nombre de messages supprimés : \`${nbrSup}\``)]
                     });
                 }

@@ -149,7 +149,7 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                 default: {},
             },
             {
-                name: 'mute',
+                name: 'muteRoleId',
                 type: DataTypes.STRING(25),
                 allowNull: true,
                 isValue: true,

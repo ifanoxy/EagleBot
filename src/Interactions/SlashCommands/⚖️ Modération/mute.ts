@@ -37,7 +37,9 @@ export default {
                                 .setTimestamp()
                         ]
                     });
-                    require("../../../functions/repeat/checkMutes").default.execute(client);
+                    setTimeout(() => {
+                        require("../../../functions/repeat/checkMutes").default.execute(client);
+                    }, 3000)
                 })
         })
 
