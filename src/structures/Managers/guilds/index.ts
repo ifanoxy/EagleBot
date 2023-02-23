@@ -139,6 +139,7 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     "move-all": Number(PermissionsBitField.Flags.Administrator),
                     mute: Number(PermissionsBitField.Flags.MuteMembers),
                     unmute: Number(PermissionsBitField.Flags.MuteMembers),
+                    slowmode: Number(PermissionsBitField.Flags.ManageChannels),
                 },
             },
             {
