@@ -53,13 +53,13 @@ export default {
                         },
                         {
                             name: "Channel vocal du membre",
-                            value: member.voice.channelId ? `<#${member.voice.channelId}>` : "`Dans aucun channel vocal`",
+                            value: member.voice.channelId ? `<#${member.voice.channelId}>` : "`Aucun channel vocal`",
                             inline: true
                         },
                         {
                             name: "Status",
                             value: member.presence ? `${member.presence.status == "dnd" ? "Ne pas dérange" : member.presence.status == "online" ? "En ligne" : member.presence.status == "idle" ? "Afk" : "Hors ligne / Invisible" }\n`+ member.presence.activities.map(x => {
-                                i++;return `__${i}. ${x.name}__\n> **Type:** ${x.type == 0 ? "Joue" : x.type == 2 ? "Stream" : x.type == 3 ? "Ecoute" : x.type == 4 ? "Custom" : "Compétition"}\n> **Depuis:** ${x.type != 4 ? `<t:${Math.round(new Date(x.timestamps.start).getTime()/1000)}:R>` : "pas de temps"}\n> **Status:** ${x.state}`
+                                i++;return `__${i}. ${x.name}__\n> **Type:** ${x.type == 0 ? "Joue" : x.type == 1 ? "Stream" : x.type == 2 ? "Ecoute" : x.type == 3 ? "Regarde" : x.type == 4 ? "Custom" : "Compétition"}\n> **Depuis:** ${x.type != 4 ? `<t:${Math.round(new Date(x.timestamps.start).getTime()/1000)}:R>` : "pas de temps"}\n> **Status:** ${x.state}`
                             }).join("\n") : "Hors Ligne / Invisible",
                             inline: true
                         },

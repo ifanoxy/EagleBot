@@ -3,7 +3,7 @@ import {ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "d
 export default {
     data: new SlashCommandBuilder()
         .setName("unban-all")
-        .setDescription("Unban all users from the server")
+        .setDescription("Permet de débannir tout les membres du serveur")
         .setDMPermission(false),
     async execute(interaction: ChatInputCommandInteraction) {
         const bans = await interaction.guild.bans.fetch();

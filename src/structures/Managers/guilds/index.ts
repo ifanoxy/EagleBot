@@ -121,7 +121,7 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                 allowNull: false,
                 isValue: true,
                 default: {
-                    calc: Number(PermissionsBitField.Flags.ManageGuild),
+                    calc: Number(PermissionsBitField.Flags.UseApplicationCommands),
                     kick: Number(PermissionsBitField.Flags.KickMembers),
                     ban: Number(PermissionsBitField.Flags.BanMembers),
                     unban: Number(PermissionsBitField.Flags.BanMembers),
@@ -142,6 +142,7 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     mute: Number(PermissionsBitField.Flags.MuteMembers),
                     unmute: Number(PermissionsBitField.Flags.MuteMembers),
                     slowmode: Number(PermissionsBitField.Flags.ManageChannels),
+                    help: Number(PermissionsBitField.Flags.UseApplicationCommands),
                 },
             },
             {
