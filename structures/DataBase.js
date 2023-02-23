@@ -8,7 +8,7 @@ class EagleDatabaseMysql extends Sequelize {
             Eagle.config.database.password,
             {
                 dialect: "mysql",
-                logging: false,
+                logging: true,
                 define: {
                     charset: "utf8mb4",
                     collate: "utf8mb4_general_ci",
