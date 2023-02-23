@@ -17,8 +17,14 @@ export default {
                 id: ban.user.id
             }))
         const filtered = choices.filter(choice => choice.name.startsWith(focusedValue) || choice.id.startsWith(focusedValue));
+        let options;
+        if (filtered.length > 25) {
+            options = filtered.slice(0, 25);
+        } else {
+            options = filtered;
+        }
         await interaction.respond(
-            filtered.map(choice => ({ name: `${choice.name} | ${choice.id}`, value: choice.id })),
+            options.map(choice => ({ name: `${choice.name} | ${choice.id}`, value: choice.id })),
         );
     },
     execute(interaction: ChatInputCommandInteraction) {

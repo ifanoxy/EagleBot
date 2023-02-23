@@ -143,6 +143,10 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     unmute: Number(PermissionsBitField.Flags.MuteMembers),
                     slowmode: Number(PermissionsBitField.Flags.ManageChannels),
                     help: Number(PermissionsBitField.Flags.UseApplicationCommands),
+                    owner: "owner",
+                    unowner: "owner",
+                    "owner-list": "owner",
+                    "commands-perms": "owner",
                 },
             },
             {

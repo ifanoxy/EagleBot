@@ -18,8 +18,13 @@ export default {
         const userId = interaction.options.get("utilisateur")?.value.toString();
         const choices = client.managers.membersManager.getIfExist(userId)?.values.warn.map(x => x.reason).concat("All") || ["Ce membre n'a aucun warn !"];
         const filtered = choices.filter(choice => choice.startsWith(focus));
-
-        await interaction.respond(filtered.map(c => ({name: c, value: c})));
+        let options;
+        if (filtered.length > 25) {
+            options = filtered.slice(0, 25);
+        } else {
+            options = filtered;
+        }
+        await interaction.respond(options.map(c => ({name: c, value: c})));
     },
     execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
         const warn = interaction.options.getString("warn");

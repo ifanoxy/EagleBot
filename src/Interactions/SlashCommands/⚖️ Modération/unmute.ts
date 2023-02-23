@@ -22,8 +22,14 @@ export default {
             })
         })
         const filtered = choices.filter(choice => choice.username.startsWith(focusedValue) || choice.id.startsWith(focusedValue) || choice.reason.startsWith(focusedValue));
+        let options;
+        if (filtered.length > 25) {
+            options = filtered.slice(0, 25);
+        } else {
+            options = filtered;
+        }
         await interaction.respond(
-            filtered.map(choice => ({ name: `${choice.username} (${choice.id}) --> ${choice.reason}`, value: choice.id })),
+            options.map(choice => ({ name: `${choice.username} (${choice.id}) --> ${choice.reason}`, value: choice.id })),
         );
     },
     execute(interaction: ChatInputCommandInteraction, client: EagleClient) {

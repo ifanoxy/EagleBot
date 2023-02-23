@@ -24,6 +24,12 @@ export default {
             case interaction.isAutocomplete() : {
                 const command = client.handlers.slashCommandsHandler.SlashCommandsList.get(interaction.commandName);
 
+                if (interaction.inGuild()) {
+                    const NotPerm = client.hasNotPermissions(interaction);
+
+                    if (NotPerm)return;
+                }
+
                 if (!command) {
                     console.error(`No command matching ${interaction.commandName} was found.`);
                     return;
