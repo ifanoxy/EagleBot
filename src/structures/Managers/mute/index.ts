@@ -3,10 +3,9 @@ export default function (database, modelName): Promise<Array<{name: string, type
         const DataTypes = database.DataTypes;
         const data = [
             {
-                name: "guildId",
-                type: DataTypes.TEXT,
-                allowNull: false,
-                isWhere: true,
+                name: "id",
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             {
@@ -14,6 +13,12 @@ export default function (database, modelName): Promise<Array<{name: string, type
                 type: DataTypes.TEXT,
                 allowNull: false,
                 isWhere: true,
+            },
+            {
+                name: "guildId",
+                type: DataTypes.TEXT,
+                allowNull: false,
+                isWhere: true
             },
             {
                 name: "expiredAt",

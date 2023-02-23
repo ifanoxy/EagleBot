@@ -20,7 +20,7 @@ export default {
             ephemeral: true
         })
         interaction.guild.voiceStates.cache.map(member => {
-            member.setChannel(channelId, `Demandé par ${interaction.user.tag} (${interaction.user.id}) | Move-all commande`).catch()
+            member.setChannel(channelId, `Demandé par ${interaction.user.tag} (${interaction.user.id}) | Move-all`).catch()
         });
 
         interaction.reply({
