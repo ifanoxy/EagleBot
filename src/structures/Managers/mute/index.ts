@@ -10,13 +10,13 @@ export default function (database, modelName): Promise<Array<{name: string, type
             },
             {
                 name: "memberId",
-                type: DataTypes.TEXT,
+                type: DataTypes.STRING(25),
                 allowNull: false,
                 isWhere: true,
             },
             {
                 name: "guildId",
-                type: DataTypes.TEXT,
+                type: DataTypes.STRING(25),
                 allowNull: false,
                 isWhere: true
             },
@@ -40,7 +40,7 @@ export default function (database, modelName): Promise<Array<{name: string, type
             },
             {
                 name: "authorId",
-                type: DataTypes.TEXT,
+                type: DataTypes.STRING(25),
                 allowNull: true,
                 isValue: true,
             },

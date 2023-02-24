@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import {ChannelType, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
 import { DiscordColor } from "../../../structures/Enumerations/Embed";
 
 export default {
@@ -25,6 +25,12 @@ export default {
             )
         ),
     execute(interaction: ChatInputCommandInteraction) {
+        if (interaction.channel.type == ChannelType.GuildStageVoice)return interaction.reply({
+            embeds: [
+                new EmbedBuilder().setDescription("Vous ne pouvez pas utiliser cette commande dans ce channel !").setColor("Red")
+            ],
+            ephemeral: true
+        });
         interaction.channel.setRateLimitPerUser(interaction.options.getInteger("délai"))
         interaction.reply({
             embeds: [

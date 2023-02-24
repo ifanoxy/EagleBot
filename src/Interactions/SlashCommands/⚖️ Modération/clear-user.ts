@@ -36,9 +36,11 @@ export default {
                         embeds: [embed.setDescription(`Nombre de messages supprimés : \`${nbrSup}\``)]
                     });
                 } else {
-                    interaction.channel.send({
-                        embeds: [embed.setDescription(`Nombre de messages supprimés : \`${nbrSup}\``)]
-                    });
+                    if (interaction.channel.type != ChannelType.GuildStageVoice) {
+                        interaction.channel.send({
+                            embeds: [embed.setDescription(`Nombre de messages supprimés : \`${nbrSup}\``)]
+                        });
+                    }
                 }
                 let executorData = client.managers.membersManager.getAndCreateIfNotExists(interaction.user.id, { memberId: interaction.user.id });
                 executorData.moderation.removedMessage += nbrSup;

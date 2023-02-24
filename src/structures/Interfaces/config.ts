@@ -6,6 +6,7 @@ export default interface Config {
         name: string,
         username: string,
         password: string,
+        host: string,
     },
     webhook: {
         token: string,

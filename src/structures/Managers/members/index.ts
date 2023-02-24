@@ -4,7 +4,7 @@ export default function (database, modelName): Promise<Array<{name: string, type
         const data = [
             {
                 name: "memberId",
-                type: DataTypes.TEXT,
+                type: DataTypes.STRING(25),
                 allowNull: false,
                 isWhere: true,
                 primaryKey: true,

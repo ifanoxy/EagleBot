@@ -2,6 +2,7 @@ import chalk from "chalk";
 import { Collection } from "discord.js";
 import { Guilds } from "../Interfaces/Managers";
 import Managers from "../Managers";
+import {DataTypes} from "sequelize";
 
 export default class Manager<Type> extends Collection<string, DatabaseManager<Type> & Type > {
     EagleManager: Managers;
@@ -49,7 +50,6 @@ export default class Manager<Type> extends Collection<string, DatabaseManager<Ty
     async loadTables(data: {model: string, key: Array<string>, add: string}) {
         for await (const element of (await this.EagleManager.EagleClient?.database.models[data.model].findAll()))
             this[data.add](data.key.map(k => k.startsWith("{") && k.endsWith("}") ? element[k.slice(1, -1)] : k).join(''), element.get());
-        console.log(chalk.bold.greenBright("[Eagle BOT]") + chalk.redBright(`Database - Successfully loaded ${this.size} ${data.model.charAt(0).toUpperCase()}${data.model.slice(1)}`))
         this.EagleManager.actualModelLoad++;
         if (this.EagleManager.actualModelLoad >= (this.EagleManager.EagleClient?.database.modelManager.models.length || 1)) {
             this.EagleManager.actualModelLoad = 0
@@ -71,8 +71,17 @@ class DatabaseManager<T> {
         // @ts-ignore
         this.values = {};
         this.manager.model.filter(m => m.name !== "id").forEach(v => {
-            v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values)[v.name] = values_[v.name] || !v.default ? values_[v.name] : v.default : '';
-            this[v.name] = this[v.isWhere ? "wheres" : "values"][v.name]
+            switch (v.type.key) {
+                case DataTypes.JSON.key :
+                    v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values)[v.name] = JSON.parse(values_[v.name]) || !v.default ? JSON.parse(values_[v.name]) : JSON.parse(v.default) : '';
+                    break
+                case DataTypes.NUMBER.key :
+                    v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values)[v.name] = Number(values_[v.name]) || !v.default ? Number(values_[v.name]) : Number(v.default) : '';
+                    break
+                default :
+                    v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values)[v.name] = values_[v.name] || !v.default ? values_[v.name] : v.default : '';
+            }
+            this[v.name] = this[v.isWhere ? "wheres" : "values"][v.name];
         });
         this.values = {...this.wheres, ...this.values};
     }

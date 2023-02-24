@@ -1,11 +1,12 @@
 export default {
     discord: {
-        token: "MTA1NzAwODAwMDEzMDM2NzU5MQ.G8hc_M.9c68JSImeoAzhm5bKyCqeFSVNhdzc_9HxPZy6w"
+        token: "MTA3ODI5NjYyNzMxMzM5NzgyMA.G4Fygu.nfEtJ6KtXXFgYz5aFLvrAlLSsmEoQOKQ4PrsnA"
     },
     database: {
-        name: "",
-        username: "",
-        password: "",
+        host: "45.140.165.82",
+        name: "s2122_EagleBaseDev",
+        username: "u2122_mnTVgJTiYs",
+        password: "QeTGdJGG@diMF7u=.DMRUgeR",
     },
     webhook: {
         token: "_Mx2P12-QuqxifynC7yB-ZxX3y6ArJO8yWo0CzKi6acH6KlCT8F15Moi7eHeEIDuClfy",

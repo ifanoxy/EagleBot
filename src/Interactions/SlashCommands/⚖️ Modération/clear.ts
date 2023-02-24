@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import {ChannelType, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
 import { EagleClient } from "../../../structures/Client";
 import { DiscordColor } from "../../../structures/Enumerations/Embed";
 
@@ -11,6 +11,12 @@ export default {
             opt => opt.setName("nombre-messages").setDescription("Le nombre de message que vous souhaitez supprimer").setMaxValue(100).setRequired(true)
         ),
     execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
+        if (interaction.channel.type == ChannelType.GuildStageVoice)return interaction.reply({
+            embeds: [
+                new EmbedBuilder().setDescription("Vous ne pouvez pas utiliser cette commande dans ce channel !").setColor("Red")
+            ],
+            ephemeral: true
+        });
         interaction.channel.bulkDelete(interaction.options.getInteger("nombre-messages"), true)
             .then(DeleteMessages => {
                 interaction.reply({

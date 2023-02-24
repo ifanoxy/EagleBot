@@ -1,13 +1,14 @@
 import { Sequelize, DataTypes, QueryOptions } from "sequelize";
 import {EagleClient} from "./Client"
 export class EagleDatabaseMysql extends Sequelize {
-    Datatypes: typeof DataTypes;
+    DataTypes: typeof DataTypes
     constructor(EagleClient: EagleClient) {
         super(
             EagleClient.config.database.name,
             EagleClient.config.database.username,
             EagleClient.config.database.password,
             {
+                host: EagleClient.config.database.host,
                 dialect: "mysql",
                 logging: false,
                 define: {
@@ -18,10 +19,10 @@ export class EagleDatabaseMysql extends Sequelize {
                 }
             }
         );
-        this.Datatypes = DataTypes;
+        this.DataTypes = DataTypes;
     }
 
-    auth(options: QueryOptions) {
+    auth(options?: QueryOptions) {
         return new Promise((resolve, reject) => {
             try {
                 super.authenticate(options).then(resolve).catch(reject);

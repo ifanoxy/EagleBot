@@ -1,7 +1,7 @@
 import { Client, Partials, Collection, SnowflakeUtil, ChatInputCommandInteraction, PermissionsBitField } from "discord.js";
 import Config from "./Interfaces/config"
 import { EagleHandler } from "./Handler/EagleHandler";
-import { EagleDatabaseSqlite } from "./DataBase";
+import {EagleDatabaseMysql, EagleDatabaseSqlite} from "./DataBase";
 import EagleManagers from "./Managers";
 import chalk from "chalk";
 import * as fs from "fs";
@@ -11,7 +11,7 @@ export class EagleClient extends Client {
     Collection: typeof Collection;
     _fs: typeof fs;
     config: Config;
-    database: EagleDatabaseSqlite;
+    database: EagleDatabaseMysql;
     managers: EagleManagers;
     handlers: EagleHandler;
     func: Functions;
@@ -27,7 +27,7 @@ export class EagleClient extends Client {
 
         this.Collection = Collection;
         this._fs = require("fs");
-        this.database = new EagleDatabaseSqlite();
+        this.database = new EagleDatabaseMysql(this);
         this.func = new Functions(this);
         this.database.auth().then(() => {
             this.log("Database connection...")
@@ -40,7 +40,6 @@ export class EagleClient extends Client {
                 activities: [{
                     name: `Version ${this.config.version}`,
                     type: 3,
-
                 }]
             });
         });
