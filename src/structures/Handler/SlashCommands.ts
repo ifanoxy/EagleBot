@@ -1,13 +1,14 @@
 import chalk from 'chalk';
 import * as path from 'path';
 import { EagleHandler } from "./EagleHandler";
+import {Collection, SlashCommandBuilder} from "discord.js";
 
 export class SlashCommandsHandler {
     EagleHandler: EagleHandler;
-    SlashCommandsList: any;
+    SlashCommandsList: Collection<string, {data: SlashCommandBuilder, execute: (...x) => {}, autocomplete?: (...x) => {}}>;
     constructor(EagleHandler: EagleHandler) {
         this.EagleHandler = EagleHandler;
-        this.SlashCommandsList = new EagleHandler.EagleClient.Collection();
+        this.SlashCommandsList = new Collection();
         this.EagleHandler.getFiles(
             path.resolve(__dirname, "..","..","Interactions","SlashCommands"),
             this

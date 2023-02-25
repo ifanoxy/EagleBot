@@ -56,7 +56,7 @@ export default {
                     }
                 )
 
-            let nbrCommandsByCategory = {}
+            let nbrCommandsByCategory = {};
             folders.map(fold => {
                 const commandNameArray = client._fs.readdirSync(`./src/Interactions/SlashCommands/${fold}`).map(file => {
                     return require(`../${fold}/${file}`).default.data.name

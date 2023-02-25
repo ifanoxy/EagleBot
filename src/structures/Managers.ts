@@ -1,6 +1,19 @@
 import * as path from "path";
 import { EagleClient } from "./Client";
-import {Antiraid, Backup, Guilds, Lastname, Members, ModelTypes, Mute, Owner, Stats, Tickets, Whitelist} from "./Interfaces/Managers";
+import {
+    Antiraid,
+    Backup,
+    Blacklist,
+    Guilds,
+    Lastname,
+    Members,
+    ModelTypes,
+    Mute,
+    Owner,
+    Stats,
+    Tickets,
+    Whitelist
+} from "./Interfaces/Managers";
 import Manager from './Managers/main';
 
 export default class Managers implements ModelTypes {
@@ -17,7 +30,7 @@ export default class Managers implements ModelTypes {
     statsManager: Manager<Stats>;
     ticketsManager: Manager<Tickets>;
     whitelistManager: Manager<Whitelist>;
-
+    blacklistManager: Manager<Blacklist>;
 
     constructor(EagleClient: EagleClient) {
         this.EagleClient = EagleClient;
@@ -36,4 +49,5 @@ export default class Managers implements ModelTypes {
         this[`${dirName}Manager`] = new Manager(this, dirName);
         delete require.cache[require.resolve("./Managers/main")];
     }
+
 }

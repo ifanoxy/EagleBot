@@ -1,6 +1,7 @@
 import {EmbedData, PermissionsBitField } from "discord.js";
 import {DataType } from "sequelize";
 import Manager from "../Managers/main";
+import {CommandsType} from "../Enumerations/CommandType";
 
 export interface ModelTypes {
     guildsManager: Manager<Guilds>
@@ -13,6 +14,7 @@ export interface ModelTypes {
     statsManager: Manager<Stats>
     ticketsManager: Manager<Tickets>
     whitelistManager: Manager<Whitelist>
+    blacklistManager: Manager<Blacklist>
 }
 
 export interface Whitelist {
@@ -207,6 +209,8 @@ export interface Blacklist {
 
 export interface Guilds {
     guildId: string,
+    prefix?: string,
+    commandType?: CommandsType,
     lang?: "fr" | "en",
     autoreply?: Array<{question: string, reponse: string}>,
     antiLink?: {
@@ -277,12 +281,7 @@ export interface Guilds {
         }
     },
     permissions?: {
-        calc: number,
-        kick: number,
-        vkick: number,
-        warn: number,
-        unwarn: number,
-        "user-info": number,
+        [key: string]: number | string,
     }
     form?: {
         [key: string]: Array<{

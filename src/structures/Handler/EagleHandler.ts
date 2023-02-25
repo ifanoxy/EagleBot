@@ -6,7 +6,7 @@ import { SlashCommandsHandler } from "./SlashCommands";
 
 export class EagleHandler {
     EagleClient: EagleClient;
-    slashCommandsHandler: any;
+    slashCommandsHandler: SlashCommandsHandler;
     eventHandler: EventsHandler;
     functionsHandler: FunctionHandler;
     constructor(EagleClient: EagleClient) {

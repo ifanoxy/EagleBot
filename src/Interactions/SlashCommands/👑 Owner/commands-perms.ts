@@ -1,10 +1,11 @@
 import {
     AutocompleteInteraction,
-    ChatInputCommandInteraction,
+    ChatInputCommandInteraction, EmbedBuilder,
     PermissionsBitField,
     SlashCommandBuilder
 } from "discord.js";
 import { EagleClient } from "../../../structures/Client";
+import {DiscordColor} from "../../../structures/Enumerations/Embed";
 
 export default {
     data: new SlashCommandBuilder()
@@ -19,11 +20,14 @@ export default {
                 .addStringOption(
                     opt => opt.setName("permission").setDescription("la nouvelle permission pour utiliser cette commande").setRequired(true).setAutocomplete(true)
                 )
+        )
+        .addSubcommand(
+            sub => sub.setName("list").setDescription("Vous permet de voir toute les permissions de toute les commandes")
         ),
     async autocomplete(interaction: AutocompleteInteraction, client: EagleClient) {
         const focusedValue = interaction.options.getFocused(true)
         if (focusedValue.name == "commande") {
-            const perms = client.managers.guildsManager.getIfExist(interaction.guildId).permissions;
+            const perms = client.managers.guildsManager.getAndCreateIfNotExists(interaction.guildId, { guildId: interaction.guildId }).permissions;
             const choices = client.application.commands.cache.map(x => ({name: `${x.name} | ${typeof perms[x.name] == "string" ? perms[x.name] : new PermissionsBitField(BigInt(perms[x.name])).toArray()[0]}`, value: x.name}))
             const filtered = choices.filter(choice => choice.name.toLocaleLowerCase().includes(focusedValue.value.toLocaleLowerCase())).slice(0, 25);
             await interaction.respond(
@@ -44,15 +48,39 @@ export default {
             );
         }
     },
-    execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
-        const commandName = interaction.options.getString('commande');
-        const permission = interaction.options.getString("permission");
+    async execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
+        let GuildData = client.managers.guildsManager.getAndCreateIfNotExists(interaction.guildId, {guildId: interaction.guildId});
+        if (interaction.options.getSubcommand() == "modifier") {
+            const commandName = interaction.options.getString('commande');
+            const permission = interaction.options.getString("permission");
 
-        let GuildData = client.managers.guildsManager.getAndCreateIfNotExists(interaction.guildId, { guildId: interaction.guildId });
-        try {
-            GuildData.permissions[commandName] == Number(permission);
-        } catch {
-            GuildData.permissions[commandName] == permission;
+            if (!Number.isNaN(Number(permission))) {
+                GuildData.permissions[commandName] = Number(permission);
+            } else {
+                GuildData.permissions[commandName] = permission;
+            };
+            GuildData.save();
+
+            interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(DiscordColor.Eagle)
+                        .setDescription(`\`${interaction.user.tag}\` vient de changer les permissions de la commande **${commandName}**.\nNouvelle Permission : \`${typeof GuildData.permissions[commandName] == "string" ? permission : new PermissionsBitField(BigInt(permission)).toArray()[0]}\``)
+                        .setTimestamp()
+                ]
+            })
+        } else {
+            interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(DiscordColor.Eagle)
+                        .setTitle(`Voici la liste des permissions des ${client.application.commands.cache.size} commandes`)
+                        .setDescription(
+                            client.application.commands.cache.map(cmd => `${cmd.name} -> \`${typeof GuildData.permissions[cmd.name] == "string" ? GuildData.permissions[cmd.name] : new PermissionsBitField(BigInt(GuildData.permissions[cmd.name])).toArray()[0]}\``).join("\n")
+                        )
+                        .setTimestamp()
+                ]
+            })
         }
     }
 }

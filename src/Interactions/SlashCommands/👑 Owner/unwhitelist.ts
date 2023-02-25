@@ -3,15 +3,15 @@ import { EagleClient } from "../../../structures/Client";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName("unowner")
-        .setDescription("Permet de unowner une personne du bot")
+        .setName("unwl")
+        .setDescription("Permet de unwhitelist une personne du bot")
         .setDMPermission(false)
         .addStringOption(
-            option => option.setName("utilisateur").setDescription("entrez la personne que vous shouaitez unowner").setRequired(true).setAutocomplete(true)
+            option => option.setName("utilisateur").setDescription("entrez la personne que vous shouaitez unwhitelist").setRequired(true).setAutocomplete(true)
         ),
     async autocomplete(interaction: AutocompleteInteraction, client: EagleClient) {
         const focusedValue = interaction.options.getFocused();
-        let choices = client.managers.ownerManager.map(x => ({tag: client.users.cache.get(x.userId).tag, id: x.userId}));
+        let choices = client.managers.whitelistManager.map(x => ({tag: client.users.cache.get(x.userId).tag, id: x.userId}));
         choices.unshift({tag: "All", id:"all"})
         const filtered = choices.filter(choice => choice.tag.startsWith(focusedValue) || choice.id.startsWith(focusedValue));
         let options;
@@ -27,11 +27,11 @@ export default {
     execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
         const id = interaction.options.getString("utilisateur");
         if (id == "all") {
-            client.managers.ownerManager.map(x => {
+            client.managers.whitelistManager.map(x => {
                 x.delete()
             })
         } else {
-            client.managers.ownerManager.getAndCreateIfNotExists(id, {
+            client.managers.whitelistManager.getAndCreateIfNotExists(id, {
                 userId: id,
             }).delete();
         }
@@ -40,7 +40,7 @@ export default {
             embeds: [
                 new EmbedBuilder()
                     .setColor("Blurple")
-                    .setDescription(`Vous avez unowner <@${id}>`)
+                    .setDescription(`Vous avez unwhitelist <@${id}>`)
             ]
         });
     }

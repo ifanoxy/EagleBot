@@ -20,6 +20,20 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                 default: "fr"
             },
             {
+                name: "prefix",
+                type: DataTypes.STRING(5),
+                allowNull: false,
+                isValue: true,
+                default: "&"
+            },
+            {
+                name: "commandType",
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                isValue: true,
+                default: 1
+            },
+            {
                 name: 'reactroles',
                 type: DataTypes.JSON,
                 allowNull: true,

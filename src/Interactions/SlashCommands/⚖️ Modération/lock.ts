@@ -11,6 +11,7 @@ export default {
             opt => opt.setName("role").setDescription("le rôle dont vous souhaitez lock le channel").setRequired(false)
         ),
     async execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
+        interaction.options.getSubcommandGroup()
         const role = interaction.guild.roles.cache.get(interaction.options.getRole("role")?.id) || interaction.guild.roles.everyone;
         const channel = interaction.channel;
         if (channel.permissionsFor(role).has("SendMessages")) {
@@ -40,7 +41,7 @@ export default {
             interaction.reply({
                 embeds: [
                     new EmbedBuilder()
-                        .setDescription(`**Ce channel est déjà lock pour se rôle !**\nVoulez vous unlock ? --> ${client.func.utils.slashCommandSend("unlock")}`)
+                        .setDescription(`**Ce channel est déjà lock pour se rôle !**\nVoulez vous unlock ? --> ${interaction.commandName ? client.func.utils.slashCommandSend("unlock") : "&unlock"}`)
                         .setColor("Red")
                 ],
                 ephemeral: true
