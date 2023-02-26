@@ -1,6 +1,11 @@
 export default interface Config {
     discord: {
-        token: string
+        token: string,
+        presence: {
+            name: string,
+            type: number,
+            status: "idle" | "dnd" | "online",
+        }
     },
     database: {
         name: string,

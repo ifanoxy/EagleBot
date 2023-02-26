@@ -45,10 +45,10 @@ export class EagleClient extends Client {
         this.on("ready", () => {
             this.log(`Bot is ready ! Connected on ${this.user.tag}\n`);
             this.user.setPresence({
-                status: "online",
+                status: this.config.discord.presence.status,
                 activities: [{
-                    name: `Version ${this.config.version}`,
-                    type: 3,
+                    name: this.config.discord.presence.name,
+                    type: this.config.discord.presence.type,
                 }]
             });
         });

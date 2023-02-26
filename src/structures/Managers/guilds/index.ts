@@ -161,6 +161,8 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     unowner: "owner",
                     "owner-list": "owner",
                     "commands-perms": "owner",
+                    "config": "owner",
+                    "guild-list": "owner",
                 },
             },
             {
