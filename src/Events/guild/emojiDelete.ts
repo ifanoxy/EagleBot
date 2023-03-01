@@ -16,10 +16,8 @@ export default {
                         .setTitle(`Logs | ${this.name}`)
                         .setDescription(
                             `**Nom:** ${emoji.name}\n\n`+
-                            `**ID:** ${emoji.id}\n\n`+
                             `**Animé:** ${emoji.animated ? "Oui" : "Non"}\n\n`+
-                            `**Emoji:** <:${emoji.name}:${emoji.id}>\n\n`+
-                            `**Créé par:** <@${audit.entries.first().executor.id}>`
+                            `**Supprimé par:** <@${audit.entries.first().executor.id}>`
                         )
                 ]
             });

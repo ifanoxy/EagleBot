@@ -4,7 +4,7 @@ import {AuditLogEvent, ChannelType, EmbedBuilder, GuildChannel} from "discord.js
 export default {
     name: "channelDelete",
     execute(client: EagleClient, channel: GuildChannel) {
-        const channelSend = client.func.log.isActive(channel.guildId, "ChannelDelete");
+        const channelSend = client.func.log.isActive(channel.guildId, "channelDelete");
         if (!channelSend)return;
         let type;
         switch (channel.type) {
@@ -50,9 +50,8 @@ export default {
                         .setDescription(
                             `**Nom:** ${channel.name}\n\n` +
                             `**Type:** ${type}\n\n` +
-                            `**Channel:** <#${channel.id}> (${channel.id})\n\n` +
                             `**Catégorie:** <#${channel.parentId || "Aucune"}>\n\n` +
-                            `**Créé par:** <@${audit.entries.first()?.executor.id}>`
+                            `**Supprimé par:** <@${audit.entries.first()?.executor.id}>`
                         )
                 ]
             });
