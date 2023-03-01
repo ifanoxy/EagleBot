@@ -2,9 +2,9 @@ import {EagleClient} from "../../structures/Client";
 import {AuditLogEvent, ChannelType, EmbedBuilder, GuildChannel} from "discord.js";
 
 export default {
-    name: "channelCreate",
+    name: "channelDelete",
     execute(client: EagleClient, channel: GuildChannel) {
-        const channelSend = client.func.log.isActive(channel.guildId, "ChannelCreate");
+        const channelSend = client.func.log.isActive(channel.guildId, "ChannelDelete");
         if (!channelSend)return;
         let type;
         switch (channel.type) {
@@ -41,7 +41,7 @@ export default {
         }
         channel.guild.fetchAuditLogs({
             limit: 1,
-            type: AuditLogEvent.ChannelCreate,
+            type: AuditLogEvent.ChannelDelete,
         }).then(audit => {
             channelSend.send({
                 embeds: [
