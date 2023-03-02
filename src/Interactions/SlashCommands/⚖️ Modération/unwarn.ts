@@ -1,4 +1,4 @@
-import {AutocompleteInteraction, ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import {AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
 import { EagleClient } from "../../../structures/Client";
 import { DiscordColor } from "../../../structures/Enumerations/Embed";
 
@@ -51,5 +51,20 @@ export default {
                 }
             ]
         })
+        const channelLog = client.func.log.isActive(interaction.guildId, "Warn");
+        if (channelLog) this.log(interaction, user.id, channelLog);
+    },
+
+    log(interaction, userId, channel) {
+        channel.send({
+            embeds: [
+                new EmbedBuilder().setColor("#2f3136").setTimestamp()
+                    .setTitle(`Logs | Warn Remove`)
+                    .setDescription(
+                        `**Membre Unwarn:** <@${userId}>\n\n` +
+                        `**Unwarn par:** <@${interaction.user.id}>`
+                    )
+            ]
+        });
     }
 }

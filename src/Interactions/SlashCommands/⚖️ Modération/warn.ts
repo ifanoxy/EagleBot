@@ -70,5 +70,21 @@ export default {
                     .setTimestamp()
             ]
         });
+        const channelLog = client.func.log.isActive(interaction.guildId, "Warn");
+        if (channelLog) this.log(interaction, member.id, channelLog, raison);
+    },
+
+    log(interaction, userId, channel, raison) {
+        channel.send({
+            embeds: [
+                new EmbedBuilder().setColor("#2f3136").setTimestamp()
+                    .setTitle(`Logs | Warn Add`)
+                    .setDescription(
+                        `**Membre Warn:** <@${userId}>\n\n` +
+                        `**Raison:** <@${raison}>\n\n` +
+                        `**Warn par:** <@${interaction.user.id}>`
+                    )
+            ]
+        });
     }
 }
