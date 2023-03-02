@@ -1,6 +1,7 @@
 import {AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { EagleClient } from "../../../structures/Client";
 import { DiscordColor } from "../../../structures/Enumerations/Embed";
+import ms from "ms";
 
 export default {
     data: new SlashCommandBuilder()
@@ -58,5 +59,20 @@ export default {
                     ephemeral: true
                 });
             })
+        const channelLog = client.func.log.isActive(interaction.guildId, "Mute");
+        if (channelLog) this.log(interaction, muteId, channelLog);
+    },
+
+    log(interaction, userId, channel) {
+        channel.send({
+            embeds: [
+                new EmbedBuilder().setColor("#2f3136").setTimestamp()
+                    .setTitle(`Logs | Mute Remove`)
+                    .setDescription(
+                        `**Membre Unmute:** <@${userId}>\n\n` +
+                        `**Unmute par:** <@${interaction.user.id}>`
+                    )
+            ]
+        });
     }
 }

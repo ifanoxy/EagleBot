@@ -48,5 +48,22 @@ export default {
         })
         memberData.moderation.mute++;
         memberData.save();
+        const channelLog = client.func.log.isActive(interaction.guildId, "Mute");
+        if (channelLog) this.log(interaction, cible.id, channelLog, interaction.options.getString('raison') || "pas de raison"), interaction.options.getString("temps") ? ms(interaction.options.getString("temps")) : Infinity;
+    },
+
+    log(interaction, userId, channel, raison, time) {
+        channel.send({
+            embeds: [
+                new EmbedBuilder().setColor("#2f3136").setTimestamp()
+                    .setTitle(`Logs | Mute Add`)
+                    .setDescription(
+                        `**Membre Mute:** <@${userId}>\n\n` +
+                        `**Raison:** <@${raison}>\n\n` +
+                        `**Temps:** <@${time}>\n\n` +
+                        `**Mute par:** <@${interaction.user.id}>`
+                    )
+            ]
+        });
     }
 }
