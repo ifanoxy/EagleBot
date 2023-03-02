@@ -97,4 +97,58 @@ export default class Utils {
     slashCommandSend(name: string, sub: string = "", subGroup: string = "") {
         return `</${name}${subGroup}${sub}:${this.#client.application.commands.cache.find(x => x.name == name).id}>`;
     }
+
+    askWithButton(msg, time = 30) {
+        return msg.awaitMessageComponent({
+            componentType: ComponentType.Button,
+            filter: i => i.customId.startsWith("[no-check]"),
+            time: time * 1000
+        })
+            .then(inter => {
+                return inter
+            })
+            .catch(() => {
+                msg.components.map(row => row.components.map(x => x.data.disabled = true));
+                msg.edit({
+                    components: msg.components
+                });
+                return null
+            })
+    }
+
+    askWithSelectMenuRole(msg, time = 30) {
+        return msg.awaitMessageComponent({
+            componentType: ComponentType.RoleSelect,
+            filter: i => i.customId.startsWith("[no-check]"),
+            time: time * 1000
+        })
+            .then(inter => {
+                return inter
+            })
+            .catch(() => {
+                msg.components.map(row => row.components.map(x => x.data.disabled = true));
+                msg.edit({
+                    components: msg.components
+                });
+                return null
+            })
+    }
+
+    askWithSelectMenuString(msg, time = 30) {
+        return msg.awaitMessageComponent({
+            componentType: ComponentType.StringSelect,
+            filter: i => i.customId.startsWith("[no-check]"),
+            time: time * 1000
+        })
+            .then(inter => {
+                return inter
+            })
+            .catch(() => {
+                msg.components.map(row => row.components.map(x => x.data.disabled = true));
+                msg.edit({
+                    components: msg.components
+                });
+                return null
+            })
+    }
 }

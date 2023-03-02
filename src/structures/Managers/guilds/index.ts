@@ -138,6 +138,7 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     "config": "owner",
                     "guild-list": "owner",
                     "logs": Number(PermissionsBitField.Flags.Administrator),
+                    "autoroles": Number(PermissionsBitField.Flags.Administrator),
                 },
             },
             {

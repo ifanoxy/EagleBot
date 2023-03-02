@@ -267,7 +267,7 @@ export interface Guilds {
         }>
     },
     muteRoleId?: string,
-    autoRoles?: Array<string>,
+    autoroles?: Array<string>,
     join?: {
         channelId: string,
         message: {
