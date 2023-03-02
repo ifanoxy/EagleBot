@@ -19,7 +19,7 @@ export default {
     execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
         let guildData = client.managers.guildsManager.getAndCreateIfNotExists(interaction.guildId, { guildId: interaction.guildId });
         const logsName = Object.keys(guildData.logs);
-        const channel = interaction.options.getChannel('channel')
+        const channel = interaction.options.getChannel('channel');
         let paginationRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
                 .setCustomId("[no-check]logs#previous")
@@ -36,9 +36,14 @@ export default {
                 .setStyle(ButtonStyle.Secondary)
                 .setLabel("Page suivante ⏩"),
             new ButtonBuilder()
+                .setCustomId("[no-check]logs")
+                .setStyle(ButtonStyle.Secondary)
+                .setDisabled(true)
+                .setLabel(" "),
+            new ButtonBuilder()
                 .setCustomId("[no-check]logs#finish")
                 .setStyle(ButtonStyle.Secondary)
-                .setLabel("Terminer"),
+                .setLabel("Terminer")
         );
         let logsRows = [new ActionRowBuilder<ButtonBuilder>(), new ActionRowBuilder<ButtonBuilder>(), new ActionRowBuilder<ButtonBuilder>(), new ActionRowBuilder<ButtonBuilder>(), new ActionRowBuilder<ButtonBuilder>(), new ActionRowBuilder<ButtonBuilder>(), new ActionRowBuilder<ButtonBuilder>(), new ActionRowBuilder<ButtonBuilder>(),];
         let j = [[], [], [], [], [], [], [], []];
@@ -156,10 +161,19 @@ export default {
         }
 
         function btncolor(name: string, position: number) {
+            checkChannel()
             return new ButtonBuilder()
                 .setLabel(name)
                 .setStyle(guildData?.logs[name] ? guildData.logs[name] == channel.id ? ButtonStyle.Success : ButtonStyle.Primary : ButtonStyle.Danger)
                 .setCustomId(`[no-check]logs_${name}#${position}`)
+        }
+
+        function checkChannel() {
+            logsName.map(name => {
+                if (interaction.guild.channels.cache.get(guildData.logs[name]))return;
+                guildData.logs[name] = null;
+            })
+            guildData.save()
         }
     }
 }

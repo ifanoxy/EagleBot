@@ -30,11 +30,27 @@ export default {
             reason: interaction.options.getString("raison") || "Pas de raison",
         }).save()
 
+        const channelLog = client.func.log.isActive(interaction.guildId, "WhiteListUpdate");
+        if (channelLog) this.log(interaction, id, channelLog);
+
         interaction.reply({
             embeds: [
                 new EmbedBuilder()
                     .setColor("Blurple")
                     .setDescription(`Vous avez ajouté <@${id}> à la whitelist`)
+            ]
+        });
+    },
+
+    log(interaction, userId, channel) {
+        channel.send({
+            embeds: [
+                new EmbedBuilder().setColor("#2f3136").setTimestamp()
+                    .setTitle(`Logs | Whitelist Add`)
+                    .setDescription(
+                        `**Membre Ajouté:** <@${userId}>\n\n` +
+                        `**Ajouté par:** <@${interaction.user.id}>`
+                    )
             ]
         });
     }

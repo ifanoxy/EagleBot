@@ -36,11 +36,27 @@ export default {
             }).delete();
         }
 
+        const channelLog = client.func.log.isActive(interaction.guildId, "WhiteListUpdate");
+        if (channelLog) this.log(interaction, id, channelLog);
+
         interaction.reply({
             embeds: [
                 new EmbedBuilder()
                     .setColor("Blurple")
                     .setDescription(`Vous avez unwhitelist <@${id}>`)
+            ]
+        });
+    },
+
+    log(interaction, userId, channel) {
+        channel.send({
+            embeds: [
+                new EmbedBuilder().setColor("#2f3136").setTimestamp()
+                    .setTitle(`Logs | Whitelist Remove`)
+                    .setDescription(
+                        `**Membre Retiré:** <@${userId}>\n\n` +
+                        `**Retiré par:** <@${interaction.user.id}>`
+                    )
             ]
         });
     }
