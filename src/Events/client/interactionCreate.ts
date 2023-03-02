@@ -54,6 +54,8 @@ export default {
                 file.execute(interaction, client);
             }break;
             case interaction.isChatInputCommand() : {
+                const logChannel = client.func.log.isActive(interaction.guildId, "BotCommands");
+                if (logChannel) this.log(client, interaction, logChannel);
                 const command = client.handlers.slashCommandsHandler.SlashCommandsList.get(interaction.commandName);
 
                 if (interaction.inGuild()) {
@@ -116,5 +118,18 @@ export default {
                 }
             }
         }
+    },
+
+    log(client: EagleClient, interaction: ChatInputCommandInteraction, channel) {
+        channel.send({
+            embeds: [
+                new EmbedBuilder().setColor("#2f3136").setTimestamp()
+                    .setTitle(`Logs | Commands Used`)
+                    .setDescription(
+                        `**Commande:** </${interaction.commandName}:${interaction.id}>\n\n` +
+                        `**Utilisé par:** <@${interaction.user.id}>`
+                    )
+            ]
+        });
     }
 }
