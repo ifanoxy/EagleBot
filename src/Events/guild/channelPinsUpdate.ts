@@ -3,7 +3,7 @@ import {AuditLogEvent, ChannelType, EmbedBuilder, TextBasedChannel} from "discor
 
 export default {
     name: "channelPinsUpdate",
-    async execute(client: EagleClient, channel: TextBasedChannel, time) {
+    async execute(client: EagleClient, channel: TextBasedChannel) {
         if (channel.isVoiceBased() || channel.isDMBased())return;
         const auditPinAdd = (await channel.guild.fetchAuditLogs({
             type: AuditLogEvent.MessagePin,
@@ -17,7 +17,9 @@ export default {
         else await this.pinRemove(client, channel, auditPinRemove)
     },
     async pinAdd(client: EagleClient, channel, audit) {
-        channel.send({
+        const channelSend = client.func.log.isActive(channel.guild.id, "MessagePin");
+        if (!channelSend)return;
+        channelSend.send({
             embeds: [
                 new EmbedBuilder().setColor("#2f3136").setTimestamp()
                     .setTitle(`Logs | ${this.name}`)
@@ -29,7 +31,9 @@ export default {
         });
     },
     async pinRemove(client: EagleClient, channel, audit) {
-        channel.send({
+        const channelSend = client.func.log.isActive(channel.guild.id, "MessageUnpin");
+        if (!channelSend)return;
+        channelSend.send({
             embeds: [
                 new EmbedBuilder().setColor("#2f3136").setTimestamp()
                     .setTitle(`Logs | ${this.name}`)
