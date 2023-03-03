@@ -9,8 +9,6 @@ import {
 import {EagleClient} from "../../../structures/Client";
 import {DiscordColor} from "../../../structures/Enumerations/Embed";
 import backup from "../../../structures/Managers/backup";
-import guilds from "../../../structures/Managers/guilds";
-
 export default {
     data: new SlashCommandBuilder()
         .setName("backup")
