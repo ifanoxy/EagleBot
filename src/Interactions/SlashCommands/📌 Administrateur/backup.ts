@@ -1,5 +1,6 @@
 import {ChannelType, ChatInputCommandInteraction, EmbedBuilder, HexColorString, SlashCommandBuilder} from "discord.js";
 import {EagleClient} from "../../../structures/Client";
+import * as repl from "repl";
 
 export default {
     data: new SlashCommandBuilder()
@@ -151,7 +152,42 @@ export default {
         await reply.edit({
             embeds: [embed.setDescription(description.join("\n")).setColor(hexColorCharging[4])]
         });
-        console.log(StickerData)
+
+        const BansData = await interaction.guild.bans.fetch().then(bans => {
+            return  bans.map(ban => {
+                i++
+                return {
+                    userId: ban.user.id,
+                    reason: ban.reason,
+                }
+            })
+        });
+
+        description[4] = `Bans: \`${i}\`/\`${interaction.guild.bans.cache.size}\``
+        i = 0;
+        await reply.edit({
+            embeds: [embed.setDescription(description.join("\n")).setColor(hexColorCharging[5])]
+        });
+
+        let backupdata = client.managers.backupManager.getAndCreateIfNotExists(`${interaction.user.id}-${name}`, {
+            userId: interaction.user.id,
+            name: name,
+        });
+        backupdata.guild = {
+            name: interaction.guild.name,
+            ownerId: interaction.guild.ownerId,
+            iconURL: interaction.guild.iconURL() || null,
+        },
+        backupdata.channels =  ChannelsData
+        backupdata.roles = RolesData
+        backupdata.emojis = EmojisData
+        backupdata.bans = BansData
+        backupdata.stickers = StickerData
+        backupdata.save().then(() => {
+            reply.edit({
+                embeds: [embed.setColor(hexColorCharging[6]).setTitle("Création d'une backup | Terminé")]
+            })
+        })
     },
 
     use(interaction: ChatInputCommandInteraction, client: EagleClient) {

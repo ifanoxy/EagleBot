@@ -3,11 +3,16 @@ export default function (database, modelName): Promise<Array<{name: string, type
         const DataTypes = database.DataTypes;
         const data = [
             {
+                name: "id",
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true
+            },
+            {
                 name: "userId",
                 type: DataTypes.STRING(25),
                 allowNull: false,
                 isWhere: true,
-                primaryKey: true
             },
             {
                 name: 'name',
@@ -18,7 +23,7 @@ export default function (database, modelName): Promise<Array<{name: string, type
                 name: 'guild',
                 type: DataTypes.JSON,
                 isValue: true,
-                allowNull: false,
+                allowNull: true,
             },
             {
                 name: 'channels',

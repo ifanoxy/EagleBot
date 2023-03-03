@@ -70,19 +70,21 @@ class DatabaseManager<T> {
         this.wheres = {};
         // @ts-ignore
         this.values = {};
-        this.manager.model.filter(m => m.name !== "id").forEach(v => {
-            switch (v.type.key) {
-                case DataTypes.JSON.key :
-                    v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values)[v.name] = values_[v.name] || !v.default ? JSON.parse(values_[v.name]) : v.default : '';
-                    break
-                case DataTypes.INTEGER.key :
-                    v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values)[v.name] = values_[v.name] || !v.default ? Number(values_[v.name]) : v.default : '';
-                    break
-                default :
-                    v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values)[v.name] = values_[v.name] || !v.default ? values_[v.name] : v.default : '';
-            }
-            this[v.name] = this[v.isWhere ? "wheres" : "values"][v.name];
-        });
+        try {
+            this.manager.model.filter(m => m.name !== "id").forEach(v => {
+                switch (v.type.key) {
+                    case DataTypes.JSON.key :
+                        v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values)[v.name] = values_[v.name] || !v.default ? JSON.parse(values_[v.name]) : v.default : '';
+                        break
+                    case DataTypes.INTEGER.key :
+                        v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values)[v.name] = values_[v.name] || !v.default ? Number(values_[v.name]) : v.default : '';
+                        break
+                    default :
+                        v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values)[v.name] = values_[v.name] || !v.default ? values_[v.name] : v.default : '';
+                }
+                this[v.name] = this[v.isWhere ? "wheres" : "values"][v.name];
+            });
+        } catch (e) {console.log(e)}
         this.values = {...this.wheres, ...this.values};
     }
 

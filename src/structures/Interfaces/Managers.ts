@@ -1,5 +1,4 @@
 import {EmbedData, PermissionOverwrites, PermissionsBitField} from "discord.js";
-import {DataType } from "sequelize";
 import Manager from "../Managers/main";
 import {CommandsType} from "../Enumerations/CommandType";
 
@@ -193,9 +192,10 @@ export interface Antiraid {
 export interface Backup {
     userId: string,
     name: string,
-    guild: {
+    guild?: {
         name: string,
         ownerId: string,
+        iconURL?: string,
     }
     channels?: {
         name: string,
@@ -213,10 +213,31 @@ export interface Backup {
             permissions: PermissionOverwrites[]
         }[]
     }[],
-    roles?: [],
-    emojis?: [],
-    stickers?: [],
-    bans?: [],
+    roles?: {
+        name: string,
+        id: string,
+        color: number,
+        position: number,
+        icon: string,
+        permissions: string,
+        mentionable: boolean
+    }[],
+    emojis?: {
+        name: string,
+        animated: boolean,
+        url:string
+    }[],
+    stickers?: {
+        name: string,
+        description: string,
+        url: string,
+        type: number,
+        format: number
+    }[],
+    bans?: {
+        userId: string,
+        reason: string,
+    }[],
 }
 
 export interface Blacklist {
