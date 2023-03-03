@@ -354,12 +354,12 @@ export default {
             ephemeral: true
         })
         const value = backupData.map(x => `
-        Backup du serveur: \`${x.guild?.name}\`\n
+        Backup du serveur: \`${x.guild?.name}\`
         OwnerId: \`${x.guild?.ownerId}\`
-        Channels: \`${x.channels?.length}\`\n
-        Roles: \`${x.roles?.length}\`\n
-        Emojis: \`${x.emojis?.length}\`\n
-        Stickers: \`${x.stickers?.length}\`\n
+        Channels: \`${x.channels?.length}\`
+        Roles: \`${x.roles?.length}\`
+        Emojis: \`${x.emojis?.length}\`
+        Stickers: \`${x.stickers?.length}\`
         Bans: \`${x.stickers?.length}\``
         )
         const Embed = new EmbedBuilder()
