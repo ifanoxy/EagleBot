@@ -2,10 +2,8 @@ import {
     Client,
     Partials,
     Collection,
-    SnowflakeUtil,
     ChatInputCommandInteraction,
     PermissionsBitField,
-    ForumChannel
 } from "discord.js";
 import Config from "./Interfaces/config"
 import { EagleHandler } from "./Handler/EagleHandler";
@@ -80,6 +78,19 @@ export class EagleClient extends Client {
     isOwner(userId: string) {
         if (userId == this.config.ownerId)return true;
         if (this.managers.ownerManager.getIfExist(userId))return true;
+        else return false;
+    }
+
+    isSnowflake(str: string) {
+        let nbr = Number(str);
+        if (isNaN(nbr))return false;
+        let bin = nbr.toString(2);
+        if (38 > bin.length || bin.length > 64)return false;
+        return true
+    }
+
+    isBlacklist(userId: string) {
+        if (this.managers.blacklistManager.getIfExist(userId))return true;
         else return false;
     }
 

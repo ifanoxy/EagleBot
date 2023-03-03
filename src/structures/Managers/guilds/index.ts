@@ -141,6 +141,8 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     "autoroles": Number(PermissionsBitField.Flags.Administrator),
                     "add-buttonlink": Number(PermissionsBitField.Flags.Administrator),
                     "backup": Number(PermissionsBitField.Flags.Administrator),
+                    "moveall": Number(PermissionsBitField.Flags.Administrator),
+                    "bl": "whitelist",
                 },
             },
             {
