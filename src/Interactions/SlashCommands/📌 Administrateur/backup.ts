@@ -90,10 +90,32 @@ export default {
                 }
             });
         });
+
         description[0] = `channels: \`${i}\`/\`${interaction.guild.channels.cache.size}\``;
         i = 0;
         await reply.edit({
             embeds: [embed.setDescription(description.join("\n")).setColor(hexColorCharging[1])]
+        });
+
+        const RolesData = await interaction.guild.roles.fetch().then(roles => {
+            return roles.map(role => {
+                i++;
+                return {
+                    name: role.name,
+                    id: role.id,
+                    color: role.color,
+                    position: role.position,
+                    icon: role.iconURL(),
+                    permissions: role.permissions.toJSON(),
+                    mentionable: role.mentionable,
+                }
+            })
+        });
+
+        description[1] = `roles: \`${i}\`/\`${interaction.guild.roles.cache.size}\``;
+        i = 0;
+        await reply.edit({
+            embeds: [embed.setDescription(description.join("\n")).setColor(hexColorCharging[2])]
         });
     },
 
