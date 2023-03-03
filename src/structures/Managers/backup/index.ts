@@ -23,7 +23,7 @@ export default function (database, modelName): Promise<Array<{name: string, type
                 name: 'guild',
                 type: DataTypes.JSON,
                 isValue: true,
-                allowNull: true,
+                allowNull: false,
             },
             {
                 name: 'channels',

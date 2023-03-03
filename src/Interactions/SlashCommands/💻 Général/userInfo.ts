@@ -4,7 +4,7 @@ import { DiscordColor } from "../../../structures/Enumerations/Embed";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName("user-info")
+        .setName("userinfo")
         .setDescription("Vous permet d'obtenir des renseignements sur un membre")
         .setDMPermission(false)
         .addUserOption(

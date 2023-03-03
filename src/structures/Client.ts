@@ -3,7 +3,7 @@ import {
     Partials,
     Collection,
     ChatInputCommandInteraction,
-    PermissionsBitField,
+    PermissionsBitField, ChannelType,
 } from "discord.js";
 import Config from "./Interfaces/config"
 import { EagleHandler } from "./Handler/EagleHandler";

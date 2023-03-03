@@ -21,7 +21,7 @@ export default {
             options = filtered;
         }
         await interaction.respond(
-            options.map(choice => ({ name: `${choice.id}`, value: choice.id })),
+            options.map(choice => ({ name: `${choice}`, value: choice })),
         );
     },
     execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
