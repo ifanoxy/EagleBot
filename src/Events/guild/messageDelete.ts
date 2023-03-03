@@ -4,7 +4,7 @@ import {EmbedBuilder, Message} from "discord.js";
 export default {
     name: "messageDelete",
     execute(client: EagleClient, message: Message) {
-        if (message.author.bot)return;
+        if (message.author?.bot)return;
         const channel = client.func.log.isActive(message.guildId, "MessageDelete");
         if (!channel)return;
         channel.send({
