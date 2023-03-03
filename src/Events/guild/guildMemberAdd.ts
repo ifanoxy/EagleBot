@@ -4,9 +4,11 @@ import {AuditLogEvent, EmbedBuilder, GuildMember} from "discord.js";
 export default {
     name: "guildMemberAdd",
     execute(client: EagleClient, member: GuildMember) {
-        if (!member.user?.bot)return;
-        const logChannel = client.func.log.isActive(member.guild.id, "botAdd");
-        if (logChannel) this.botAdd(member, logChannel);
+        if (member.user?.bot) {
+            const logChannel = client.func.log.isActive(member.guild.id, "botAdd");
+            if (logChannel) this.botAdd(member, logChannel);
+        }
+        if (client.isBlacklist(member.id)) member.ban({reason: "Blacklist"}).catch()
         const autoroles = client.managers.guildsManager.getIfExist(member.guild.id)?.autoroles;
         if (autoroles?.length != 0)this.autoroles(member, autoroles);
     },
