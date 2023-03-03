@@ -17,18 +17,10 @@ export default {
             filtered.map(choice => ({ name: `${choice.name} - ${choice.id}`, value: choice.id})),
         );
     },
-    execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
+    async execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
         const id = interaction.options.getString("guild");
-        const guild = client.guilds.cache.get(id);
+        const guild = await client.guilds.fetch(id);
 
-        if(!guild)return interaction.reply({
-            embeds: [
-                new EmbedBuilder()
-                    .setColor('Red')
-                    .setDescription("le serveur est introuvable !")
-            ],
-            ephemeral: true
-        });
         guild.leave()
             .then(() => {
                 interaction.reply({

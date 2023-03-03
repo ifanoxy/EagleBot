@@ -143,6 +143,9 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     "backup": Number(PermissionsBitField.Flags.Administrator),
                     "moveall": Number(PermissionsBitField.Flags.Administrator),
                     "bl": "whitelist",
+                    "unbl": "whitelist",
+                    "bl-list": "whitelist",
+                    "guild-leave": "owner",
                 },
             },
             {

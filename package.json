@@ -21,7 +21,7 @@
   "description": "discord bot multifunction",
   "main": "src/index.ts",
   "scripts": {
-    "run": "ts-node src/index.ts"
+    "run": "ts-node src/index.ts --trace-warnings"
   },
   "author": "Ifanoxy#7183",
   "license": "ISC"

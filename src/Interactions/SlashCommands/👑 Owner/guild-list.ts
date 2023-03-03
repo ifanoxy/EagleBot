@@ -29,6 +29,7 @@ export default {
                                 return {
                                     name: nameArray[x],
                                     value: valueArray[x],
+                                    inline: true
                                 }
                             })
                         )
