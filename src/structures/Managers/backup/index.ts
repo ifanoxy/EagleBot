@@ -10,12 +10,46 @@ export default function (database, modelName): Promise<Array<{name: string, type
                 primaryKey: true
             },
             {
-                name: 'data',
+                name: 'name',
+                type: DataTypes.STRING(25),
+                allowNull: false,
+                isWhere: true,
+            },{
+                name: 'guild',
                 type: DataTypes.JSON,
-                default: [],
-                allowNull: true,
                 isValue: true,
-            }
+                allowNull: false,
+            },
+            {
+                name: 'channels',
+                type: DataTypes.JSON,
+                isValue: true,
+                allowNull: true,
+            },
+            {
+                name: 'roles',
+                type: DataTypes.JSON,
+                isValue: true,
+                allowNull: true,
+            },
+            {
+                name: 'emojis',
+                type: DataTypes.JSON,
+                isValue: true,
+                allowNull: true,
+            },
+            {
+                name: 'stickers',
+                type: DataTypes.JSON,
+                isValue: true,
+                allowNull: true,
+            },
+            {
+                name: 'bans',
+                type: DataTypes.JSON,
+                isValue: true,
+                allowNull: true,
+            },
         ]
         const t = {};
         data.forEach(y => {
