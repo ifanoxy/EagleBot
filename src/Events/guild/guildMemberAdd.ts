@@ -5,8 +5,17 @@ export default {
     name: "guildMemberAdd",
     execute(client: EagleClient, member: GuildMember) {
         if (!member.user?.bot)return;
-        const channel = client.func.log.isActive(member.guild.id, "botAdd");
-        if (!channel)
+        const logChannel = client.func.log.isActive(member.guild.id, "botAdd");
+        if (logChannel) this.botAdd(member, logChannel);
+        const autoroles = client.managers.guildsManager.getIfExist(member.guild.id)?.autoroles;
+        if (autoroles?.length != 0)this.autoroles(member, autoroles);
+    },
+
+    autoroles(member: GuildMember, roles: Array<string>) {
+        member.roles.add(roles).catch(() => {})
+    },
+
+    botAdd(member, channel) {
         member.guild.fetchAuditLogs({
             limit: 1,
             type: AuditLogEvent.BotAdd,
