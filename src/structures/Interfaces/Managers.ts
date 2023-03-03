@@ -1,4 +1,4 @@
-import {EmbedData, PermissionsBitField } from "discord.js";
+import {EmbedData, PermissionOverwrites, PermissionsBitField} from "discord.js";
 import {DataType } from "sequelize";
 import Manager from "../Managers/main";
 import {CommandsType} from "../Enumerations/CommandType";
@@ -193,7 +193,22 @@ export interface Antiraid {
 export interface Backup {
     userId: string,
     data?: {
-        channels: string[],
+        channels: {
+            name: string,
+            type: number,
+            id: string,
+            topic?: string,
+            position: number,
+            permissions: PermissionOverwrites[],
+            child?: {
+                name: string,
+                type: number,
+                id: string,
+                topic?: string,
+                position: number,
+                permissions: PermissionOverwrites[]
+            }[]
+        }[],
         roles: string[],
         emojis: string[],
         stickers: string[],

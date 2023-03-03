@@ -25,7 +25,8 @@ export default {
                     .setTitle(`Logs | ${this.name}`)
                     .setDescription(
                         `**Pin par :** <@${audit.executor.id}>\n\n`+
-                        `**Contenu du message :**\n\`\`\`${await channel.messages.fetch(audit.extra.messageId).content}\`\`\``
+                        `**Lien vers le message :** ${(await channel.messages.fetch(audit.extra.messageId)).url}\n\n`+
+                        `**Contenu du message :**\n\`\`\`${(await channel.messages.fetch(audit.extra.messageId)).content || "ne contient pas de texte"}\`\`\``
                     )
             ]
         });
@@ -39,7 +40,8 @@ export default {
                     .setTitle(`Logs | ${this.name}`)
                     .setDescription(
                         `**unPin par :** <@${audit.executor.id}>\n\n`+
-                        `**Contenu du message :**\n\`\`\`${await channel.messages.fetch(audit.extra.messageId).content}\`\`\``
+                        `**Lien vers le message :** ${(await channel.messages.fetch(audit.extra.messageId)).url}\n\n`+
+                        `**Contenu du message :**\n\`\`\`${(await channel.messages.fetch(audit.extra.messageId)).content || "ne contient pas de texte"}\`\`\``
                     )
             ]
         });
