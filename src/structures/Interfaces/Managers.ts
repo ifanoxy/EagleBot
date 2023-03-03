@@ -192,28 +192,31 @@ export interface Antiraid {
 
 export interface Backup {
     userId: string,
-    data?: {
-        channels: {
+    name: string,
+    guild: {
+        name: string,
+        ownerId: string,
+    }
+    channels?: {
+        name: string,
+        type: number,
+        id: string,
+        topic?: string,
+        position: number,
+        permissions: PermissionOverwrites[],
+        child?: {
             name: string,
             type: number,
             id: string,
             topic?: string,
             position: number,
-            permissions: PermissionOverwrites[],
-            child?: {
-                name: string,
-                type: number,
-                id: string,
-                topic?: string,
-                position: number,
-                permissions: PermissionOverwrites[]
-            }[]
-        }[],
-        roles: string[],
-        emojis: string[],
-        stickers: string[],
-        bans: string[],
-    }
+            permissions: PermissionOverwrites[]
+        }[]
+    }[],
+    roles?: [],
+    emojis?: [],
+    stickers?: [],
+    bans?: [],
 }
 
 export interface Blacklist {
