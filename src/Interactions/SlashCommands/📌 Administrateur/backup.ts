@@ -48,7 +48,7 @@ export default {
             sticker: x.stickers?.length || 0,
             bans: x.bans?.length || 0,
         }))
-        const filtered = choices.filter(choice => choice.name.includes(focusedValue) || choice.guild.includes(focusedValue));
+        const filtered = choices.filter(choice => choice.name.includes(focusedValue) || choice.guild.includes(focusedValue)).slice(0, 25);
         await interaction.respond(
             filtered.map(choice => ({ name: `${choice.name} - ${choice.guild} | ${choice.chn} Channels / ${choice.roles} Roles / ${choice.sticker} Stickers / ${choice.emojis} Emojis / ${choice.bans} bans`, value: choice.name })),
         );
