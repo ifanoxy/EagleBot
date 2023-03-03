@@ -9,6 +9,7 @@ import {
 import {EagleClient} from "../../../structures/Client";
 import {DiscordColor} from "../../../structures/Enumerations/Embed";
 import backup from "../../../structures/Managers/backup";
+import guilds from "../../../structures/Managers/guilds";
 
 export default {
     data: new SlashCommandBuilder()
@@ -202,6 +203,11 @@ export default {
         let backupdata = client.managers.backupManager.getAndCreateIfNotExists(`${interaction.user.id}-${name}`, {
             userId: interaction.user.id,
             name: name,
+            guild: {
+                name: interaction.guild.name,
+                ownerId: interaction.guild.ownerId,
+                iconURL: interaction.guild.iconURL() || null,
+            }
         });
         backupdata.userId = interaction.user.id;
         backupdata.name = name;
@@ -229,66 +235,73 @@ export default {
             name: backupData.guild.name + " | Backup",
             icon: backupData.guild.iconURL,
         }).then(async guild => {
-            backupData.emojis.forEach(emoji => {
+            await Promise.all(
+                guild.channels.cache.map(chn => chn.delete())
+            )
+            backupData.emojis.map(emoji => {
                 guild.emojis.create({
                     name: emoji.name,
                     attachment: emoji.url,
                 }).catch()
-            });
-            backupData.stickers.forEach(sticker => {
+            })
+            backupData.stickers.map(sticker => {
                 guild.stickers.create({
                     tags: sticker.tags,
                     name: sticker.name,
                     description: sticker.description,
                     file: sticker.url
                 }).catch()
-            });
-            backupData.channels.map(channel => {
-                if (channel.child) {
-                    guild.channels.create({
-                        name: channel.name,
-                        position: channel.position,
-                        type: channel.type,
-                        permissionOverwrites: channel.permissions,
-                        topic: channel.topic
-                    }).then((parent: CategoryChannel) => {
-                        channel.child.map(child => {
-                            guild.channels.create({
-                                name: child.name,
-                                parent: parent,
-                                topic: child.topic,
-                                position: child.position,
-                                type: child.type,
-                                permissionOverwrites: child.permissions,
+            })
+            await Promise.all(
+                backupData.channels.map(async channel => {
+                    if (channel.children) {
+                        return await guild.channels.create({
+                            name: channel.name,
+                            position: channel.position,
+                            type: channel.type,
+                            permissionOverwrites: channel.permissions,
+                            topic: channel.topic
+                        }).then(async (parent: CategoryChannel) => {
+                            return channel.children.map(async child => {
+                                return await guild.channels.create({
+                                    name: child.name,
+                                    parent: parent.id,
+                                    topic: child.topic,
+                                    position: child.position,
+                                    type: child.type,
+                                    permissionOverwrites: child.permissions,
+                                })
                             })
                         })
-                    })
-                } else {
-                    guild.channels.create({
-                        name: channel.name,
-                        topic: channel.topic,
-                        position: channel.position,
-                        type: channel.type,
-                        permissionOverwrites: channel.permissions,
-                    })
-                };
-            });
-            backupData.roles.sort(x => x.position).map(role => {
-                guild.roles.create({
-                    name: role.name,
-                    position: role.position,
-                    // @ts-ignore
-                    permissions: new PermissionsBitField(role.permissions),
-                    color: role.color,
-                    mentionable: role.mentionable,
+                    } else {
+                        return await guild.channels.create({
+                            name: channel.name,
+                            topic: channel.topic,
+                            position: channel.position,
+                            type: channel.type,
+                            permissionOverwrites: channel.permissions,
+                        })
+                    }
                 })
-            });
-            console.log(backupData.bans)
+            )
+            await Promise.all(
+                backupData.roles.sort((a, b) => b.position - a.position).map(async role => {
+                    return await guild.roles.create({
+                        name: role.name,
+                        position: role.position,
+                        // @ts-ignore
+                        permissions: new PermissionsBitField(role.permissions),
+                        color: role.color,
+                        mentionable: role.mentionable,
+                    })
+                })
+            )
+
             backupData.bans.forEach(ban => {
                 guild.bans.create(ban.userId, {reason: ban.reason}).catch()
             });
 
-            interaction.editReply({
+            await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setTitle("Le serveur à été créer avec succès !")
@@ -298,6 +311,22 @@ export default {
                         .setTimestamp()
                 ]
             })
+
+            function OwnerAdd(stop = false) {
+                if (stop)return;
+                client.once("guildMemberAdd", (member) => {
+                    if (member.guild.id != guild.id)return OwnerAdd();
+                    if (member.id == backupData.guild.ownerId) guild.setOwner(member)
+                    else OwnerAdd();
+                });
+            }
+            OwnerAdd()
+
+            setTimeout(() => {
+                if (guild.ownerId == client.user.id)
+                    guild.delete();
+                OwnerAdd(true)
+            }, 5 * 60 * 1000)
         })
     },
 

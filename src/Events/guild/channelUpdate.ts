@@ -5,6 +5,7 @@ export default {
     name: "channelUpdate",
     execute(client: EagleClient, oldChannel: GuildChannel | null, newChannel: GuildChannel) {
         const channel = client.func.log.isActive(newChannel.guildId, "ChannelUpdate");
+        if (!channel)return;
         let changement: {
             name?: {
                 old: any,

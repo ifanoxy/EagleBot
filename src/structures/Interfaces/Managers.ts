@@ -204,7 +204,7 @@ export interface Backup {
         topic?: string,
         position: number,
         permissions: PermissionOverwrites[],
-        child?: {
+        children?: {
             name: string,
             type: number,
             id: string,

@@ -74,7 +74,7 @@ class DatabaseManager<T> {
             this.manager.model.filter(m => m.name !== "id").forEach(v => {
                 switch (v.type.key) {
                     case DataTypes.JSON.key :
-                        v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values)[v.name] = values_[v.name] || !v.default ? JSON.parse(values_[v.name]) : v.default : '';
+                        v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values)[v.name] = values_[v.name] || !v.default ? (typeof values_[v.name] == "object" ? values_[v.name] : JSON.parse(values_[v.name])) : v.default : '';
                         break
                     case DataTypes.INTEGER.key :
                         v.isWhere || v.isValue ? (v.isWhere ? this.wheres : this.values)[v.name] = values_[v.name] || !v.default ? Number(values_[v.name]) : v.default : '';
