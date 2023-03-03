@@ -36,10 +36,10 @@ export default {
                 .setStyle(ButtonStyle.Secondary)
                 .setLabel("Page suivante ⏩"),
             new ButtonBuilder()
-                .setCustomId("[no-check]logs")
+                .setCustomId("[no-check]logs2")
                 .setStyle(ButtonStyle.Secondary)
                 .setDisabled(true)
-                .setLabel(" "),
+                .setLabel("‎‎"),
             new ButtonBuilder()
                 .setCustomId("[no-check]logs#finish")
                 .setStyle(ButtonStyle.Secondary)
