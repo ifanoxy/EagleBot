@@ -224,15 +224,13 @@ export interface Backup {
     }[],
     emojis?: {
         name: string,
-        animated: boolean,
         url:string
     }[],
     stickers?: {
         name: string,
         description: string,
         url: string,
-        type: number,
-        format: number
+        tags: string,
     }[],
     bans?: {
         userId: string,

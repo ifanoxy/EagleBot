@@ -56,7 +56,7 @@ export default {
         interaction.reply({
             embeds: [
                 new EmbedBuilder()
-                    .setColor("Blurple")
+                    .setColor("Red")
                     .setDescription(`Vous avez ajouté l'identifiant \`${id}\` à la blacklist`)
             ]
         });

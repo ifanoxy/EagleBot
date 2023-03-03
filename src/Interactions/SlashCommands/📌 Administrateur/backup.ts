@@ -1,6 +1,14 @@
-import {ChannelType, ChatInputCommandInteraction, EmbedBuilder, HexColorString, SlashCommandBuilder} from "discord.js";
+import {
+    AutocompleteInteraction,
+    ChannelType,
+    ChatInputCommandInteraction,
+    EmbedBuilder,
+    HexColorString,
+    SlashCommandBuilder
+} from "discord.js";
 import {EagleClient} from "../../../structures/Client";
 import * as repl from "repl";
+import {BIGINT} from "sequelize";
 
 export default {
     data: new SlashCommandBuilder()
@@ -28,6 +36,24 @@ export default {
         .addSubcommand(sub =>
             sub.setName('list').setDescription("permet de voir la liste des backup")
         ),
+    async autocomplete(interaction: AutocompleteInteraction, client: EagleClient) {
+        const focusedValue = interaction.options.getFocused();
+        const backupData = client.managers.backupManager.map(x => x).filter(x => x.userId == interaction.user.id);
+        const choices = backupData.map(x => ({
+            name: x.name,
+            guild: x.guild.name,
+            chn: x.channels?.length || 0,
+            roles: x.roles?.length || 0,
+            emojis: x.emojis?.length || 0,
+            sticker: x.stickers?.length || 0,
+            bans: x.bans?.length || 0,
+        }))
+        const filtered = choices.filter(choice => choice.name.includes(focusedValue) || choice.guild.includes(focusedValue));
+        await interaction.respond(
+            filtered.map(choice => ({ name: `${choice.name} - ${choice.guild} | ${choice.chn} Channels / ${choice.roles} Roles / ${choice.sticker} Stickers / ${choice.emojis} Emojis / ${choice.bans} bans`, value: choice.name })),
+        );
+    },
+
     execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
         this[interaction.options.getSubcommand()](interaction, client)
     },
@@ -52,6 +78,7 @@ export default {
             fetchReply: true
         });
         let i = 0;
+        let time = Date.now();
         const ChannelsData = await interaction.guild.channels.fetch().then(channels => {
             return channels.filter(x => x.type == ChannelType.GuildCategory || !x.parent).map(channel => {
                 i++;
@@ -90,8 +117,9 @@ export default {
             });
         });
 
-        description[0] = `Channels: \`${i}\`/\`${interaction.guild.channels.cache.size}\``;
+        description[0] = `Channels: \`${i}\`/\`${interaction.guild.channels.cache.size}\` *${time - Date.now()}ms*`;
         i = 0;
+        time = Date.now();
         await reply.edit({
             embeds: [embed.setDescription(description.join("\n")).setColor(hexColorCharging[1])]
         });
@@ -111,8 +139,9 @@ export default {
             })
         });
 
-        description[1] = `roles: \`${i}\`/\`${interaction.guild.roles.cache.size}\``;
+        description[1] = `roles: \`${i}\`/\`${interaction.guild.roles.cache.size}\` *${time - Date.now()}ms*`;
         i = 0;
+        time = Date.now();
         await reply.edit({
             embeds: [embed.setDescription(description.join("\n")).setColor(hexColorCharging[2])]
         });
@@ -122,14 +151,14 @@ export default {
                 i++;
                 return {
                     name: emoji.name,
-                    animated: emoji.animated,
                     url: emoji.url
                 }
             })
         });
 
-        description[2] = `Émojis: \`${i}\`/\`${interaction.guild.emojis.cache.size}\``;
+        description[2] = `Émojis: \`${i}\`/\`${interaction.guild.emojis.cache.size}\` *${time - Date.now()}ms*`;
         i = 0;
+        time = Date.now();
         await reply.edit({
             embeds: [embed.setDescription(description.join("\n")).setColor(hexColorCharging[3])]
         });
@@ -141,14 +170,14 @@ export default {
                     name: sticker.name,
                     description: sticker.description,
                     url: sticker.url,
-                    type: sticker.type,
-                    format: sticker.format
+                    tags: sticker.tags,
                 }
             })
         })
 
-        description[3] = `Stickers: \`${i}\`/\`${interaction.guild.stickers.cache.size}\``;
+        description[3] = `Stickers: \`${i}\`/\`${interaction.guild.stickers.cache.size}\` *${time - Date.now()}ms*`;
         i = 0;
+        time = Date.now();
         await reply.edit({
             embeds: [embed.setDescription(description.join("\n")).setColor(hexColorCharging[4])]
         });
@@ -163,8 +192,9 @@ export default {
             })
         });
 
-        description[4] = `Bans: \`${i}\`/\`${interaction.guild.bans.cache.size}\``
+        description[4] = `Bans: \`${i}\`/\`${interaction.guild.bans.cache.size}\` *${time - Date.now()}ms*`
         i = 0;
+        time = Date.now();
         await reply.edit({
             embeds: [embed.setDescription(description.join("\n")).setColor(hexColorCharging[5])]
         });
@@ -191,7 +221,32 @@ export default {
     },
 
     use(interaction: ChatInputCommandInteraction, client: EagleClient) {
-
+        const backupData = client.managers.backupManager.getIfExist(`${interaction.user.id}-${interaction.options.getString("nom")}`);
+        client.guilds.create({
+            name: backupData.guild.name,
+            icon: backupData.guild.iconURL,
+            channels: backupData.channels,
+            //@ts-ignore
+            roles: backupData.roles,
+        }).then(guild => {
+            backupData.emojis.forEach(emoji => {
+                guild.emojis.create({
+                    name: emoji.name,
+                    attachment: emoji.url,
+                }).catch()
+            });
+            backupData.stickers.forEach(sticker => {
+                guild.stickers.create({
+                    tags: sticker.tags,
+                    name: sticker.name,
+                    description: sticker.description,
+                    file: sticker.url
+                }).catch()
+            });
+            backupData.bans.forEach(ban => {
+                guild.bans.create(ban.userId, {reason: ban.reason}).catch()
+            });
+        })
     },
 
     delete(interaction: ChatInputCommandInteraction, client: EagleClient) {

@@ -3,7 +3,7 @@ import {AuditLogEvent, EmbedBuilder, GuildEmoji} from "discord.js";
 
 export default {
     name: "emojiDelete",
-    interaction(client: EagleClient, emoji: GuildEmoji) {
+    execute(client: EagleClient, emoji: GuildEmoji) {
         const channel = client.func.log.isActive(emoji.guild.id, "EmojiDelete");
         if (!channel)return;
         emoji.guild.fetchAuditLogs({
