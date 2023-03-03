@@ -148,6 +148,7 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     "bl": "whitelist",
                     "unbl": "whitelist",
                     "bl-list": "whitelist",
+                    "role-everyone": "whitelist",
                     "guild-leave": "owner",
                 },
             },
