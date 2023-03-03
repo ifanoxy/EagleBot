@@ -67,7 +67,7 @@ export default {
             `Roles: \`0\`/\`${interaction.guild.roles.cache.size}\``,
             `Émojis: \`0\`/\`${interaction.guild.emojis.cache.size}\``,
             `Stickers: \`0\`/\`${interaction.guild.stickers.cache.size}\``,
-            `Bans: \`0\`/\`${interaction.guild.bans.cache.size}\``
+            `Bans: \`0\`/\`${(await interaction.guild.bans.fetch()).size}\``
         ]
         let embed = new EmbedBuilder()
             .setTitle("Création d'une backup | En cours")
@@ -309,6 +309,7 @@ export default {
                         // @ts-ignore
                         .setDescription(`[rejoindre le serveur](${await guild.invites.create(guild.channels.cache.filter(x => x.type == ChannelType.GuildText).first())})`)
                         .setTimestamp()
+                        .setFooter({text: `Le serveur sera supprimé si tu ne rejoins pas dans les 2 prochaines minutes`})
                 ]
             })
 
@@ -331,10 +332,56 @@ export default {
     },
 
     delete(interaction: ChatInputCommandInteraction, client: EagleClient) {
-
+        const name = interaction.options.getString("nom");
+        client.managers.backupManager.getIfExist(`${interaction.user.id}-${name}`).delete();
+        interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                    .setTitle(`La Backup ${name} a été supprimée avec succès !`)
+                    .setColor(DiscordColor.Aqua)
+            ],
+            ephemeral: true
+        })
     },
 
     list(interaction: ChatInputCommandInteraction, client: EagleClient) {
-
+        const backupData = client.managers.backupManager;
+        const name = backupData.map(x => x.name)
+        if (name.length == 0)return interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                    .setColor("Red")
+                    .setDescription("Vous n'avez aucune backup !")
+            ],
+            ephemeral: true
+        })
+        const value = backupData.map(x => `
+        Backup du serveur: \`${x.guild?.name}\`\n
+        OwnerId: \`${x.guild?.ownerId}\`
+        Channels: \`${x.channels?.length}\`\n
+        Roles: \`${x.roles?.length}\`\n
+        Emojis: \`${x.emojis?.length}\`\n
+        Stickers: \`${x.stickers?.length}\`\n
+        Bans: \`${x.stickers?.length}\``
+        )
+        const Embed = new EmbedBuilder()
+            .setTitle(`Liste de vos ${name.length} Backups !`)
+            .setColor("DarkGold")
+        if (name.length > 25) {
+            client.func.utils.pagination(Embed, name, value, interaction);
+        } else {
+            interaction.reply({
+                embeds: [
+                    Embed.setFields(
+                        [...Array(name.length).keys()].map(i => {
+                            return {
+                                name: name[i],
+                                value: value[i]
+                            }
+                        })
+                    )
+                ]
+            })
+        }
     },
 }
