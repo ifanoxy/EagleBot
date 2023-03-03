@@ -60,5 +60,22 @@ export default {
                     .setDescription(`Vous avez ajouté l'identifiant \`${id}\` à la blacklist`)
             ]
         });
+
+        const channelLog = client.func.log.isActive(interaction.guildId, "BlackListUpdate");
+        if (channelLog) this.log(interaction, id, channelLog);
+    },
+
+    log(interaction, userId, channel) {
+        channel.send({
+            embeds: [
+                new EmbedBuilder().setColor("#2f3136").setTimestamp()
+                    .setTitle(`Logs | Blacklist Add`)
+                    .setDescription(
+                        `**Membre Ajouté:** <@${userId}>\n\n` +
+                        `**Raison:** <@${interaction.options.getString("raison") || "pas de raison"}>\n\n` +
+                        `**Ajouté par:** <@${interaction.user.id}>`
+                    )
+            ]
+        });
     }
 }
