@@ -37,11 +37,11 @@ export default {
         const name = interaction.options.getString("nom");
         const hexColorCharging: HexColorString[] = ["#212748", "#114870", "#006998", "#008da5", "#00b0b1", "#2cd19c", "#57f287"];
         let description = [
-            `channels: \`0\`/\`${interaction.guild.channels.cache.size}\``,
-            `roles: \`0\`/\`${interaction.guild.roles.cache.size}\``,
-            `émojis: \`0\`/\`${interaction.guild.emojis.cache.size}\``,
-            `stickers: \`0\`/\`${interaction.guild.stickers.cache.size}\``,
-            `bans: \`0\`/\`${interaction.guild.bans.cache.size}\``
+            `Channels: \`0\`/\`${interaction.guild.channels.cache.size}\``,
+            `Roles: \`0\`/\`${interaction.guild.roles.cache.size}\``,
+            `Émojis: \`0\`/\`${interaction.guild.emojis.cache.size}\``,
+            `Stickers: \`0\`/\`${interaction.guild.stickers.cache.size}\``,
+            `Bans: \`0\`/\`${interaction.guild.bans.cache.size}\``
         ]
         let embed = new EmbedBuilder()
             .setTitle("Création d'une backup | En cours")
@@ -91,7 +91,7 @@ export default {
             });
         });
 
-        description[0] = `channels: \`${i}\`/\`${interaction.guild.channels.cache.size}\``;
+        description[0] = `Channels: \`${i}\`/\`${interaction.guild.channels.cache.size}\``;
         i = 0;
         await reply.edit({
             embeds: [embed.setDescription(description.join("\n")).setColor(hexColorCharging[1])]
@@ -117,6 +117,26 @@ export default {
         await reply.edit({
             embeds: [embed.setDescription(description.join("\n")).setColor(hexColorCharging[2])]
         });
+
+        const EmojisData = await interaction.guild.emojis.fetch().then(emojis => {
+            return emojis.map(emoji => {
+                i++;
+                return {
+                    name: emoji.name,
+                    id: emoji.id,
+                    animated: emoji.animated,
+                    url: emoji.url
+                }
+            })
+        });
+
+        description[2] = `Émojis: \`${i}\`/\`${interaction.guild.emojis.cache.size}\``;
+        i = 0;
+        await reply.edit({
+            embeds: [embed.setDescription(description.join("\n")).setColor(hexColorCharging[3])]
+        });
+
+        const StickerData = await interaction.guild.stickers.fetch()
     },
 
     use(interaction: ChatInputCommandInteraction, client: EagleClient) {
