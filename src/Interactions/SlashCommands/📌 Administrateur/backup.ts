@@ -1,7 +1,5 @@
 import {ChannelType, ChatInputCommandInteraction, EmbedBuilder, HexColorString, SlashCommandBuilder} from "discord.js";
 import {EagleClient} from "../../../structures/Client";
-import {Backup} from "../../../structures/Interfaces/Managers";
-import * as repl from "repl";
 
 export default {
     data: new SlashCommandBuilder()
@@ -123,7 +121,6 @@ export default {
                 i++;
                 return {
                     name: emoji.name,
-                    id: emoji.id,
                     animated: emoji.animated,
                     url: emoji.url
                 }
@@ -136,7 +133,25 @@ export default {
             embeds: [embed.setDescription(description.join("\n")).setColor(hexColorCharging[3])]
         });
 
-        const StickerData = await interaction.guild.stickers.fetch()
+        const StickerData = await interaction.guild.stickers.fetch().then(stickers => {
+            return stickers.map(sticker => {
+                i++;
+                return {
+                    name: sticker.name,
+                    description: sticker.description,
+                    url: sticker.url,
+                    type: sticker.type,
+                    format: sticker.format
+                }
+            })
+        })
+
+        description[3] = `Stickers: \`${i}\`/\`${interaction.guild.stickers.cache.size}\``;
+        i = 0;
+        await reply.edit({
+            embeds: [embed.setDescription(description.join("\n")).setColor(hexColorCharging[4])]
+        });
+        console.log(StickerData)
     },
 
     use(interaction: ChatInputCommandInteraction, client: EagleClient) {
