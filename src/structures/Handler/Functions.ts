@@ -29,8 +29,15 @@ export default class FunctionHandler {
     }
 
     startFonction(list, client) {
+        list.filter(x => !x.repeat).map(file => {
+            try {
+                file.execute(client)
+            } catch (err) {
+                client.error(err)
+            }
+        })
         setInterval(function myFunction() {
-            list.map(file => {
+            list.filter(x => x.repeat).map(file => {
                 try {
                     file.execute(client)
                 } catch (err) {

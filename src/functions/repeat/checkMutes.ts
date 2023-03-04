@@ -4,6 +4,7 @@ import { EmbedBuilder } from "discord.js";
 
 export default  {
     name: "checkMute",
+    repeat: true,
     execute(client: EagleClient) {
         const mutesData = client.managers.muteManager.map(m => m.values)
         console.log(chalk.green.bold("[Eagle BOT - Functions]") + chalk.magenta("Checking mutes peoples..."));

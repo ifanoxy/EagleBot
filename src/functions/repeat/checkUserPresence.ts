@@ -4,12 +4,14 @@ import { EagleClient } from "../../structures/Client";
 
 export default {
     name: "presenceRole",
+    repeat: false,
     execute(client: EagleClient) {
         const guildsData = client.managers.guildsManager.map(m => m.values).filter(p => p.presenceRole.roleId)
         console.log(chalk.green.bold("[Eagle BOT - Fonctions]") + chalk.magenta("Checking Presence Role..."));
 
         for (let guildData of guildsData) {
             const guild = client.guilds.cache.get(guildData.guildId);
+            if (!guild)return;
             guild.members.fetch({
                 withPresences: true
             }).then(members => {
