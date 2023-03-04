@@ -29,5 +29,6 @@ export default {
                 })
             })
         })
+        interaction.message.delete();
     }
 }
