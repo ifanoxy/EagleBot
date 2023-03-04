@@ -149,6 +149,7 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     "copy-emoji": Number(PermissionsBitField.Flags.Administrator),
                     formulaire: Number(PermissionsBitField.Flags.Administrator),
                     "presence-role": Number(PermissionsBitField.Flags.Administrator),
+                    "greet-ping": Number(PermissionsBitField.Flags.Administrator),
                     bl: "whitelist",
                     unbl: "whitelist",
                     "bl-list": "whitelist",
