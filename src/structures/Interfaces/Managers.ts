@@ -62,7 +62,7 @@ export interface Members {
 
 export interface Lastname {
     userId: string
-    namelist?: string[]
+    namelist?: Array<Array<string | number>>
 }
 
 export interface Antiraid {
