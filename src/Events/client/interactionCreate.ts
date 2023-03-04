@@ -1,5 +1,4 @@
-import {AutocompleteInteraction, BaseInteraction, ButtonInteraction,
-    ChatInputCommandInteraction, EmbedBuilder, PermissionsBitField, StringSelectMenuInteraction } from "discord.js";
+import {ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
 import { EagleClient } from "../../structures/Client";
 
 export default {
@@ -9,7 +8,7 @@ export default {
             case interaction.isAnySelectMenu() : {
                 if (interaction.customId.startsWith("[no-check]")) return;
 
-                const file = require(`../../Interactions/selectmenu/${interaction.customId.split("#")[0]}.js`);
+                const file = require(`../../Interactions/Selectmenus/${interaction.customId.split("#")[0]}.ts`);
                 if (!file) return interaction.reply({
                     embeds: [
                         new EmbedBuilder()
@@ -40,7 +39,7 @@ export default {
             case interaction.isButton() : {
                 if (interaction.customId.startsWith("[no-check]")) return;
 
-                const file = require(`../../Interactions/button/${interaction.customId.split("#")[0]}.js`);
+                const file = require(`../../Interactions/Buttons/${interaction.customId.split("#")[0]}.ts`);
 
                 if (!file) return interaction.reply({
                     embeds: [
@@ -102,7 +101,7 @@ export default {
             case interaction.isModalSubmit() : {
                 if (interaction.customId.startsWith("[no-check]")) return;
 
-                const file = require(`../../Interactions/modal/${interaction.customId.split("#")[0]}.js`);
+                const file = require(`../../Interactions/Modals/${interaction.customId.split("#")[0]}.ts`);
                 if (!file) return interaction.reply({
                     embeds: [
                         new EmbedBuilder()
