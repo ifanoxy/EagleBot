@@ -1,5 +1,5 @@
 import {EagleClient} from "../../structures/Client";
-import {AuditLogEvent, EmbedBuilder, GuildMember} from "discord.js";
+import {AuditLogEvent, EmbedBuilder, GuildMember, TextChannel} from "discord.js";
 
 export default {
     name: "guildMemberAdd",
@@ -9,8 +9,20 @@ export default {
             if (logChannel) this.botAdd(member, logChannel);
         }
         if (client.isBlacklist(member.id)) member.ban({reason: "Blacklist"}).catch()
-        const autoroles = client.managers.guildsManager.getIfExist(member.guild.id)?.autoroles;
-        if (autoroles?.length != 0)this.autoroles(member, autoroles);
+        const guildData = client.managers.guildsManager.getIfExist(member.guild.id);
+        if (!guildData)return;
+        if (guildData?.autoroles?.length != 0)this.autoroles(member, guildData.autoroles);
+        if (guildData?.greetPing?.status) this.greetPing(member, guildData.greetPing)
+    },
+
+    async greetPing(member: GuildMember, Data) {
+        for (let channel of Data.channels) {
+            ((await member.guild.channels.fetch(channel)) as TextChannel).send(`<@${member.id}>`).then(msg => {
+                setTimeout(() => {
+                    msg.delete()
+                }, 200)
+            })
+        }
     },
 
     autoroles(member: GuildMember, roles: Array<string>) {
