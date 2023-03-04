@@ -150,6 +150,7 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     formulaire: Number(PermissionsBitField.Flags.Administrator),
                     "presence-role": Number(PermissionsBitField.Flags.Administrator),
                     "greet-ping": Number(PermissionsBitField.Flags.Administrator),
+                    "ticket": Number(PermissionsBitField.Flags.Administrator),
                     bl: "whitelist",
                     unbl: "whitelist",
                     "bl-list": "whitelist",
