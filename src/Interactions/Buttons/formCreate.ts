@@ -1,16 +1,17 @@
-const { ButtonInteraction, ModalBuilder, TextInputBuilder, EmbedBuilder, ActionRowBuilder } = require("discord.js");
-const { EagleClient } = require("../../structures/Client");
+import {
+    ActionRowBuilder,
+    ButtonInteraction,
+    EmbedBuilder,
+    ModalBuilder,
+    TextChannel,
+    TextInputBuilder
+} from "discord.js";
+import {EagleClient} from "../../structures/Client";
 
-module.exports = {
-    /**
-     *
-     * @param {ButtonInteraction} interaction
-     * @param {EagleClient} client
-     */
-    async execute(interaction, client) {
-        var guildData = client.managers.guildsManager.getIfExist(interaction.guildId, {
-            guildId: interaction.guildId,
-        });
+
+export default {
+    async execute(interaction: ButtonInteraction, client: EagleClient) {
+        var guildData = client.managers.guildsManager.getIfExist(interaction.guildId);
         if (!guildData) return interaction.reply({content: "Il y a un problème avec ce formulaire !"});
 
         const formData = guildData.form[interaction.customId.split('#')[1]];
@@ -24,7 +25,7 @@ module.exports = {
         let i = 0;
         for (let TextInputData of formData.data) {
             formModal.addComponents(
-                new ActionRowBuilder().addComponents(
+                new ActionRowBuilder<TextInputBuilder>().addComponents(
                     new TextInputBuilder()
                         .setStyle(TextInputData.style)
                         .setLabel(TextInputData.question)
@@ -61,7 +62,7 @@ module.exports = {
                             )
                             i++;
                         }
-                        channel.send({
+                        (channel as TextChannel).send({
                             embeds: [formEmbed]
                         })
                         modalInter.reply({
@@ -77,8 +78,5 @@ module.exports = {
                         guildData.save()
                     })
             })
-        /**
-         channel: form_sendchannel
-         */
     }
 }

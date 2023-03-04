@@ -295,13 +295,17 @@ export interface Guilds {
         [key: string]: number | string,
     }
     form?: {
-        [key: string]: Array<{
-            question: string,
-            style: number,
-            required: boolean,
-            max: number,
-            min: number,
-        }>
+        [key: string]: {
+            channel: string,
+            data:
+                Array<{
+                    question: string,
+                    style: number,
+                    required: boolean,
+                    max: number,
+                    min: number,
+                }>
+        }
     },
     muteRoleId?: string,
     autoroles?: Array<string>,
