@@ -12,7 +12,8 @@ export default {
         const guildData = client.managers.guildsManager.getIfExist(member.guild.id);
         if (!guildData)return;
         if (guildData?.autoroles?.length != 0)this.autoroles(member, guildData.autoroles);
-        if (guildData?.greetPing?.status) this.greetPing(member, guildData.greetPing)
+        if (guildData?.greetPing?.status) this.greetPing(member, guildData.greetPing);
+        if (guildData?.join?.channelId) client.func.mod.sendJoinMessage(member.guild.id, member);
     },
 
     async greetPing(member: GuildMember, Data) {
