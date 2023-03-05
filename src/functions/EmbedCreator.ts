@@ -16,6 +16,7 @@ export default class EmbedCreator {
     }
 
     askBase(interaction, CreatorEmbed, CreatorModal) {
+        if (!interaction)return;
         return interaction.update({
             embeds: [
                 CreatorEmbed
@@ -27,7 +28,8 @@ export default class EmbedCreator {
                         .setLabel("Ouvrir le modal")
                         .setStyle(ButtonStyle.Secondary)
                 )
-            ]
+            ],
+            fetchReply: true
         })
             .then(msg => {
                 return this.func.utils.askWithButton(msg)
@@ -87,6 +89,7 @@ export default class EmbedCreator {
                     ),
                 ),
         );
+        if (!interactionModal) return {embed: embed, interaction: interactionModal}
         embed.setAuthor({
             name: interactionModal.fields.getTextInputValue("name"),
             iconURL: interactionModal.fields.getTextInputValue("iconURL") || null,
@@ -118,6 +121,7 @@ export default class EmbedCreator {
                     ),
                 ),
         );
+        if (!interactionModal) return {embed: embed, interaction: interactionModal}
         embed.setURL(interactionModal.fields.getTextInputValue("titre_url") || null);
         embed.setTitle(interactionModal.fields.getTextInputValue("titre"));
         return {embed: embed, interaction: interactionModal };
@@ -141,6 +145,7 @@ export default class EmbedCreator {
                     ),
                 ),
         );
+        if (!interactionModal) return {embed: embed, interaction: interactionModal}
 
         embed.setDescription(interactionModal.fields.getTextInputValue("description"));
 
@@ -164,6 +169,7 @@ export default class EmbedCreator {
                 ),
         );
 
+        if (!interactionModal) return {embed: embed, interaction: interactionModal}
         embed.setColor(interactionModal.fields.getTextInputValue("color") || 'Random');
 
         return {embed: embed, interaction: interactionModal };
@@ -186,6 +192,7 @@ export default class EmbedCreator {
                 ),
         );
 
+        if (!interactionModal) return {embed: embed, interaction: interactionModal}
         embed.setThumbnail(interactionModal.fields.getTextInputValue("url"));
 
         return {embed: embed, interaction: interactionModal };
@@ -208,6 +215,7 @@ export default class EmbedCreator {
                 ),
         );
 
+        if (!interactionModal) return {embed: embed, interaction: interactionModal}
         embed.setThumbnail(interactionModal.fields.getTextInputValue("url"));
 
         return {embed: embed, interaction: interactionModal };
@@ -230,6 +238,7 @@ export default class EmbedCreator {
                 ),
         );
 
+        if (!interactionModal) return {embed: embed, interaction: interactionModal}
         embed.setTimestamp(interactionModal.fields.getTextInputValue("time") == "now" ? Date.now() : Number(interactionModal.fields.getTextInputValue("time")));
 
         return {embed: embed, interaction: interactionModal };
@@ -259,6 +268,7 @@ export default class EmbedCreator {
                 ),
         );
 
+        if (!interactionModal) return {embed: embed, interaction: interactionModal}
         embed.setFooter({
             text: interactionModal.fields.getTextInputValue("text"),
             iconURL: interactionModal.fields.getTextInputValue("url") || null,
@@ -325,6 +335,7 @@ export default class EmbedCreator {
                                 ),
                             ),
                     )
+                    if (!nowInteraction) return {embed: embed, interaction: nowInteraction}
                     embed.addFields({
                         name: nowInteraction.fields.getTextInputValue("name"),
                         value: nowInteraction.fields.getTextInputValue("value"),

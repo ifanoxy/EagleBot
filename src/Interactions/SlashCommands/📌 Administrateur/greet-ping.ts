@@ -70,7 +70,7 @@ export default {
                                         .setColor("Gold")
                                 ],
                                 components: [
-                                    new ActionRowBuilder().addComponents(
+                                    new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
                                         new ChannelSelectMenuBuilder()
                                             .setChannelTypes([ChannelType.GuildText, ChannelType.GuildAnnouncement])
                                             .setCustomId("[no-check]greet-addchannel")
@@ -106,7 +106,7 @@ export default {
                                         .setColor("Gold")
                                 ],
                                 components: [
-                                    new ActionRowBuilder().addComponents(
+                                    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
                                         new StringSelectMenuBuilder()
                                             .setCustomId("[no-check]greet-removechannel")
                                             .addOptions(

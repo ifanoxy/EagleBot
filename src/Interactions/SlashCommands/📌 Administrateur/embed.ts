@@ -100,14 +100,14 @@ export default {
                                             .setColor("#9283ab")
                                     ],
                                     components: [
-                                        new ActionRowBuilder().addComponents(
+                                        new ActionRowBuilder<ButtonBuilder>().addComponents(
                                             new ButtonBuilder()
                                                 .setStyle(ButtonStyle.Secondary)
                                                 .setLabel("Ouvrir le modal")
                                                 .setCustomId("[no-check]embed_openmodal")
                                         )
                                     ],
-                                    ephemeral: true
+                                    fetchReply: true
                                 })
                                     .then(msg => client.func.utils.askWithButton(msg)
                                             .then(inter => client.func.utils.askWithModal(
@@ -160,7 +160,8 @@ export default {
                                                                         .setStyle(ButtonStyle.Primary)
                                                                         .setLabel("Sauvegarder l'embed.")
                                                                 )
-                                                            ]
+                                                            ],
+                                                            fetchReply: true
                                                         }).then(msg => {
                                                             client.func.utils.askWithButton(msg)
                                                                 .then(inter3 => {
@@ -183,7 +184,8 @@ export default {
                                                                                         new EmbedBuilder()
                                                                                             .setTitle("Sauvegarde en cours de votre embed")
                                                                                             .setColor("Blurple")
-                                                                                    ]
+                                                                                    ],
+                                                                                    fetchReply: true
                                                                                 })
                                                                                 let memberData = client.managers.membersManager.getAndCreateIfNotExists(interaction.user.id, {
                                                                                     memberId: interaction.user.id
@@ -201,7 +203,8 @@ export default {
                                                                                     new EmbedBuilder().setColor("Blurple")
                                                                                         .setDescription("L'embed a été envoyé avec succès !")
                                                                                 ],
-                                                                                ephemeral: true
+                                                                                ephemeral: true,
+                                                                                fetchReply: true
                                                                             })
                                                                         })
                                                                     }
@@ -255,7 +258,7 @@ export default {
                                             .setColor("#9283ab")
                                     ],
                                     components: [ selectMenu ],
-                                    ephemeral: true
+                                    fetchReply: true
                                 })
                                     .then(msg => {
                                         client.func.utils.askWithSelectMenuString(msg)
@@ -288,7 +291,8 @@ export default {
                                                                 .setStyle(ButtonStyle.Primary)
                                                                 .setLabel("Sauvegarder l'embed.")
                                                         )
-                                                    ]
+                                                    ],
+                                                    fetchReply: true
                                                 }).then(msg => {
                                                     client.func.utils.askWithButton(msg)
                                                         .then(inter3 => {
@@ -311,7 +315,8 @@ export default {
                                                                                     .setTitle("Embed sauvegardé avec succès !")
                                                                                     .setColor("Blurple")
                                                                             ],
-                                                                            ephemeral: true
+                                                                            ephemeral: true,
+                                                                            fetchReply: true
                                                                         })
                                                                         let memberData = client.managers.membersManager.getAndCreateIfNotExists(interaction.user.id, {
                                                                             memberId: interaction.user.id
@@ -406,47 +411,123 @@ export default {
                     ephemeral: true
                 });
 
-                const embedData = userData.embeds[interaction.options.getString('embed')];
+                let embedData = userData.embeds[interaction.options.getString('embed')];
 
                 interaction.reply({
-                    content: "a",
-                    components: createRows()
-                })
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor("Yellow")
+                            .setDescription(`Voici l'embed \`${interaction.options.getString('embed')}\` que vous pouvez editer.`),
+                        embedData
+                    ],
+                    components: createRows(),
+                    fetchReply: true
+                }).then(msg => mainEdit(msg))
+
+                function mainEdit(msg) {
+                    client.func.utils.askWithButton(msg, 60)
+                        .then(async inter => {
+                            if (!inter)return;
+                            const choice = inter.customId.split("#")[1];
+                            if (choice.split("_").length == 1) {
+                                if (choice == "save") {
+                                    userData.embeds[interaction.options.getString('embed')] = embedData;
+                                    await userData.save();
+                                    // @ts-ignore
+                                    inter.message.components.map(row => row.components.map(btn => btn.data.disabled = true));
+                                    inter.update({
+                                        embeds: [
+                                            new EmbedBuilder()
+                                                .setColor("Green")
+                                                .setDescription(`Fin de l'édition de l'embed \`${interaction.options.getString('embed')}\`.`),
+                                            embedData
+                                        ],
+                                        components: inter.message.components,
+                                    })
+                                } else {
+                                    const res = await client.func.embedCreator[`ask${choice}`](new EmbedBuilder(embedData), inter);
+                                    embedData = res.embed.data;
+
+                                    res.interaction.update({
+                                        embeds: [
+                                            new EmbedBuilder()
+                                                .setColor("Yellow")
+                                                .setDescription(`Voici l'embed \`${interaction.options.getString('embed')}\` que vous pouvez editer.`),
+                                            embedData
+                                        ],
+                                        components: createRows(),
+                                        fetchReply: true
+                                    }).then(msg => mainEdit(msg))
+                                }
+                            } else {
+                                if (choice.split("_")[1] == "add") {
+                                    let rows = createRows();
+                                    rows[choice.split("_")[2][0]].components[choice.split("_")[2][2]].setDisabled(false)
+                                    inter.update({
+                                        embeds: [
+                                            new EmbedBuilder()
+                                                .setColor("Yellow")
+                                                .setDescription(`Voici l'embed \`${interaction.options.getString('embed')}\` que vous pouvez editer.`),
+                                            embedData
+                                        ],
+                                        components: rows,
+                                        fetchReply: true
+                                    }).then(msg => mainEdit(msg))
+                                } else {
+                                    embedData[choice.split("_")[0].toLowerCase()] = null;
+                                    userData.save();
+                                    inter.update({
+                                        embeds: [
+                                            new EmbedBuilder()
+                                                .setColor("Yellow")
+                                                .setDescription(`Voici l'embed \`${interaction.options.getString('embed')}\` que vous pouvez editer.`),
+                                            embedData
+                                        ],
+                                        components: createRows(),
+                                        fetchReply: true
+                                    }).then(msg => mainEdit(msg))
+                                }
+                            }
+
+                        })
+                }
 
                 function createRows() {
                     return [
                         new ActionRowBuilder<ButtonBuilder>().addComponents(
-                            new ButtonBuilder().setLabel("Auteur").setCustomId("[no-check]embedEdit#author").setStyle(ButtonStyle.Primary).setDisabled(!!embedData.author),
-                            new ButtonBuilder().setEmoji(embedData.author ? "✅" : "❌").setStyle(embedData.author ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#author_" + embedData.author ? "remove" : "add"),
-                            new ButtonBuilder().setDisabled(true).setLabel("‎").setCustomId("[no-check]embedEdit#1"),
-                            new ButtonBuilder().setLabel("Titre").setCustomId("[no-check]embedEdit#title").setStyle(ButtonStyle.Primary).setDisabled(!!embedData.title),
-                            new ButtonBuilder().setEmoji(embedData.title ? "✅" : "❌").setStyle(embedData.title ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#title_" + embedData.title ? "remove" : "add"),
-                        ),
-                        new ActionRowBuilder<ButtonBuilder>().addComponents(
-                            new ButtonBuilder().setLabel("Description").setCustomId("[no-check]embedEdit#desc").setStyle(ButtonStyle.Primary).setDisabled(!!embedData.description),
-                            new ButtonBuilder().setEmoji(embedData.description ? "✅" : "❌").setStyle(embedData.description ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#desc_" + embedData.description ? "remove" : "add"),
-                            new ButtonBuilder().setDisabled(true).setLabel("‎").setCustomId("[no-check]embedEdit#2"),
-                            new ButtonBuilder().setLabel("Couleur").setCustomId("[no-check]embedEdit#color").setStyle(ButtonStyle.Primary).setDisabled(!!embedData.color),
-                            new ButtonBuilder().setEmoji(embedData.color ? "✅" : "❌").setStyle(embedData.color ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#color_" + embedData.color ? "remove" : "add"),
-                        ),
-                        new ActionRowBuilder<ButtonBuilder>().addComponents(
-                            new ButtonBuilder().setLabel("Fields").setCustomId("[no-check]embedEdit#fields").setStyle(ButtonStyle.Primary).setDisabled(embedData?.fields?.length != 0),
-                            new ButtonBuilder().setEmoji(embedData?.fields?.length != 0 ? "✅" : "❌").setStyle(embedData?.fields?.length != 0 ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#fields_" + (embedData?.fields?.length != 0 ? "remove" : "add")),
-                            new ButtonBuilder().setDisabled(true).setLabel("‎").setCustomId("[no-check]embedEdit#3"),
-                            new ButtonBuilder().setLabel("Thumbnail").setCustomId("[no-check]embedEdit#thumbnail").setStyle(ButtonStyle.Primary).setDisabled(!!embedData.thumbnail),
-                            new ButtonBuilder().setEmoji(embedData.thumbnail ? "✅" : "❌").setStyle(embedData.thumbnail ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#thumbnail_" + embedData.thumbnail ? "remove" : "add"),
-                        ),
-                        new ActionRowBuilder<ButtonBuilder>().addComponents(
-                            new ButtonBuilder().setLabel("Image").setCustomId("[no-check]embedEdit#image").setStyle(ButtonStyle.Primary).setDisabled(!!embedData.image),
-                            new ButtonBuilder().setEmoji(embedData.image ? "✅" : "❌").setStyle(embedData.image ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#image_" + embedData.image ? "remove" : "add"),
-                            new ButtonBuilder().setDisabled(true).setLabel("‎").setCustomId("[no-check]embedEdit#4"),
-                            new ButtonBuilder().setLabel("Timestamp").setCustomId("[no-check]embedEdit#timestamp").setStyle(ButtonStyle.Primary).setDisabled(!!embedData.timestamp),
-                            new ButtonBuilder().setEmoji(embedData.timestamp ? "✅" : "❌").setStyle(embedData.timestamp ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#timestamp_" + embedData.timestamp ? "remove" : "add"),
-                        ),
-                        new ActionRowBuilder<ButtonBuilder>().addComponents(
-                            new ButtonBuilder().setLabel("Footer").setCustomId("[no-check]embedEdit#footer").setStyle(ButtonStyle.Primary).setDisabled(!!embedData.footer),
-                            new ButtonBuilder().setEmoji(embedData.footer ? "✅" : "❌").setStyle(embedData.footer ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#footer_" + embedData.footer ? "remove" : "add"),
+                            new ButtonBuilder().setLabel("Auteur").setCustomId("[no-check]embedEdit#Author").setStyle(ButtonStyle.Primary).setDisabled(!embedData.author),
+                            new ButtonBuilder().setEmoji(embedData.author ? "✅" : "⛔").setStyle(embedData.author ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#Author_" + (embedData.author ? "remove" : "add") + "_0/0"),
+                            new ButtonBuilder().setDisabled(true).setStyle(ButtonStyle.Secondary).setLabel("‎").setCustomId("[no-check]embedEdit#1"),
+                            new ButtonBuilder().setLabel("Description").setCustomId("[no-check]embedEdit#Description").setStyle(ButtonStyle.Primary).setDisabled(!embedData.description),
+                            new ButtonBuilder().setEmoji(embedData.description ? "✅" : "⛔").setStyle(embedData.description ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#Description_" + (embedData.description ? "remove" : "add" + "_0/3")),
                             ),
+                        new ActionRowBuilder<ButtonBuilder>().addComponents(
+                            new ButtonBuilder().setLabel("Titre").setCustomId("[no-check]embedEdit#Title").setStyle(ButtonStyle.Primary).setDisabled(!embedData.title),
+                            new ButtonBuilder().setEmoji(embedData.title ? "✅" : "⛔").setStyle(embedData.title ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#Title_" + (embedData.title ? "remove" : "add") + "_1/0"),
+                            new ButtonBuilder().setDisabled(true).setStyle(ButtonStyle.Secondary).setLabel("‎").setCustomId("[no-check]embedEdit#2"),
+                            new ButtonBuilder().setLabel("Couleur").setCustomId("[no-check]embedEdit#Color").setStyle(ButtonStyle.Primary).setDisabled(!embedData.color),
+                            new ButtonBuilder().setEmoji(embedData.color ? "✅" : "⛔").setStyle(embedData.color ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#Color_" + (embedData.color ? "remove" : "add") + "_1/3"),
+                        ),
+                        new ActionRowBuilder<ButtonBuilder>().addComponents(
+                            new ButtonBuilder().setLabel("Fields").setCustomId("[no-check]embedEdit#Fields").setStyle(ButtonStyle.Primary).setDisabled(!embedData.fields),
+                            new ButtonBuilder().setEmoji(embedData.fields ? "✅" : "⛔").setStyle(embedData.fields ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#Fields_" + (embedData.fields ? "remove" : "add") + "_2/0"),
+                            new ButtonBuilder().setDisabled(true).setStyle(ButtonStyle.Secondary).setLabel("‎").setCustomId("[no-check]embedEdit#3"),
+                            new ButtonBuilder().setLabel("Thumbnail").setCustomId("[no-check]embedEdit#Thumbnail").setStyle(ButtonStyle.Primary).setDisabled(!embedData.thumbnail),
+                            new ButtonBuilder().setEmoji(embedData.thumbnail ? "✅" : "⛔").setStyle(embedData.thumbnail ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#Thumbnail_" + (embedData.thumbnail ? "remove" : "add") + "_2/3"),
+                        ),
+                        new ActionRowBuilder<ButtonBuilder>().addComponents(
+                            new ButtonBuilder().setLabel("Image").setCustomId("[no-check]embedEdit#Image").setStyle(ButtonStyle.Primary).setDisabled(!embedData.image),
+                            new ButtonBuilder().setEmoji(embedData.image ? "✅" : "⛔").setStyle(embedData.image ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#Image_" + (embedData.image ? "remove" : "add") + "_3/0"),
+                            new ButtonBuilder().setDisabled(true).setStyle(ButtonStyle.Secondary).setLabel("‎").setCustomId("[no-check]embedEdit#4"),
+                            new ButtonBuilder().setLabel("Timestamp").setCustomId("[no-check]embedEdit#Timestamp").setStyle(ButtonStyle.Primary).setDisabled(!embedData.timestamp),
+                            new ButtonBuilder().setEmoji(embedData.timestamp ? "✅" : "⛔").setStyle(embedData.timestamp ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#Timestamp_" + (embedData.timestamp ? "remove" : "add") + "_3/3"),
+                        ),
+                        new ActionRowBuilder<ButtonBuilder>().addComponents(
+                            new ButtonBuilder().setLabel("Footer").setCustomId("[no-check]embedEdit#Footer").setStyle(ButtonStyle.Primary).setDisabled(!embedData.footer),
+                            new ButtonBuilder().setEmoji(embedData.footer ? "✅" : "⛔").setStyle(embedData.footer ? ButtonStyle.Success : ButtonStyle.Danger).setCustomId("[no-check]embedEdit#Footer_" + (embedData.footer ? "remove" : "add") + "_4/0"),
+                            new ButtonBuilder().setDisabled(true).setStyle(ButtonStyle.Secondary).setLabel("‎").setCustomId("[no-check]embedEdit#5"),
+                            new ButtonBuilder().setStyle(ButtonStyle.Success).setLabel("Sauvegarder").setEmoji("♻️").setCustomId("[no-check]embedEdit#save")
+                        ),
                     ]
                 };
             }

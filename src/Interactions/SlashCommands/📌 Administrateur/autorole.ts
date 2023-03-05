@@ -44,7 +44,7 @@ export default {
                                         .setColor("Gold")
                                 ],
                                 components: [
-                                    new ActionRowBuilder().addComponents(
+                                    new ActionRowBuilder<RoleSelectMenuBuilder>().addComponents(
                                         new RoleSelectMenuBuilder()
                                             .setCustomId("[no-check]autoroles-addrole")
                                             .setMinValues(1)
@@ -79,7 +79,7 @@ export default {
                                         .setColor("Gold")
                                 ],
                                 components: [
-                                    new ActionRowBuilder().addComponents(
+                                    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
                                         new StringSelectMenuBuilder()
                                             .setCustomId("[no-check]autoroles-removerole")
                                             .addOptions(

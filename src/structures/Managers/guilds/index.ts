@@ -159,6 +159,7 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     "bl-list": "whitelist",
                     "role-everyone": "whitelist",
                     "guild-leave": "owner",
+                    "embeds": Number(PermissionsBitField.Flags.Administrator),
                 },
             },
             {
