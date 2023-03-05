@@ -35,7 +35,7 @@ export default {
             old: oldGuild.vanityURLCode,
             new: newGuild.vanityURLCode,
         };
-        if(!Object.entries(changement))return
+        if(Object.entries(changement).length == 0)return
 
         let logEmbed = new EmbedBuilder().setColor("#2f3136").setTitle(`Logs | ${this.name}`).setTimestamp()
         if (changement.name) logEmbed.addFields(

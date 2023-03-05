@@ -35,7 +35,7 @@ export default {
             old: oldChannel?.parentId,
             new: newChannel?.parentId,
         };
-        if(!Object.entries(changement))return
+        if(Object.entries(changement).length == 0)return
 
         let logEmbed = new EmbedBuilder().setColor("#2f3136").setTitle(`Logs | ${this.name}`).setTimestamp().setDescription(`Channel ID : ${newChannel.id} (<#${newChannel.id}>)`)
         if (changement.name) logEmbed.addFields(
