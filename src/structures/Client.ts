@@ -13,6 +13,16 @@ import chalk from "chalk";
 import * as fs from "fs";
 import Functions from "../functions/main";
 
+String.prototype.replaceArray = function(find, replace) {
+    var replaceString = this;
+    var regex;
+    for (var i = 0; i < find.length; i++) {
+        regex = new RegExp(find[i], "g");
+        replaceString = replaceString.replace(regex, replace[i]);
+    }
+    return replaceString;
+};
+
 export class EagleClient extends Client {
     Collection: typeof Collection;
     _fs: typeof fs;

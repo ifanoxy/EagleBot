@@ -90,6 +90,15 @@ export default class Utils {
         }
     }
 
+    replaceArray(content: string, find: Array<string>, replace: Array<string>) {
+        var regex;
+        for (var i = 0; i < find.length; i++) {
+            regex = new RegExp(find[i], "g");
+            content = content.replace(regex, replace[i]);
+        }
+        return content;
+    };
+
     numberFormat(nbr: number) {
         return new Intl.NumberFormat("fr", {notation: "compact"}).format(nbr)
     }

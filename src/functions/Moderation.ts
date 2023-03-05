@@ -3,10 +3,53 @@ import {ButtonInteraction,
 import { EagleClient } from "../structures/Client";
 import { DiscordColor } from "../structures/Enumerations/Embed";
 
+
 export default class Moderation {
     #client: EagleClient;
     constructor(client: EagleClient) {
         this.#client = client;
+    }
+
+    sendJoinMessage(guildId, member) {
+        let guildData = this.#client.managers.guildsManager.getIfExist(guildId);
+        if (!guildData)return;
+
+        const channel = this.#client.guilds.cache.get(guildId).channels.cache.get(guildData.join?.channelId);
+        if (!channel) {
+            guildData.join = {channelId: null, message: {content: null, embed: null}};
+            guildData.save();
+            return;
+        }
+
+        let content = guildData.join.message.content;
+        let embed = guildData.join.message.embed;
+
+        const find = ["{member-name}","{member-tag}","{member-id}","{member-mention}","{member-avatar}","{member-age}"];
+        const replace = [member.user.username, member.user.tag, member.id, `<@${member.id}>`, member.user.avatarURL(), `<t:${Math.round(member.user.createdTimestamp/1000)}>`];
+
+        if (content) {
+            content = content.replaceArray(find, replace);
+        }
+        if (embed) {
+            embed = JSON.parse(JSON.stringify(embed).replaceArray(find, replace));
+        }
+
+        if (content && embed) { // @ts-ignore
+            return channel.send({
+                        content: content,
+                        embeds: [ embed ]
+                    })
+        }
+        else if (content) { // @ts-ignore
+            return channel.send({
+                        content: content
+                    })
+        }
+        else { // @ts-ignore
+            return channel.send({
+                            embeds: [embed]
+                        })
+        }
     }
 
     cibleRoleIsBetter(cible: GuildMember, executor: GuildMember) {
