@@ -6,6 +6,9 @@ export default {
     execute(client: EagleClient, member: GuildMember) {
         const kickChannel = client.func.log.isActive(member.guild.id, "MemberKick");
         if (kickChannel) this.kickLog(client, member, kickChannel);
+        const guildData = client.managers.guildsManager.getIfExist(member.guild.id);
+        if (!guildData)return;
+        if (guildData.leave.channelId) client.func.mod.sendLeaveMessage(member.guild.id, member);
     },
     kickLog(client: EagleClient, member: GuildMember, channel) {
         member.guild.fetchAuditLogs({

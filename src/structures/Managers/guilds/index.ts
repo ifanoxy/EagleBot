@@ -152,6 +152,8 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     "greet-ping": Number(PermissionsBitField.Flags.Administrator),
                     ticket: Number(PermissionsBitField.Flags.Administrator),
                     autoreply: Number(PermissionsBitField.Flags.Administrator),
+                    join: Number(PermissionsBitField.Flags.Administrator),
+                    leave: Number(PermissionsBitField.Flags.Administrator),
                     bl: "whitelist",
                     unbl: "whitelist",
                     "bl-list": "whitelist",

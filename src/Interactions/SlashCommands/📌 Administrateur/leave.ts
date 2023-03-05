@@ -1,25 +1,25 @@
 import {
     AutocompleteInteraction,
     ChannelType,
-    ChatInputCommandInteraction,
-    EmbedBuilder,
+    ChatInputCommandInteraction, EmbedBuilder,
+    PermissionsBitField,
     SlashCommandBuilder
 } from "discord.js";
 import {EagleClient} from "../../../structures/Client";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName("join")
-        .setDescription("Permet de gérer les messages de bienvenue du serveur")
+        .setName("leave")
+        .setDescription("Permet de gérer les messages de départ du serveur")
         .setDMPermission(false)
         .addSubcommandGroup(
             subGroup => subGroup
                 .setName("setup")
                 .setDescription("gérer le message lorsque les membres rejoignent")
                 .addSubcommand(
-                    sub => sub.setName("activer").setDescription("Permet d'activer les messages de bienvenue")
+                    sub => sub.setName("activer").setDescription("Permet d'activer les messages de départ")
                         .addChannelOption(
-                            opt => opt.setName("channel").setDescription("le channel où seront envoyé les messages de bienvenue").setRequired(true).addChannelTypes(ChannelType.GuildText)
+                            opt => opt.setName("channel").setDescription("le channel où seront envoyé les messages de départ").setRequired(true).addChannelTypes(ChannelType.GuildText)
                         )
                         .addStringOption(
                             opt => opt.setName("message").setDescription("le message qui sera envoyé")
@@ -29,18 +29,18 @@ export default {
                         )
                 )
                 .addSubcommand(
-                    sub => sub.setName("désactiver").setDescription("Permet désactiver les messages de bienvenue")
+                    sub => sub.setName("désactiver").setDescription("Permet désactiver les messages de départ")
                 )
         )
         .addSubcommand(
             subGroup => subGroup
                 .setName("parametre")
-                .setDescription("Voir tout les paramètres pour les messages de join")
+                .setDescription("Voir tout les paramètres pour les messages de leave")
         )
         .addSubcommand(
             subGroup => subGroup
                 .setName("test")
-                .setDescription("Permet de testé le message de join")
+                .setDescription("Permet de testé le message de leave")
         ),
     async autocomplete(interaction: AutocompleteInteraction, client: EagleClient) {
         const userData = client.managers.membersManager.getIfExist(interaction.user.id);
@@ -59,7 +59,7 @@ export default {
     execute(interaction: ChatInputCommandInteraction, client: EagleClient) {
         let database = client.managers.guildsManager.getAndCreateIfNotExists(interaction.guildId, {
             guildId: interaction.guildId
-        })
+        });
 
         const subGroup = interaction.options.getSubcommandGroup() || interaction.options.getSubcommand();
         switch (subGroup) {
@@ -73,7 +73,7 @@ export default {
                         embeds: [
                             new EmbedBuilder()
                                 .setColor("Red")
-                                .setDescription("Vous devez définir au moins un message ou un embed de bienvenue")
+                                .setDescription("Vous devez définir au moins un message ou un embed de départ")
                         ],
                         ephemeral: true
                     });
@@ -88,52 +88,52 @@ export default {
                         ephemeral: true
                     });
 
-                    if (embedName) database.join.message.embed = client.managers.membersManager.getIfExist(interaction.user.id).embeds[embedName];
-                    if (message) database.join.message.content = message;
+                    if (embedName) database.leave.message.embed = client.managers.membersManager.getIfExist(interaction.user.id).embeds[embedName];
+                    if (message) database.leave.message.content = message;
 
-                    database.join.channelId = channel.id;
+                    database.leave.channelId = channel.id;
 
                     database.save();
 
                     interaction.reply({
                         embeds: [
                             new EmbedBuilder()
-                                .setTitle("Vous avez activé les messages automatiques lors de l'arrivé d'un membre avec succès !")
+                                .setTitle("Vous avez activé les messages automatiques lors du départ d'un membre avec succès !")
                                 .setColor("Green")
                         ]
                     })
                 } else {
-                    database.join = null;
+                    database.leave = null;
                     database.save();
 
                     interaction.reply({
                         embeds: [
                             new EmbedBuilder()
                                 .setColor("Red")
-                                .setDescription("Vous avez enlever les messages automatiques lors de l'arrivé d'un membre")
+                                .setDescription("Vous avez enlever les messages automatiques lors du départ d'un membre")
                         ]
                     })
                 }
             }break;
             case "test" : {
-                if (!database || !database.join?.channelId)return interaction.reply({
+                if (!database || !database.leave?.channelId)return interaction.reply({
                     embeds: [
                         new EmbedBuilder()
                             .setColor('Red')
-                            .setDescription("Il n'y a pas de message de join créé !")
+                            .setDescription("Il n'y a pas de message de leave créé !")
                     ],
                     ephemeral: true
                 });
 
-                if (!interaction.guild.channels.cache.get(database.join?.channelId)) {
-                    database.join = {channelId: null, message: {content: null, embed: null}};
+                if (!interaction.guild.channels.cache.get(database.leave?.channelId)) {
+                    database.leave = {channelId: null, message: {content: null, embed: null}};
                     database.save();
 
                     return interaction.reply({
                         embeds: [
                             new EmbedBuilder()
                                 .setColor('Red')
-                                .setDescription("Le channel a été supprimé ou est introuvable, veuillez recréer le message de join")
+                                .setDescription("Le channel a été supprimé ou est introuvable, veuillez recréer le message de leave")
                         ],
                         ephemeral: true
                     });
@@ -142,18 +142,18 @@ export default {
                 interaction.reply({
                     embeds: [
                         new EmbedBuilder()
-                            .setColor("Blue")
-                            .setDescription('Le message de join a été envoyé avec succès !')
+                            .setColor("DarkBlue")
+                            .setDescription("Le message de départ a été envoyé avec succès !")
                     ]
                 })
 
-                client.func.mod.sendJoinMessage(interaction.guildId, interaction.guild.members.cache.get(interaction.user.id))
+                client.func.mod.sendLeaveMessage(interaction.guildId, interaction.guild.members.cache.get(interaction.user.id))
             }break;
             case "parametre" : {
                 interaction.reply({
                     embeds: [
                         new EmbedBuilder()
-                            .setTitle("Liste de tout les paramètres pour les messages de bienvenue.")
+                            .setTitle("Liste de tout les paramètres pour les messages de départ.")
                             .setColor("White")
                             .setDescription(`
                         {member-name} --> Pseudo du membre.
