@@ -169,4 +169,22 @@ export default class Utils {
                 return null
             })
     }
+
+    askWithModal(inter, modal, time = 120) {
+        inter.showModal(modal);
+        return inter.awaitModalSubmit({
+            filter: i => i.customId.startsWith("[no-check]"),
+            time: time * 1000,
+        })
+            .then(inter => {
+                return inter
+            })
+            .catch(() => {
+                inter.message.components.map(row => row.components.map(cp => cp.disabled = true));
+                inter.message.edit({
+                    components: inter.message.components
+                });
+                return null
+            })
+    }
 }

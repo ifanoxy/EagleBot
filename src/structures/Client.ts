@@ -13,6 +13,14 @@ import chalk from "chalk";
 import * as fs from "fs";
 import Functions from "../functions/main";
 
+export {};
+
+declare global {
+    interface String {
+        replaceArray(find: Array<string>, replace: Array<string>): string;
+    }
+}
+
 String.prototype.replaceArray = function(find, replace) {
     var replaceString = this;
     var regex;

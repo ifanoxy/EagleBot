@@ -1,4 +1,4 @@
-import {EmbedData, PermissionOverwrites, PermissionsBitField} from "discord.js";
+import {APIEmbed, EmbedData, PermissionOverwrites, PermissionsBitField} from "discord.js";
 import Manager from "../Managers/main";
 import {CommandsType} from "../Enumerations/CommandType";
 
@@ -56,7 +56,7 @@ export interface Members {
     },
     warn?: Array<{userId: string, reason: string, date: Date}>,
     embeds?: {
-        [key: string]: EmbedData
+        [key: string]: APIEmbed
     }
 }
 
@@ -312,14 +312,14 @@ export interface Guilds {
     join?: {
         channelId: string,
         message: {
-            embed: EmbedData,
+            embed: APIEmbed,
             content: string,
         }
     },
     leave?: {
         channelId: string,
         message: {
-            embed: EmbedData,
+            embed: APIEmbed,
             content: string,
         }
     },
