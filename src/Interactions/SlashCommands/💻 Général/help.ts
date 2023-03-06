@@ -14,7 +14,7 @@ export default {
     async autocomplete(interaction: AutocompleteInteraction, client: EagleClient) {
         const focusedValue = interaction.options.getFocused();
         const choices = client.application.commands.cache.map(x => ({name: x.name, description: x.description}));
-        const filtered = choices.filter(choice => choice.name.startsWith(focusedValue) || choice.description.includes(focusedValue));
+        const filtered = choices.filter(choice => choice.name.startsWith(focusedValue) || choice.description.includes(focusedValue)).slice(0, 25);
         await interaction.respond(
             filtered.map(choice => ({ name: `${choice.name} <----> ${choice.description}`, value: choice.name })),
         );
