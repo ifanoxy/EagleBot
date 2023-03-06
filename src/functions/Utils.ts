@@ -1,6 +1,8 @@
-import {ActionRowBuilder, ButtonBuilder,
+import {
+    ActionRowBuilder, ButtonBuilder,
     ButtonInteraction, ButtonStyle, ChatInputCommandInteraction, ComponentType, EmbedBuilder,
-    InteractionResponse, Message } from "discord.js";
+    InteractionResponse, Message, ModalSubmitInteraction
+} from "discord.js";
 import { EagleClient } from "../structures/Client";
 
 export default class Utils {
@@ -171,7 +173,7 @@ export default class Utils {
             })
     }
 
-    askWithModal(inter, modal, time = 120) {
+    askWithModal(inter, modal, time = 120): Promise<ModalSubmitInteraction | null> {
         inter.showModal(modal);
         return inter.awaitModalSubmit({
             filter: i => i.customId.startsWith("[no-check]"),

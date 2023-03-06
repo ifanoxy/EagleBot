@@ -139,9 +139,10 @@ export default {
                                                         const embed = new EmbedBuilder()
                                                             .setTitle(titre || null)
                                                             .setDescription(description)
-                                                            .setColor(color.startsWith('#') ? color : "Random")
+                                                            // @ts-ignore
+                                                            .setColor((color.startsWith('#') ? color : "Random") || "Random")
                                                             .setFooter({text: footer || null})
-                                                        inter2.update({
+                                                        inter2.message.edit({
                                                             embeds: [
                                                                 new EmbedBuilder()
                                                                     .setTitle("Vous avez terminé la création de votre embed !")
@@ -150,7 +151,7 @@ export default {
                                                                 embed
                                                             ],
                                                             components: [
-                                                                new ActionRowBuilder().addComponents(
+                                                                new ActionRowBuilder<ButtonBuilder>().addComponents(
                                                                     new ButtonBuilder()
                                                                         .setStyle(ButtonStyle.Success)
                                                                         .setLabel("Envoyer dans ce channel")
@@ -160,8 +161,7 @@ export default {
                                                                         .setStyle(ButtonStyle.Primary)
                                                                         .setLabel("Sauvegarder l'embed.")
                                                                 )
-                                                            ],
-                                                            fetchReply: true
+                                                            ]
                                                         }).then(msg => {
                                                             client.func.utils.askWithButton(msg)
                                                                 .then(inter3 => {

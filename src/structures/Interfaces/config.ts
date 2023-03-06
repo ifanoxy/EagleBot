@@ -20,4 +20,5 @@ export default interface Config {
     ownerId: string,
     version: string,
     lastUpdate: string,
+    modmailChannelId: string,
 }
