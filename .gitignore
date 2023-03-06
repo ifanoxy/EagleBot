@@ -2,3 +2,4 @@ node_modules
 Database
 .idea
 package-lock.json
+output

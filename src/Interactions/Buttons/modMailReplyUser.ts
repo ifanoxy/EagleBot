@@ -47,7 +47,10 @@ export default {
                             .setTimestamp()
                     ]
                 });
-                inter.followUp({
+                inter.message.edit({
+                    components: []
+                })
+                inter.reply({
                     embeds: [
                         new EmbedBuilder()
                             .setTitle(`Réponse envoyé par ${inter.user.username}`)

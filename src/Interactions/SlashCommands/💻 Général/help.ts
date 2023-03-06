@@ -24,13 +24,14 @@ export default {
             const command = client.application.commands.cache.find(x => x.name == interaction.options.getString("commande"));
 
             let description = `**Description :** ${command.description}\n`+
-                `**Permissions :** \`${new PermissionsBitField(BigInt(client.managers.guildsManager.getIfExist(interaction.guildId).permissions[command.name])).toArray()[0]}\`\n`+
+                `**Permissions :** \`${typeof client.managers.guildsManager.getIfExist(interaction.guildId).permissions[command.name] == "string" ? client.managers.guildsManager.getIfExist(interaction.guildId).permissions[command.name] : new PermissionsBitField(BigInt(client.managers.guildsManager.getIfExist(interaction.guildId).permissions[command.name])).toArray()[0]}\`\n`+
                 `**Utilisations :**\n`+
                 `${client.func.utils.slashCommandSend(command.name)} ${command.options.filter(x => x.type != 1 && x.type != 2 && x.required).map(x => `\`{${x.name}}\``).join(" ")} ${command.options.filter(x => x.type != 1 && x.type != 2 && !x.required).map(x => `\`<${x.name}>\``).join(" ")}\n`+
                 `\n{} Option Obligatoire | <> Option Optionnelle`
-            const helpEmbed = new EmbedBuilder().setDescription(description).setTitle(`Aide sur la commande ${command.name}`).setFooter({text: `Besoin de plus d'aide ? https://discord.gg/vdSRK2Bcx9`}).setColor("White");
+            const helpEmbed = new EmbedBuilder().setDescription(description).setTitle(`Aide sur la commande ${command.name}`).setFooter({text: `Besoin de plus d'aide ? https://discord.gg/eaglebot`}).setColor("White");
             interaction.reply({
-                embeds: [helpEmbed]
+                embeds: [helpEmbed],
+                ephemeral: true
             })
         } else {
             interface Commands {
