@@ -45,7 +45,7 @@ export default {
                 }
             }
 
-            const folders = client._fs.readdirSync(__dirname+"/../..")
+            const folders = client._fs.readdirSync(__dirname+"/..")
             let SelectMenuHelp = new StringSelectMenuBuilder()
                 .setCustomId("[no-check]help")
                 .setPlaceholder("Choississez une catégorie")
@@ -59,7 +59,7 @@ export default {
 
             let nbrCommandsByCategory = {};
             folders.map(fold => {
-                const commandNameArray = client._fs.readdirSync(__dirname+`/../../${fold}`).map(file => {
+                const commandNameArray = client._fs.readdirSync(__dirname+`/../${fold}`).map(file => {
                     return require(`../${fold}/${file}`).default.data.name
                 })
                 nbrCommandsByCategory[fold] = client.application.commands.cache.filter(cmd => commandNameArray.includes(cmd.name)).map(cmd => {
@@ -139,7 +139,7 @@ export default {
                         if (inter.values[0] == "Accueil") {
                             var embedCommands = acceuilEmbed
                         } else {
-                            const files = client._fs.readdirSync(__dirname+`/../../${inter.values[0]}`)
+                            const files = client._fs.readdirSync(__dirname+`/../${inter.values[0]}`)
                             var embedCommands = new EmbedBuilder()
                                 .setColor("Blue")
                                 .setTitle(`Aide des commandes ${inter.values[0]}`)
