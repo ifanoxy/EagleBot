@@ -60,7 +60,7 @@ export default {
             type: activite,
         };
 
-        client._fs.writeFileSync("./src/config.json", JSON.stringify(client.config, null, 2))
+        client._fs.writeFileSync(__dirname+"/../../../config.json", JSON.stringify(client.config, null, 2))
 
         interaction.reply({
             embeds: [
