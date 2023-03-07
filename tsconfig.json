@@ -5,6 +5,7 @@
     "target": "ES6",
     "module": "CommonJS",
     "esModuleInterop": true,
-    "outDir": "./ouput"
+    "outDir": "./out",
+    "sourceMap": true
   }
 }

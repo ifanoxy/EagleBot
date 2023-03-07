@@ -23,7 +23,7 @@ export default function (database, modelName): Promise<Array<{name: string, type
                 default: `pas de raison`
             }
         ]
-        const t = {};
+        const t: any = {};
         data.forEach(y => {
             t[y.name] = y;
         })

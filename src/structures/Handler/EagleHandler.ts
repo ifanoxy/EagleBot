@@ -30,7 +30,7 @@ export class EagleHandler {
             if (err) throw err;
             files.map((file) => {
                 if (file.endsWith(".disabled")) return;
-                if (file.endsWith(".ts"))
+                if (file.endsWith(".ts") || file.endsWith(".js"))
                     return handler.registerFile(`${path}/${file}`);
                 if (!file.includes(".")) this.getFiles(`${path}/${file}`, handler);
             })

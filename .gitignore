@@ -4,3 +4,4 @@ Database
 package-lock.json
 .src
 tsconfig.json
+out

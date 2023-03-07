@@ -75,31 +75,43 @@ export class EagleClient extends Client {
     }
 
     async log(message: string, couleur: any = chalk.blueBright) {
-        (await this.channels.fetch(this.config.forumId) as ForumChannel).threads.cache.find(x => x.name == "Console").send({
-            content: `[${new Date().getDate()}] ${message}`
-        })
+        try {
+            let d = new Date();
+            (await this.channels.fetch(this.config.forumId) as ForumChannel).threads.cache.find(x => x.name == "Console").send({
+                content: `[${("00" + (d.getMonth() + 1)).slice(-2)}/${("00" + d.getDate()).slice(-2)}/${d.getFullYear()} ${("00" + d.getHours()).slice(-2)}:${("00" + d.getMinutes()).slice(-2)}:${("00" + d.getSeconds()).slice(-2)}] \`${message}\``
+            })
+        } catch {}
         console.log(chalk.bold.greenBright("[Eagle BOT]") + couleur(message));
     }
 
     startHandler() {
         this.handlers = new EagleHandler(this);
-        this.login(this.config.discord.token)
-            .then(async () => {
-                this.log(`Adding ${this.handlers.slashCommandsHandler.SlashCommandsList.size} slash commands`, chalk.yellow);
-                this.application.commands.set(this.handlers.slashCommandsHandler.SlashCommandsList.map(s => s.data.toJSON()));
-            })
+        setTimeout(() => {
+            this.login(this.config.discord.token)
+                .then(async () => {
+                    this.log(`Adding ${this.handlers.slashCommandsHandler.SlashCommandsList.size} slash commands`, chalk.yellow);
+                    this.application.commands.set(this.handlers.slashCommandsHandler.SlashCommandsList.map(s => s.data.toJSON()));
+                })
+        }, 2000)
+
     }
 
     async error(err) {
-        (await this.channels.fetch(this.config.forumId) as ForumChannel).threads.cache.find(x => x.name == "Console").send({
-            content: "<@&1069191489105702945> :fire: :fire: :fire:",
-            embeds: [
-                new EmbedBuilder()
-                    .setColor("Red")
-                    .setDescription("Une erreur c'est produite !")
-                    .setDescription(`\`\`\`${err.stack ? err.stack : err}\`\`\``)
-            ]
-        })
+        if (this.isReady()) {
+            try {
+                (await this.channels.fetch(this.config.forumId) as ForumChannel).threads.cache.find(x => x.name == "Console").send({
+                    content: "<@&1069191489105702945> :fire: :fire: :fire:",
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor("Red")
+                            .setTimestamp()
+                            .setTitle("Une erreur c'est produite !")
+                            .setDescription(`\`\`\`${err.stack ? err.stack : err}\`\`\``)
+                    ]
+                })
+            } catch {
+            }
+        }
         console.log(chalk.bold.greenBright("\n[Eagle BOT]") + chalk.red.bold(" an error has occurred :\n" + err))
     }
 
