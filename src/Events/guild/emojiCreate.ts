@@ -7,7 +7,7 @@ export default {
     name: "emojiCreate",
     execute(client: EagleClient, emoji: GuildEmoji) {
         const AntiraidData = client.managers.antiraidManager.getIfExist(emoji.guild.id)
-        if (!AntiraidData?.status["anti-massEmoji"]?.create?.status) this.antiraid(AntiraidData, emoji, client);
+        if (AntiraidData?.status["anti-massEmoji"]?.create?.status) this.antiraid(AntiraidData, emoji, client);
         const channel = client.func.log.isActive(emoji.guild.id, "EmojiCreate");
         if (!channel)return;
         emoji.guild.fetchAuditLogs({
@@ -32,7 +32,7 @@ export default {
 
     async antiraid(AntiraidData:  DatabaseManager<Antiraid> & Antiraid, channel: GuildChannel, client: EagleClient) {
         const AuditLog = await channel.guild.fetchAuditLogs({limit: 1, type: AuditLogEvent.EmojiCreate});
-        const userId = AuditLog.entries[0].user.id;
+        const userId = AuditLog.entries.first().executor.id;
         if (client.isOwner(userId))return;
         if (AntiraidData.status["anti-massEmoji"].create.ignoreWhitelist) {
             if(client.isWhitelist(userId))return;
@@ -56,7 +56,7 @@ export default {
         }
 
         const member = await channel.guild.members.fetch(userId);
-        await client.func.mod.applySanction(member[0], AntiraidData.status["anti-massEmoji"].create.sanction, AntiraidData, "Mass Channel Create");
+        await client.func.mod.applySanction(member[0], AntiraidData.status["anti-massEmoji"].create.sanction, AntiraidData, "Mass Emoji Create");
         delete frequenceData?.emojiCreate;
         client._fs.writeFileSync(`./AntiRaid/frequence/${userId}.json`, JSON.stringify(frequenceData));
     }

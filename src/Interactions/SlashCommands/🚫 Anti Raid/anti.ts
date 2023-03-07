@@ -1,5 +1,6 @@
 import {ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
 import {EagleClient} from "../../../structures/Client";
+import ms from "ms";
 
 export default {
     data: new SlashCommandBuilder()
@@ -724,7 +725,7 @@ export default {
                 "anti-newAccount", interaction,
                 {
                     status: true,
-                    ageMin: interaction.options.getBoolean("temps-minimum"),
+                    ageMin: ms(interaction.options.getString("temps-minimum")),
                 }
             )
             interaction.reply({

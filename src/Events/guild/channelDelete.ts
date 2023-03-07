@@ -7,7 +7,7 @@ export default {
     name: "channelDelete",
     execute(client: EagleClient, channel: GuildChannel) {
         const AntiraidData = client.managers.antiraidManager.getIfExist(channel.guildId)
-        if (!AntiraidData?.status["anti-massChannel"]?.delete?.status) this.antiraid(AntiraidData, channel, client);
+        if (AntiraidData?.status["anti-massChannel"]?.delete?.status) this.antiraid(AntiraidData, channel, client);
         const channelSend = client.func.log.isActive(channel.guildId, "channelDelete");
         if (!channelSend)return;
         let type;
@@ -64,7 +64,7 @@ export default {
 
     async antiraid(AntiraidData:  DatabaseManager<Antiraid> & Antiraid, channel: GuildChannel, client: EagleClient) {
         const AuditLog = await channel.guild.fetchAuditLogs({limit: 1, type: AuditLogEvent.ChannelDelete});
-        const userId = AuditLog.entries[0].user.id;
+        const userId = AuditLog.entries.first().executor.id;
         if (client.isOwner(userId))return;
         if (AntiraidData.status["anti-massChannel"].delete.ignoreWhitelist) {
             if(client.isWhitelist(userId))return;
