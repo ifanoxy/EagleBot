@@ -161,6 +161,7 @@ export default function (database: EagleDatabaseSqlite, modelName: string): Prom
                     "guild-leave": "owner",
                     modmail: "owner",
                     anti: "owner",
+                    protect: "owner",
                     "embeds": Number(PermissionsBitField.Flags.Administrator),
                 },
             },
