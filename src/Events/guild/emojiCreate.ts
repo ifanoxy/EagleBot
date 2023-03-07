@@ -56,7 +56,7 @@ export default {
         }
 
         const member = await channel.guild.members.fetch(userId);
-        await client.func.mod.applySanction(member[0], AntiraidData.status["anti-massEmoji"].create.sanction, AntiraidData, "Mass Emoji Create");
+        await client.func.mod.applySanction(member, AntiraidData.status["anti-massEmoji"].create.sanction, AntiraidData.log, "Mass Emoji Create");
         delete frequenceData?.emojiCreate;
         client._fs.writeFileSync(`./AntiRaid/frequence/${userId}.json`, JSON.stringify(frequenceData));
     }

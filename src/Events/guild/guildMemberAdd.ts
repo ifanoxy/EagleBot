@@ -9,6 +9,8 @@ export default {
         const AntiraidData = client.managers.antiraidManager.getIfExist(member.guild.id)
         if (AntiraidData?.status["anti-newAccount"]?.status) this.antiraid(AntiraidData, member, client);
         if (member.user?.bot) {
+            const AntiraidData = client.managers.antiraidManager.getIfExist(member.guild.id)
+            if (AntiraidData?.status["anti-bot"]?.status) this.antiraidBot(AntiraidData, member, client);
             const logChannel = client.func.log.isActive(member.guild.id, "botAdd");
             if (logChannel) this.botAdd(member, logChannel);
         }
@@ -34,8 +36,22 @@ export default {
         if (client.isOwner(member.id))return;
 
         if (Number(AntiraidData.status["anti-newAccount"].ageMin) < member.user.createdTimestamp) {
-            await client.func.mod.applySanction(member[0], "ban", AntiraidData, "Anti New Account");
+            await client.func.mod.applySanction(member, "ban", AntiraidData.log, "Anti New Account");
         }
+    },
+
+    async antiraidBot(AntiraidData:  DatabaseManager<Antiraid> & Antiraid, member: GuildMember, client: EagleClient) {
+        if (client.isOwner(member.id))return;
+        if (AntiraidData.status["anti-bot"].ignoreWhitelist) {
+            if(client.isWhitelist(member.id))return;
+        }
+        const audit = (await member.guild.fetchAuditLogs({
+            type: AuditLogEvent.BotAdd,
+            limit: 1
+        })).entries.first()
+        member.ban({reason:"Anti Raid"});
+        const executor = await member.guild.members.fetch(audit.executor.id)
+        await client.func.mod.applySanction(executor, AntiraidData.status["anti-bot"].sanction, AntiraidData.log, "Bot Add");
     },
 
     autoroles(member: GuildMember, roles: Array<string>) {

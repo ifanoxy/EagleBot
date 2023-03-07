@@ -57,7 +57,7 @@ export default {
         }
 
         const member = await channel.guild.members.fetch(userId);
-        await client.func.mod.applySanction(member[0], AntiraidData.status["anti-massSticker"].delete.sanction, AntiraidData, "Mass Sticker Delete");
+        await client.func.mod.applySanction(member, AntiraidData.status["anti-massSticker"].delete.sanction, AntiraidData.log, "Mass Sticker Delete");
         delete frequenceData?.stickerDeletee;
         client._fs.writeFileSync(`./AntiRaid/frequence/${userId}.json`, JSON.stringify(frequenceData));
     }

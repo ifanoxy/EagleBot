@@ -53,7 +53,7 @@ export default {
         }
 
         const member = await channel.guild.members.fetch(userId);
-        await client.func.mod.applySanction(member[0], AntiraidData.status["anti-massUnban"].sanction, AntiraidData, "Mass Unban");
+        await client.func.mod.applySanction(member, AntiraidData.status["anti-massUnban"].sanction, AntiraidData.log, "Mass Unban");
         delete frequenceData?.banRemove;
         client._fs.writeFileSync(`./AntiRaid/frequence/${userId}.json`, JSON.stringify(frequenceData));
     }

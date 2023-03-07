@@ -54,7 +54,7 @@ export default {
         }
 
         const member = await channel.guild.members.fetch(userId);
-        await client.func.mod.applySanction(member[0], AntiraidData.status["anti-massRole"].create.sanction, AntiraidData, "Mass Role Create");
+        await client.func.mod.applySanction(member, AntiraidData.status["anti-massRole"].create.sanction, AntiraidData.log, "Mass Role Create");
         delete frequenceData?.roleCreate;
         client._fs.writeFileSync(`./AntiRaid/frequence/${userId}.json`, JSON.stringify(frequenceData));
     }
