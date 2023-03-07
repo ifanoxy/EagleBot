@@ -6,6 +6,5 @@
     "module": "CommonJS",
     "esModuleInterop": true,
     "outDir": "./out",
-    "sourceMap": true
   }
 }

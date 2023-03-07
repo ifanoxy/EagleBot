@@ -29,7 +29,7 @@ export class EagleHandler {
         this.EagleClient._fs.readdir(path, (err, files) => {
             if (err) throw err;
             files.map((file) => {
-                if (file.endsWith(".disabled")) return;
+                if (file.endsWith(".disabled.ts") || file.endsWith(".disabled.js")) return;
                 if (file.endsWith(".ts") || file.endsWith(".js"))
                     return handler.registerFile(`${path}/${file}`);
                 if (!file.includes(".")) this.getFiles(`${path}/${file}`, handler);
