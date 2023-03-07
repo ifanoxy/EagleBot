@@ -429,4 +429,79 @@ export default class Moderation {
             });
         }).catch(() => {return null})
     };
+
+    async applySanction(member: GuildMember, sanction, logChannelId, type) {
+        switch (sanction) {
+            case "ban" : {
+                member.ban({reason: "Anti Raid"}).then(async () => {
+                    if (!logChannelId)return;
+                    //@ts-ignore
+                    (await member.guild.channels.fetch(logChannelId)).send({
+                        embeds: [
+                            {
+                                title: "Anti Raid - Bannissement",
+                                description: `Le membre <@${member.id}> à été banni du serveur par l'anti raid\n\nRaison: \`${type}\``,
+                                color: 14592837,
+                            }
+                        ]
+                    });
+                });
+                member.user.send({
+                            embeds: [
+                                {
+                                    title: `Vous avez été banni par l'anti raid du serveur ${member.guild.name} !\n\nRaison: \`${type}\``,
+                                    color: 14592837,
+                                }
+                            ]
+                    }).catch(() => {})
+            }break;
+            case "derank" : {
+                member.roles.cache.map(role => {
+                    member.roles.remove(role, "Anti Raid").catch(() => {})
+                })
+                if (!logChannelId)return;
+                //@ts-ignore
+                (await member.guild.channels.fetch(logChannelId)).send({
+                    embeds: [
+                        {
+                            title: "Anti Raid - Derank",
+                            description: `Le membre <@${member.id}> à été derank du serveur par l'anti raid\n\nRaison: \`${type}\``,
+                            color: 14592837,
+                        }
+                    ]
+                })
+                member.user.send({
+                            embeds: [
+                                {
+                                    title: `Vous avez été derank par l'anti raid du serveur ${member.guild.name} !\n\nRaison: \`${type}\``,
+                                    color: 14592837,
+                                }
+                            ]
+                    }).catch(() => {})
+            }break;
+            case "kick" : {
+                member.kick("Anti Raid").then(async () => {
+                    if (!logChannelId)return;
+                    //@ts-ignore
+                    (await member.guild.channels.fetch(logChannelId)).send({
+                        embeds: [
+                            {
+                                title: "Anti Raid - Kick",
+                                description: `Le membre <@${member.id}> à été kick du serveur par l'anti raid\n\nRaison: \`${type}\``,
+                                color: 14592837,
+                            }
+                        ]
+                    });
+                });
+                member.user.send({
+                            embeds: [
+                                {
+                                    title: `Vous avez été kick par l'anti raid du serveur ${member.guild.name} !\n\nRaison: \`${type}\``,
+                                    color: 14592837,
+                                }
+                            ]
+                    }).catch(() => {})
+            }break;
+        }
+    }
 }
