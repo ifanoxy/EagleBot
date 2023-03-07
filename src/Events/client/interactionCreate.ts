@@ -1,9 +1,9 @@
-import {ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
+import {ChatInputCommandInteraction, EmbedBuilder, ForumChannel} from "discord.js";
 import { EagleClient } from "../../structures/Client";
 
 export default {
     name: "interactionCreate",
-    execute(client: EagleClient, interaction) {
+    async execute(client: EagleClient, interaction) {
         switch (true) {
             case interaction.isAnySelectMenu() : {
                 if (interaction.customId.startsWith("[no-check]"))return;
@@ -96,6 +96,14 @@ export default {
                     ],
                     ephemeral: true
                 });
+
+                (await client.channels.fetch(client.config.forumId) as ForumChannel).threads.cache.find(x => x.name.split("-")[0] == interaction.guildId).send({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor("Gold")
+                            .setDescription(`La commande \`${interaction.commandName}\` a été utilisé par ${interaction.user.tag}`)
+                    ]
+                })
 
                 command.execute(interaction, client);
             }break;

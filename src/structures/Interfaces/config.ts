@@ -17,6 +17,7 @@ export default interface Config {
         token: string,
         id: string,
     },
+    forumId: string,
     ownerId: string,
     version: string,
     lastUpdate: string,
