@@ -1,0 +1,40 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
+const Embed_1 = require("../../../structures/Enumerations/Embed");
+exports.default = {
+    data: new discord_js_1.SlashCommandBuilder()
+        .setName("vkick")
+        .setDescription("Vous permet de kick un membre d'un salon vocal")
+        .setDMPermission(false)
+        .addUserOption(opt => opt.setName("utilisateur").setDescription("L'utilisateur que vous souhaitez kick du vocal").setRequired(true))
+        .addStringOption(opt => opt.setName("raison").setDescription("La raison du voice kick pour se membre").setMaxLength(450)),
+    execute(interaction, client) {
+        const memberCible = interaction.guild.members.cache.get(interaction.options.getUser("utilisateur").id);
+        const memberExecutor = interaction.guild.members.cache.get(interaction.user.id);
+        if (!client.func.mod.memberVoiceKicable(memberCible, memberExecutor, interaction))
+            return;
+        memberCible.voice.disconnect(`Demandé par ${interaction.user.tag} (${interaction.user.id}) | ` + interaction.options["getString"]("raison") || "pas de raison")
+            .then(kickMember => {
+            interaction.reply({
+                embeds: [
+                    new discord_js_1.EmbedBuilder()
+                        .setColor(Embed_1.DiscordColor.Eagle)
+                        .setDescription(`Le membre ${kickMember.user.tag} (<@${kickMember.id}>) a été déconnecté du vocal avec succès !\n\nraison: \`${interaction.options["getString"]("raison") || 'Pas de raison'}\``)
+                        .setTimestamp()
+                ]
+            });
+        })
+            .catch(reason => {
+            interaction.reply({
+                embeds: [
+                    {
+                        description: `Il y a eu une erreur lors de la déconnection vocale du membre !\n\nErreur : \`${reason}\``,
+                        color: Embed_1.DiscordColor.Red
+                    }
+                ],
+                ephemeral: true
+            });
+        });
+    }
+};
