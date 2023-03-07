@@ -186,7 +186,7 @@ export interface Antiraid {
             sanction: string,
         },
     },
-    log: string,
+    log?: string,
 }
 
 export interface Backup {
