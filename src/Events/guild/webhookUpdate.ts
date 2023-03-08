@@ -22,7 +22,7 @@ export default {
             type: AuditLogEvent.WebhookDelete,
             limit: 1
         })).entries.first();
-        if (auditWebhookCreate.createdTimestamp > auditWebhookDelete.createdTimestamp) await this.webhookCreate(client, channel, auditWebhookCreate);
+        if (auditWebhookCreate?.createdTimestamp > auditWebhookDelete?.createdTimestamp) await this.webhookCreate(client, channel, auditWebhookCreate);
         else await this.webhookDelete(client, channel, auditWebhookDelete)
     },
 
