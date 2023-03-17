@@ -21,6 +21,13 @@ declare global {
     }
 }
 
+import Topgg = require("@top-gg/sdk")
+
+const webhook = new Topgg.Webhook("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwNTcwMDgwMDAxMzAzNjc1OTEiLCJib3QiOnRydWUsImlhdCI6MTY3OTA3MjM3Mn0.mx2ZSMTy6dHmJ3Mqg5346IX4rYDS6BOLihA5pGdt3i0")
+webhook.listener(vote => {
+    console.log(vote)
+})
+
 String.prototype.replaceArray = function(find, replace) {
     var replaceString = this;
     var regex;
