@@ -35,19 +35,19 @@ export default {
                     `)
             .setTimestamp(audit.createdTimestamp)
 
-        if (audit.changes) {
+        if (audit.changes && audit.actionType == "Update") {
             embed.addFields({
                 name: "Changement",
                     value: audit.changes.map(changement => {
-                        if (changement.old == changement.new)return null;
-                    return `**${changement.key}** :\n> Ancien: ${typeof changement?.old == "object" ? "\n```json\n"+JSON.stringify(changement.old,null,2)+"```" : changement.old || 'Rien'}\n> Nouveau: ${typeof changement?.new == "object" ? "\n```json\n"+JSON.stringify(changement.new,null,2)+"```" : changement.new || 'Rien'}`
+                        if (changement.old == changement.new || !changement.old && !changement.new)return null;
+                    return `**${changement.key}** :\n> Ancien: ${typeof changement?.old == "object" ? "\n```md\n"+this.jsontoString(changement.old)+"\n```" : changement.old || 'Rien'}\n> Nouveau: ${typeof changement?.new == "object" ? "\n```md\n"+this.jsontoString(changement.new)+"\n```" : changement.new || 'Rien'}`
                 }).filter(x => x != null).join("\n\n")
             })
         }
         if (audit.extra) {
             embed.addFields({
                 name: "Information supplémentaire",
-                value: audit.extra.toString(),
+                value: "```md\n"+this.jsontoString(audit.extra)+"\n```",
             })
         }
         channel.send({
@@ -55,6 +55,28 @@ export default {
                 embed
             ]
         })
+    },
+    jsontoString(obj: {} | {}[]) {
+        return main(obj);
+
+        function main(object: {} | {}[], tab = "") {
+            let i = 0;
+            if (Array.isArray(object)) {
+                return object.map(element => {
+                    Object.entries(element).map(([key, value]) => {
+                        i++;
+                        if (typeof value == "object")return main(value, tab+"\t");
+                        return `${tab}${i}. ${key} --> ${value}`
+                    }).join("\n")
+                }).join("\n")
+            } else {
+                return Object.entries(object).map(([key, value]) => {
+                    i++;
+                    if (typeof value == "object")return main(value, tab+"\t");
+                    return `${tab}${i}. ${key} --> ${value}`
+                }).join("\n")
+            }
+        }
     },
     targetSend(target: AuditLogEntryTarget) {
         if (target instanceof Guild) {
@@ -85,8 +107,8 @@ export default {
             return `ApplicationCommand: ${target.name}. description: ${target.description}.`
         } else if (target instanceof AutoModerationRule) {
             return `AutoModerationRule: ${target.name}.`
-        } else {
-            return `Autres: ${target.toString()}`
+        } else if (target) {
+            return `Autres:\n`+"```md\n"+this.jsontoString(target)+"\n```"
         }
     }
 }

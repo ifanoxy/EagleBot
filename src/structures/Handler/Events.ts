@@ -17,7 +17,7 @@ export class EventsHandler{
                 try {
                     event.execute(this.EagleHandler.EagleClient, ...args);
                 } catch (e) {
-                    console.log(e);
+                    this.EagleHandler.EagleClient.error(e);
                 }
             }
         );
