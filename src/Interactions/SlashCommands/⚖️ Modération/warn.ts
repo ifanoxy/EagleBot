@@ -81,7 +81,7 @@ export default {
                     .setTitle(`Logs | Warn Add`)
                     .setDescription(
                         `**Membre Warn:** <@${userId}>\n\n` +
-                        `**Raison:** <@${raison}>\n\n` +
+                        `**Raison:** ${raison}\n\n` +
                         `**Warn par:** <@${interaction.user.id}>`
                     )
             ]

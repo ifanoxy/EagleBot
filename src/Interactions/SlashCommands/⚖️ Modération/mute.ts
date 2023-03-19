@@ -59,7 +59,7 @@ export default {
                     .setTitle(`Logs | Mute Add`)
                     .setDescription(
                         `**Membre Mute:** <@${userId}>\n\n` +
-                        `**Raison:** <@${raison}>\n\n` +
+                        `**Raison:** ${raison}\n\n` +
                         `**Temps:** <@${time}>\n\n` +
                         `**Mute par:** <@${interaction.user.id}>`
                     )

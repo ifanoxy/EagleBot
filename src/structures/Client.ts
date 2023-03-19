@@ -21,13 +21,13 @@ declare global {
     }
 }
 
-import Topgg from "@top-gg/sdk"
+import {Webhook} from "@top-gg/sdk"
 import express from "express"
 import {DiscordColor} from "./Enumerations/Embed";
 
 const app = express()
 
-const webhook = new Topgg.Webhook('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwNTcwMDgwMDAxMzAzNjc1OTEiLCJib3QiOnRydWUsImlhdCI6MTY3OTA3MjM3Mn0.mx2ZSMTy6dHmJ3Mqg5346IX4rYDS6BOLihA5pGdt3i0')
+const webhook = new Webhook('12a.69ZazdAIHUEOAZJiouhazd&iazudhIUihIUJ75H')
 
 app.listen(7183)
 

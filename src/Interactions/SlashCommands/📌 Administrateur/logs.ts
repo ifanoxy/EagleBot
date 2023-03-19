@@ -30,7 +30,7 @@ export default {
                 .setCustomId("[no-check]logs")
                 .setStyle(ButtonStyle.Secondary)
                 .setDisabled(true)
-                .setLabel("1/2"),
+                .setLabel("1/5"),
             new ButtonBuilder()
                 .setCustomId("[no-check]logs#next")
                 .setStyle(ButtonStyle.Secondary)
@@ -45,14 +45,24 @@ export default {
                 .setStyle(ButtonStyle.Secondary)
                 .setLabel("Terminer")
         );
-        let logsRows = [new ActionRowBuilder<ButtonBuilder>(), new ActionRowBuilder<ButtonBuilder>(), new ActionRowBuilder<ButtonBuilder>(), new ActionRowBuilder<ButtonBuilder>(), new ActionRowBuilder<ButtonBuilder>(), new ActionRowBuilder<ButtonBuilder>(), new ActionRowBuilder<ButtonBuilder>(), new ActionRowBuilder<ButtonBuilder>(),];
-        let j = [[], [], [], [], [], [], [], []];
+        let logsRows = [
+            new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),
+            new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),
+            new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),
+            new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>(),new ActionRowBuilder<ButtonBuilder>()
+        ]
+        let j = [
+            [],[],[],[],[],
+            [],[],[],[],[],
+            [],[],[],[],[],
+            [],[],[],[],[],
+        ];
         let i = 0;
         let k = 0;
         logsName.map(name => {
             k += name.length;
             logsRows[i].addComponents(btncolor(name, i));
-            if (k > 48 || j[i].length == 5) {
+            if (k > 38 || j[i].length == 5) {
                 i++;
                 k = 0;
             }
@@ -94,27 +104,27 @@ export default {
                         })
                     } else if (choix == "next") {
                         paginationRow.components[0].setDisabled(false)
-                        paginationRow.components[1].setLabel("2/2")
-                        paginationRow.components[2].setDisabled(true)
+                        paginationRow.components[1].setLabel((Number(paginationRow.components[1].data.label.split("/")[0])+1)+"/5")
+                        paginationRow.components[2].setDisabled(Number(paginationRow.components[1].data.label.split("/")[0]) == 5)
                         inter.update({
                             components: [
-                                logsRows[4],
-                                logsRows[5],
-                                logsRows[6],
-                                logsRows[7],
+                                logsRows[(Number(paginationRow.components[1].data.label.split("/")[0]))*4-4],
+                                logsRows[(Number(paginationRow.components[1].data.label.split("/")[0]))*4-3],
+                                logsRows[(Number(paginationRow.components[1].data.label.split("/")[0]))*4-2],
+                                logsRows[(Number(paginationRow.components[1].data.label.split("/")[0]))*4-1],
                                 paginationRow
                             ]
                         }).then(msg => logMain(msg))
                     } else if (choix == "previous") {
-                        paginationRow.components[0].setDisabled(true)
-                        paginationRow.components[1].setLabel("1/2")
                         paginationRow.components[2].setDisabled(false)
+                        paginationRow.components[1].setLabel((Number(paginationRow.components[1].data.label.split("/")[0])-1)+"/5")
+                        paginationRow.components[0].setDisabled(Number(paginationRow.components[1].data.label.split("/")[0]) == 1)
                         inter.update({
                             components: [
-                                logsRows[0],
-                                logsRows[1],
-                                logsRows[2],
-                                logsRows[3],
+                                logsRows[(Number(paginationRow.components[1].data.label.split("/")[0]))*4-4],
+                                logsRows[(Number(paginationRow.components[1].data.label.split("/")[0]))*4-3],
+                                logsRows[(Number(paginationRow.components[1].data.label.split("/")[0]))*4-2],
+                                logsRows[(Number(paginationRow.components[1].data.label.split("/")[0]))*4-1],
                                 paginationRow
                             ]
                         }).then(msg => logMain(msg))
