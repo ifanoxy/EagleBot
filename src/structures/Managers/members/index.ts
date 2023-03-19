@@ -33,7 +33,13 @@ export default function (database, modelName): Promise<Array<{name: string, type
                 type: DataTypes.JSON,
                 isValue: true,
                 default: {}
-            }
+            },
+            {
+                name: 'vote',
+                type: DataTypes.INTEGER,
+                isValue: true,
+                default: 0
+            },
         ];
 
         const t = {};

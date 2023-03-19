@@ -8,24 +8,6 @@ export default {
     execute(client: EagleClient, emoji: GuildEmoji) {
         const AntiraidData = client.managers.antiraidManager.getIfExist(emoji.guild.id)
         if (AntiraidData?.status["anti-massEmoji"]?.delete?.status) this.antiraid(AntiraidData, emoji, client);
-        const channel = client.func.log.isActive(emoji.guild.id, "EmojiDelete");
-        if (!channel)return;
-        emoji.guild.fetchAuditLogs({
-            limit: 1,
-            type: AuditLogEvent.EmojiDelete,
-        }).then(audit => {
-            channel.send({
-                embeds: [
-                    new EmbedBuilder().setColor("#2f3136").setTimestamp()
-                        .setTitle(`Logs | ${this.name}`)
-                        .setDescription(
-                            `**Nom:** ${emoji.name}\n\n`+
-                            `**Animé:** ${emoji.animated ? "Oui" : "Non"}\n\n`+
-                            `**Supprimé par:** <@${audit.entries.first().executor.id}>`
-                        )
-                ]
-            });
-        })
     },
 
     async antiraid(AntiraidData:  DatabaseManager<Antiraid> & Antiraid, channel: GuildChannel, client: EagleClient) {

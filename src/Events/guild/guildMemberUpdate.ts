@@ -9,7 +9,7 @@ export default {
     },
 
     async AdminRolesAdd(client: EagleClient, oldMember: GuildMember, newMember: GuildMember, channel) {
-        if (newMember.roles.cache.size < oldMember.roles.cache.size)return;
+        if (newMember.roles.cache.size <= oldMember.roles.cache.size)return;
         const roleAdded = newMember.roles.cache.difference(oldMember.roles.cache);
         if (!roleAdded.first().permissions.has(PermissionsBitField.Flags.Administrator))return;
         const audit = await newMember.guild.fetchAuditLogs({

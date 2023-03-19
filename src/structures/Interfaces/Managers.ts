@@ -47,6 +47,7 @@ export interface Mute {
 
 export interface Members {
     memberId: string,
+    vote?: number,
     moderation?: {
         kick: number,
         ban: number,

@@ -11,8 +11,6 @@ export default {
         if (member.user?.bot) {
             const AntiraidData = client.managers.antiraidManager.getIfExist(member.guild.id)
             if (AntiraidData?.status["anti-bot"]?.status) this.antiraidBot(AntiraidData, member, client);
-            const logChannel = client.func.log.isActive(member.guild.id, "botAdd");
-            if (logChannel) this.botAdd(member, logChannel);
         }
         if (client.isBlacklist(member.id)) member.ban({reason: "Blacklist"}).catch()
         const guildData = client.managers.guildsManager.getIfExist(member.guild.id);
@@ -56,24 +54,5 @@ export default {
 
     autoroles(member: GuildMember, roles: Array<string>) {
         member.roles.add(roles).catch(() => {})
-    },
-
-    botAdd(member, channel) {
-        member.guild.fetchAuditLogs({
-            limit: 1,
-            type: AuditLogEvent.BotAdd,
-        }).then(audit => {
-            channel.send({
-                embeds: [
-                    new EmbedBuilder().setColor("#2f3136").setTimestamp()
-                        .setTitle(`Logs | Bot Add`)
-                        .setThumbnail(member.avatarURL())
-                        .setDescription(
-                            `**Bot ID:** <@${member.id}> (${member.id})\n\n` +
-                            `**Ajouté par:** <@${audit.entries.first()?.executor?.id}>`
-                        )
-                ]
-            });
-        });
     }
 }

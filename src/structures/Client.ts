@@ -3,11 +3,11 @@ import {
     Partials,
     Collection,
     ChatInputCommandInteraction,
-    PermissionsBitField, ChannelType, ForumChannel, EmbedBuilder, Message,
+    PermissionsBitField, ChannelType, ForumChannel, EmbedBuilder,
 } from "discord.js";
 import Config from "./Interfaces/config"
 import { EagleHandler } from "./Handler/EagleHandler";
-import {EagleDatabaseMysql, EagleDatabaseSqlite} from "./DataBase";
+import {EagleDatabaseMysql} from "./DataBase";
 import EagleManagers from "./Managers";
 import chalk from "chalk";
 import * as fs from "fs";
@@ -21,12 +21,15 @@ declare global {
     }
 }
 
-import Topgg = require("@top-gg/sdk")
+import Topgg from "@top-gg/sdk"
+import express from "express"
+import {DiscordColor} from "./Enumerations/Embed";
 
-const webhook = new Topgg.Webhook("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwNTcwMDgwMDAxMzAzNjc1OTEiLCJib3QiOnRydWUsImlhdCI6MTY3OTA3MjM3Mn0.mx2ZSMTy6dHmJ3Mqg5346IX4rYDS6BOLihA5pGdt3i0")
-webhook.listener(vote => {
-    console.log(vote)
-})
+const app = express()
+
+const webhook = new Topgg.Webhook('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwNTcwMDgwMDAxMzAzNjc1OTEiLCJib3QiOnRydWUsImlhdCI6MTY3OTA3MjM3Mn0.mx2ZSMTy6dHmJ3Mqg5346IX4rYDS6BOLihA5pGdt3i0')
+
+app.listen(7183)
 
 String.prototype.replaceArray = function(find, replace) {
     var replaceString = this;
@@ -54,6 +57,25 @@ export class EagleClient extends Client {
             intents: 3276799,
             partials: [Partials.Channel, Partials.GuildMember, Partials.GuildScheduledEvent, Partials.Message, Partials.Reaction, Partials.ThreadMember, Partials.User],
         });
+        app.post('/dblwebhook', webhook.listener(vote => {
+            this.channels.fetch("1072128486900240486")
+                .then(channel => {
+                    let memberData = this.managers.membersManager.getAndCreateIfNotExists(vote.user, {memberId: vote.user, vote: 0})
+                    //@ts-ignore
+                    channel.send({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor(DiscordColor.Eagle)
+                                .setTitle(`Merci du vote !`)
+                                .setDescription(`<@${vote.user}> vient de voter, c'est son \`${Number(memberData.vote)+1}\` votes !`)
+                                .setTimestamp()
+                        ]
+                    })
+                    memberData.vote += 1;
+                    memberData.save().catch(console.log)
+                })
+                .catch()
+        }))
         process.on("uncaughtException", (error, origin) => this.error(error))
         process.on("unhandledRejection", (error, origin) => this.error(error))
         process.on("uncaughtExceptionMonitor", (error) => this.error(error))

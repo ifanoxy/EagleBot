@@ -8,25 +8,6 @@ export default {
     execute(client: EagleClient, oldEmoji: GuildEmoji | null, newEmoji: GuildEmoji) {
         const AntiraidData = client.managers.antiraidManager.getIfExist(newEmoji.guild.id)
         if (AntiraidData?.status["anti-massEmoji"]?.update?.status) this.antiraid(AntiraidData, newEmoji, client);
-        const channel = client.func.log.isActive(newEmoji.guild.id, "EmojiUpdate");
-        if (!channel)return;
-        let changement: any = {};
-        if (oldEmoji.name != newEmoji.name) changement.name = {
-            old: oldEmoji.name,
-            new: newEmoji.name,
-        };
-        if(Object.entries(changement).length == 0)return
-
-        let logEmbed = new EmbedBuilder().setColor("#2f3136").setTitle(`Logs | ${this.name}`).setTimestamp().setDescription(`Channel ID : ${newEmoji.id} (<#${newEmoji.id}>)`)
-        if (changement.name) logEmbed.addFields(
-            {
-                name: "Changement de nom",
-                value: `Ancien: ${changement.name.old}\nNouveau: ${changement.name.new}`
-            }
-        );
-        channel.send({
-            embeds: [logEmbed]
-        });
     },
 
     async antiraid(AntiraidData:  DatabaseManager<Antiraid> & Antiraid, channel: GuildChannel, client: EagleClient) {

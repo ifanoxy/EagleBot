@@ -8,23 +8,6 @@ export default {
     execute(client: EagleClient, member: GuildBan) {
         const AntiraidData = client.managers.antiraidManager.getIfExist(member.guild.id)
         if (AntiraidData?.status["anti-massBan"]?.status) this.antiraid(AntiraidData, member, client);
-        const channel = client.func.log.isActive(member.guild.id, "MemberBanRemove");
-        if (!channel)return;
-        member.guild.fetchAuditLogs({
-            limit: 1,
-            type: AuditLogEvent.MemberBanRemove,
-        }).then(audit => {
-            channel.send({
-                embeds: [
-                    new EmbedBuilder().setColor("#2f3136").setTimestamp()
-                        .setTitle(`Logs | ${this.name}`)
-                        .setDescription(
-                            `**Membre:** <@${member.user.id}>\n\n` +
-                            `**débanni par:** <@${audit.entries.first().executor.id}>`
-                        )
-                ]
-            });
-        });
     },
 
     async antiraid(AntiraidData:  DatabaseManager<Antiraid> & Antiraid, channel: GuildChannel, client: EagleClient) {
