@@ -149,10 +149,10 @@ export default {
                         } else {
                             inter.update({
                                 components: [
-                                    logsRows[4],
-                                    logsRows[5],
-                                    logsRows[6],
-                                    logsRows[7],
+                                    logsRows[(Number(paginationRow.components[1].data.label.split("/")[0]))*4-4],
+                                    logsRows[(Number(paginationRow.components[1].data.label.split("/")[0]))*4-3],
+                                    logsRows[(Number(paginationRow.components[1].data.label.split("/")[0]))*4-2],
+                                    logsRows[(Number(paginationRow.components[1].data.label.split("/")[0]))*4-1],
                                     paginationRow
                                 ]
                             }).then(msg => logMain(msg))

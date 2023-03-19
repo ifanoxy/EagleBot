@@ -154,6 +154,7 @@ export default {
                             const nbrTextInput = Number(inter3.values[0]);
                             let TextInputData = [];
                             let interTemp = inter3;
+                            // @ts-ignore
                             for (let i of range(1, nbrTextInput)) {
                                 await askWithButtonToModal(
                                     [

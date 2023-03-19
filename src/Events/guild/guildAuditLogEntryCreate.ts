@@ -13,8 +13,9 @@ import {
     Message,
     Integration,
     StageInstance,
-    Sticker, GuildScheduledEvent, ApplicationCommand, AutoModerationRule,
+    Sticker, GuildScheduledEvent, ApplicationCommand, AutoModerationRule
 } from "discord.js";
+
 
 type AuditLogEntryTarget = (Object|Guild|BaseChannel|User|Role|Invite|Webhook|GuildEmoji|Message|Integration|StageInstance|Sticker|
     GuildScheduledEvent|ApplicationCommand|AutoModerationRule)
@@ -23,32 +24,35 @@ export default {
     name: "guildAuditLogEntryCreate",
     execute(client: EagleClient, audit: GuildAuditLogsEntry, guild: Guild) {
         const channel = client.func.log.isActive(guild.id, AuditLogEvent[audit.action].toString())
-        if (!channel)return;
-        channel.send({
-            embeds: [
-                new EmbedBuilder()
-                    .setColor("#2c2f33")
-                    .setTitle(`Logs | ${AuditLogEvent[audit.action].toString()} - ${audit.actionType}`)
-                    .setDescription(`
+        if (!channel) return;
+        let embed = new EmbedBuilder()
+            .setColor("#2c2f33")
+            .setTitle(`Logs | ${AuditLogEvent[audit.action].toString()} - ${audit.actionType}`)
+            .setDescription(`
                     Action effectué par : <@${audit.executor?.id}> \`${audit.executor.tag}\`
                     Raison: *${audit.reason || 'Aucune raison'}*,   
                     ${audit.targetType ? this.targetSend(audit.target) : ""}
                     `)
-                    .addFields(
-                        audit.changes ?
-                            {
-                                name: "Changement",
-                                value: audit.changes.map(changement => {
-                                    return `${changement.key} :\n   Ancien: ${changement.old || 'Rien'}\n   Nouveau: ${changement.new || 'Rien'}`
-                                }).join("\n\n")
-                            } : null,
-                        audit.extra ?
-                            {
-                                name: "Information supplémentaire",
-                                value: audit.extra.toString(),
-                            } : null,
-                    )
-                    .setTimestamp(audit.createdTimestamp)
+            .setTimestamp(audit.createdTimestamp)
+
+        if (audit.changes) {
+            embed.addFields({
+                name: "Changement",
+                    value: audit.changes.map(changement => {
+                        if (changement.old == changement.new)return null;
+                    return `**${changement.key}** :\n> Ancien: ${typeof changement?.old == "object" ? "\n```json\n"+JSON.stringify(changement.old,null,2)+"```" : changement.old || 'Rien'}\n> Nouveau: ${typeof changement?.new == "object" ? "\n```json\n"+JSON.stringify(changement.new,null,2)+"```" : changement.new || 'Rien'}`
+                }).filter(x => x != null).join("\n\n")
+            })
+        }
+        if (audit.extra) {
+            embed.addFields({
+                name: "Information supplémentaire",
+                value: audit.extra.toString(),
+            })
+        }
+        channel.send({
+            embeds: [
+                embed
             ]
         })
     },
