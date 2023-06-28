@@ -1,6 +1,6 @@
 module.exports = {
     discord: {
-        token: "MTA1NzAwODAwMDEzMDM2NzU5MQ.G8hc_M.9c68JSImeoAzhm5bKyCqeFSVNhdzc_9HxPZy6w"
+        token: ""
     },
     database: {
         name: "",
@@ -8,8 +8,8 @@ module.exports = {
         password: "",
     },
     webhook: {
-        token: "_Mx2P12-QuqxifynC7yB-ZxX3y6ArJO8yWo0CzKi6acH6KlCT8F15Moi7eHeEIDuClfy",
-        id: "1057017269005328494",
+        token: "",
+        id: "",
     },
-    ownerId: "429345463494508554"
+    ownerId: ""
 }
